@@ -322,7 +322,7 @@ export function AbstractSectionBackground({
           drawBakeAtmosphere(ctx, width, height, time, isDark);
           break;
         case 'entertainment':
-          drawEntertainmentAtmosphere(ctx, width, height, time, isDark, domeVertices, domeEdges);
+          drawEntertainmentAtmosphere(ctx, width, height, time, isDark);
           break;
         case 'visit':
           drawVisitAtmosphere(ctx, width, height, time, isDark);
@@ -398,6 +398,18 @@ function drawBaseAtmosphere(ctx, w, h, t, isDark, variant) {
     wineGrad.addColorStop(0.7, '#2D0B08');
     wineGrad.addColorStop(1, '#541508');
     ctx.fillStyle = wineGrad;
+    ctx.fillRect(0, 0, w, h);
+    return;
+  }
+
+  if (variant === 'entertainment' || variant === 'cinema') {
+    // Lighter, luminous royal violet & mulberry plum background (matching reference screenshot)
+    const cinemaGrad = ctx.createLinearGradient(0, 0, w, h);
+    cinemaGrad.addColorStop(0, '#462170');
+    cinemaGrad.addColorStop(0.32, '#38185C');
+    cinemaGrad.addColorStop(0.68, '#280F44');
+    cinemaGrad.addColorStop(1, '#1E0A34');
+    ctx.fillStyle = cinemaGrad;
     ctx.fillRect(0, 0, w, h);
     return;
   }
@@ -927,69 +939,150 @@ function drawDiningHeroAtmosphere(ctx, w, h, t, isDark) {
 }
 
 /**
- * 05. ENTERTAINMENT: 3D Dome Wireframe & Theatrical Cosmic Rays
+ * 05. ENTERTAINMENT: Cinematic Projector Beam & Theatrical Cosmic Rays
+ * Recreates the exact reference look with enhanced luminous lighting:
+ * Radiant royal violet background, intense golden projector beam, sweeping ambient
+ * rays, floating stardust motes, lens bloom, and pulsing red beacon dot.
  */
-function drawEntertainmentAtmosphere(ctx, w, h, t, isDark, vertices, edges) {
-  const cx = w * 0.5;
-  const cy = h * 0.58;
+function drawEntertainmentAtmosphere(ctx, w, h, t, isDark) {
+  const originX = w * 0.94;
+  const originY = h * 0.08;
 
-  // 1. Theatrical Sweeping Light Cones
-  const beamAngle = Math.sin(t * 0.5) * 0.35;
-  const beamWidth = w * 0.25;
+  ctx.save();
 
-  const beamGrad = ctx.createLinearGradient(cx, 0, cx + Math.tan(beamAngle) * h, h);
-  if (isDark) {
-    beamGrad.addColorStop(0, 'rgba(191, 161, 255, 0.28)');
-    beamGrad.addColorStop(0.6, 'rgba(212, 175, 55, 0.12)');
-    beamGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-  } else {
-    beamGrad.addColorStop(0, 'rgba(104, 59, 164, 0.2)');
-    beamGrad.addColorStop(0.6, 'rgba(180, 125, 30, 0.12)');
-    beamGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
-  }
+  // 1. Wide Ambient Theatrical Stage Glow (Lightens & softens the background)
+  const ambientGlow = ctx.createRadialGradient(originX, originY, 0, w * 0.45, h * 0.45, w * 0.95);
+  ambientGlow.addColorStop(0, 'rgba(255, 240, 195, 0.42)');
+  ambientGlow.addColorStop(0.32, 'rgba(195, 135, 255, 0.32)');
+  ambientGlow.addColorStop(0.65, 'rgba(135, 60, 210, 0.20)');
+  ambientGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+  ctx.fillStyle = ambientGlow;
+  ctx.fillRect(0, 0, w, h);
 
-  ctx.fillStyle = beamGrad;
+  // 2. Broad Outer Projector Beam Cone (Spreading diagonally to the left)
+  const beamAngle = Math.sin(t * 0.35) * 0.035;
   ctx.beginPath();
-  ctx.moveTo(cx - 20, 0);
-  ctx.lineTo(cx + 20, 0);
-  ctx.lineTo(cx + Math.tan(beamAngle) * h + beamWidth * 0.5, h);
-  ctx.lineTo(cx + Math.tan(beamAngle) * h - beamWidth * 0.5, h);
+  ctx.moveTo(originX, originY);
+  ctx.lineTo(0, h * (0.10 + beamAngle));
+  ctx.lineTo(0, h * (0.95 + beamAngle));
+  ctx.lineTo(w * 0.65, h);
   ctx.closePath();
+
+  const outerBeamGrad = ctx.createLinearGradient(originX, originY, 0, h * 0.55);
+  outerBeamGrad.addColorStop(0, 'rgba(255, 252, 235, 0.92)');
+  outerBeamGrad.addColorStop(0.15, 'rgba(255, 228, 155, 0.65)');
+  outerBeamGrad.addColorStop(0.38, 'rgba(215, 180, 255, 0.38)');
+  outerBeamGrad.addColorStop(0.68, 'rgba(124, 77, 194, 0.16)');
+  outerBeamGrad.addColorStop(1, 'rgba(15, 6, 28, 0)');
+
+  ctx.fillStyle = outerBeamGrad;
   ctx.fill();
 
-  // 2. 3D Rotating Geodesic Dome
-  const rx = 0.25;
-  const ry = t * 0.22;
+  // 3. Intense Brilliant Core Light Fan
+  ctx.beginPath();
+  ctx.moveTo(originX, originY);
+  ctx.lineTo(0, h * (0.24 + beamAngle));
+  ctx.lineTo(0, h * (0.72 + beamAngle));
+  ctx.lineTo(w * 0.42, h * 0.92);
+  ctx.closePath();
 
-  const projected = vertices.map((v) => {
-    let r = rotateX(v, rx);
-    r = rotateY(r, ry);
-    return project(r, cx, cy, 460);
-  });
+  const coreGrad = ctx.createLinearGradient(originX, originY, 0, h * 0.48);
+  coreGrad.addColorStop(0, 'rgba(255, 255, 255, 0.98)');
+  coreGrad.addColorStop(0.2, 'rgba(255, 240, 185, 0.78)');
+  coreGrad.addColorStop(0.5, 'rgba(240, 210, 255, 0.35)');
+  coreGrad.addColorStop(0.85, 'rgba(180, 130, 255, 0.12)');
+  coreGrad.addColorStop(1, 'rgba(20, 8, 36, 0)');
 
-  ctx.lineWidth = 1;
-  ctx.strokeStyle = isDark
-    ? 'rgba(191, 161, 255, 0.38)'
-    : 'rgba(104, 59, 164, 0.35)';
+  ctx.fillStyle = coreGrad;
+  ctx.fill();
 
-  edges.forEach(([i, j]) => {
-    if (projected[i].visible && projected[j].visible) {
-      ctx.beginPath();
-      ctx.moveTo(projected[i].x, projected[i].y);
-      ctx.lineTo(projected[j].x, projected[j].y);
-      ctx.stroke();
-    }
-  });
+  // 4. Razor-Sharp Projector Center Shaft
+  ctx.beginPath();
+  ctx.moveTo(originX, originY);
+  ctx.lineTo(0, h * (0.38 + beamAngle));
+  ctx.lineTo(0, h * (0.50 + beamAngle));
+  ctx.lineTo(w * 0.25, h * 0.75);
+  ctx.closePath();
 
-  // Glowing dome vertex nodes
-  projected.forEach((p, idx) => {
-    if (p.visible && idx % 3 === 0) {
-      ctx.fillStyle = isDark ? '#F5E1A4' : '#683BA4';
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  });
+  const shaftGrad = ctx.createLinearGradient(originX, originY, 0, h * 0.44);
+  shaftGrad.addColorStop(0, 'rgba(255, 255, 255, 1)');
+  shaftGrad.addColorStop(0.3, 'rgba(255, 245, 210, 0.85)');
+  shaftGrad.addColorStop(0.7, 'rgba(255, 225, 160, 0.35)');
+  shaftGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+  ctx.fillStyle = shaftGrad;
+  ctx.fill();
+
+  // 5. Radiant Projector Lens Bloom & Halo Rings
+  const flareGrad = ctx.createRadialGradient(originX, originY, 0, originX, originY, w * 0.38);
+  flareGrad.addColorStop(0, 'rgba(255, 255, 255, 1)');
+  flareGrad.addColorStop(0.08, 'rgba(255, 245, 200, 0.90)');
+  flareGrad.addColorStop(0.22, 'rgba(255, 215, 130, 0.60)');
+  flareGrad.addColorStop(0.48, 'rgba(191, 150, 255, 0.35)');
+  flareGrad.addColorStop(0.78, 'rgba(104, 59, 164, 0.14)');
+  flareGrad.addColorStop(1, 'rgba(15, 6, 28, 0)');
+
+  ctx.fillStyle = flareGrad;
+  ctx.beginPath();
+  ctx.arc(originX, originY, w * 0.38, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Concentric lens ripples
+  for (let r = 1; r <= 4; r++) {
+    const radius = 28 * r + Math.sin(t * 2.2 + r) * 5;
+    ctx.strokeStyle = `rgba(255, 240, 185, ${0.45 / r})`;
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.arc(originX, originY, radius, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
+  // 6. Floating Theatrical Stardust Particles in Beam Path
+  for (let i = 0; i < 30; i++) {
+    const speed = 0.016 + (i % 6) * 0.005;
+    const progress = (i * 0.035 + t * speed) % 1;
+    const px = originX - progress * (w * 0.94);
+    const py = originY + progress * (h * 0.78) + Math.sin(t * 1.8 + i) * 20;
+    const size = (i % 4 === 0) ? 3 : (i % 2 === 0 ? 2 : 1.4);
+    const alpha = 0.5 + Math.sin(t * 2.2 + i) * 0.4;
+
+    ctx.fillStyle = i % 2 === 0
+      ? `rgba(255, 248, 220, ${alpha})`
+      : `rgba(225, 195, 255, ${alpha})`;
+    ctx.beginPath();
+    ctx.arc(px, py, size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // 7. Pulsing Red Cinema Beacon Dot (on the right edge)
+  const beaconX = w * 0.965;
+  const beaconY = h * 0.46;
+  const pingRadius = 15 + Math.sin(t * 3.4) * 7;
+  const pingAlpha = 0.75 - (pingRadius - 8) / 18;
+
+  ctx.strokeStyle = `rgba(217, 78, 100, ${Math.max(0, pingAlpha)})`;
+  ctx.lineWidth = 1.8;
+  ctx.beginPath();
+  ctx.arc(beaconX, beaconY, pingRadius, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.fillStyle = '#C93248';
+  ctx.shadowColor = '#D94E64';
+  ctx.shadowBlur = 18;
+  ctx.beginPath();
+  ctx.arc(beaconX, beaconY, 6, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  // 8. Soft Warm Stage Floor Uplight (Illuminates bottom)
+  const floorUplight = ctx.createLinearGradient(0, h, 0, h * 0.75);
+  floorUplight.addColorStop(0, 'rgba(168, 85, 247, 0.16)');
+  floorUplight.addColorStop(0.5, 'rgba(251, 146, 60, 0.08)');
+  floorUplight.addColorStop(1, 'rgba(0, 0, 0, 0)');
+  ctx.fillStyle = floorUplight;
+  ctx.fillRect(0, h * 0.75, w, h * 0.25);
+
+  ctx.restore();
 }
 
 /**

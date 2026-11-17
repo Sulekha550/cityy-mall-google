@@ -19,6 +19,15 @@ import { BRAND_IMAGES, SCENE_IMAGES } from '../assets/imageRegistry';
 import { registerSectionMotion } from '../animations/scrollAnimations';
 import { VideoSectionBackground } from '../components/VideoSectionBackground';
 import { ResilientImage } from '../components/ResilientImage';
+import { RightVerticalSectionNav } from '../components/RightVerticalSectionNav';
+
+const DINING_SECTIONS = [
+  { id: 'dining-hero', number: '01', title: 'Flavours Pavilion' },
+  { id: 'dining-flame', number: '02', title: 'Flame Grills' },
+  { id: 'dining-pizza', number: '03', title: 'Stone-Baked 450°' },
+  { id: 'dining-styles', number: '04', title: 'Dining Atmospheres' },
+  { id: 'dining-terrace', number: '05', title: 'Dining Terrace' },
+];
 
 // CITY MALL's exact 9 approved dining outlets
 export const APPROVED_DINING_OUTLETS = [
@@ -403,7 +412,6 @@ export function DiningPage({ onInspectBrand }) {
   const pizzaRef = useRef(null);
   const mosaicRef = useRef(null);
   const terraceRef = useRef(null);
-  const directoryRef = useRef(null);
 
   // Active restaurant selection for Section 2 (Dark Burgundy Flame Grill Showcase)
   const [selectedOutletIndex, setSelectedOutletIndex] = useState(0);
@@ -436,7 +444,6 @@ export function DiningPage({ onInspectBrand }) {
     const cleanPizza = registerSectionMotion(pizzaRef.current, 'editorial');
     const cleanMosaic = registerSectionMotion(mosaicRef.current, 'cascade');
     const cleanTerrace = registerSectionMotion(terraceRef.current, 'editorial');
-    const cleanDirectory = registerSectionMotion(directoryRef.current, 'cascade');
 
     return () => {
       cleanHero();
@@ -444,7 +451,6 @@ export function DiningPage({ onInspectBrand }) {
       cleanPizza();
       cleanMosaic();
       cleanTerrace();
-      cleanDirectory();
     };
   }, []);
 
@@ -464,15 +470,20 @@ export function DiningPage({ onInspectBrand }) {
 
   return (
     <div className="bg-[#FBF5EE] dark:bg-[#140605] text-[#1B1325] dark:text-[#F6EFE7] transition-colors duration-300">
+      {/* Right Vertical Scroll-Spy Navigation (matching reference screenshots) */}
+      <RightVerticalSectionNav sections={DINING_SECTIONS} />
+
       {/* =========================================================================
-          SECTION 1: HERO — "THIRD FLOOR FLAVOURS" (Matching Screenshot 3)
+          SECTION 1: HERO — "THIRD FLOOR FLAVOURS"
           Soft champagne & lavender gradient + flowing golden wavy lines + floating dots
-          Pure abstract geometry: ZERO men, ZERO women, ZERO human figures!
+          Left: Display title, narrative text, brand badge dock & highlights
+          Right: Premium sunlit terrace visual showcase with overlapping skewer thumbnail
+          Zero Humans!
           ========================================================================= */}
       <section
         ref={heroRef}
         id="dining-hero"
-        className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-20 border-b border-[#2D1D48]/14 dark:border-white/10"
+        className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-16 sm:py-24 border-b border-[#2D1D48]/14 dark:border-white/10"
       >
         {/* Soft Champagne & Golden Wave Lines Canvas (Zero Humans) */}
         <VideoSectionBackground
@@ -482,62 +493,132 @@ export function DiningPage({ onInspectBrand }) {
           tintClassName="bg-transparent"
         />
 
-        <div className="relative z-10 max-w-7xl w-full mx-auto px-5 sm:px-8 lg:px-12 space-y-8">
-          <div data-motion="reveal" className="space-y-4 max-w-2xl">
-            {/* Kicker with Cutlery Icon */}
-            <div className="flex items-center gap-2 text-xs font-semibold tracking-[0.2em] uppercase text-[#B36624] dark:text-[#E39857]">
-              <UtensilsCrossed className="w-4 h-4" />
-              <span>THIRD FLOOR PAVILION</span>
+        <div className="relative z-10 max-w-7xl w-full mx-auto px-5 sm:px-8 lg:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+            {/* Left Column: Kicker, Title, Narrative Text & Floating Brand Dock (7 cols) */}
+            <div data-motion="reveal" className="lg:col-span-7 space-y-6">
+              <div className="space-y-3">
+                {/* Kicker with Cutlery Icon */}
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#B36624]/10 dark:bg-[#E39857]/15 border border-[#B36624]/20 text-xs font-semibold tracking-[0.2em] uppercase text-[#B36624] dark:text-[#E39857]">
+                  <UtensilsCrossed className="w-3.5 h-3.5" />
+                  <span>THIRD FLOOR PAVILION</span>
+                </div>
+
+                {/* Display Headline */}
+                <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-normal tracking-tight text-[#1B1325] dark:text-[#F6EFE7] leading-[1.04]">
+                  Third Floor Flavours
+                </h1>
+
+                {/* Subtitle */}
+                <p className="text-base sm:text-lg text-[#5D5070] dark:text-[#D8CEE9] leading-relaxed max-w-xl">
+                  Live table grills, crispy golden chicken &amp; oven-baked pizzas served across CITY MALL&apos;s sunlit culinary deck.
+                </p>
+
+                {/* Supporting Narrative Text */}
+                <p className="text-xs sm:text-sm text-[#736388] dark:text-[#B5A7D0] leading-relaxed max-w-xl">
+                  A sun-drenched culinary promenade bringing together 9 verified dining destinations — from interactive charcoal skewers and 450° stone-baked ovens to royal Awadhi gravies and degree filter kaapi.
+                </p>
+              </div>
+
+              {/* Floating Rounded Brand Badges Dock */}
+              <div className="pt-1">
+                <div className="inline-flex flex-wrap items-center gap-3 p-2.5 rounded-3xl bg-white/85 dark:bg-[#1D1628]/85 backdrop-blur-xl border border-[#2D1D48]/14 dark:border-white/15 shadow-2xl">
+                  {/* KFC */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedOutletIndex(2); // KFC
+                      scrollToSection('dining-flame');
+                    }}
+                    className="flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-[#E4002B] text-white font-black text-xs tracking-wider shadow-md hover:scale-105 transition-transform cursor-pointer"
+                  >
+                    <span className="font-black">KFC</span>
+                  </button>
+
+                  {/* Barbeque Nation */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedOutletIndex(0); // Barbeque Nation
+                      scrollToSection('dining-flame');
+                    }}
+                    className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#C9523C] text-white font-bold text-xs tracking-wider shadow-md hover:scale-105 transition-transform cursor-pointer"
+                  >
+                    <Flame className="w-3.5 h-3.5" />
+                    <span>Barbeque Nation</span>
+                  </button>
+
+                  {/* Pizza Hut */}
+                  <button
+                    type="button"
+                    onClick={() => scrollToSection('dining-pizza')}
+                    className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#006699] text-white font-bold text-xs tracking-wider shadow-md hover:scale-105 transition-transform cursor-pointer"
+                  >
+                    <Pizza className="w-3.5 h-3.5" />
+                    <span>Pizza Hut</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Key Quick Highlights Strip */}
+              <div className="pt-2 flex flex-wrap items-center gap-6 text-xs text-[#5D5070] dark:text-[#B5A7D0] font-mono border-t border-[#2D1D48]/10 dark:border-white/10">
+                <div className="flex items-center gap-2">
+                  <Clock className="w-3.5 h-3.5 text-[#B36624] dark:text-[#E39857]" />
+                  <span>11:00 AM – 11:00 PM Daily</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-3.5 h-3.5 text-[#B36624] dark:text-[#E39857]" />
+                  <span>Third Floor Promenade Deck</span>
+                </div>
+              </div>
             </div>
 
-            {/* Display Headline */}
-            <h1 className="font-display text-5xl sm:text-7xl lg:text-[5.5rem] font-normal tracking-tight text-[#1B1325] dark:text-[#F6EFE7] leading-[1.04]">
-              Third Floor Flavours
-            </h1>
+            {/* Right Column: Visual Showcase Frame with Overlapping Thumbnail (5 cols) */}
+            <div data-motion="reveal" className="lg:col-span-5 relative">
+              <div className="relative aspect-[4/3] sm:aspect-[16/11] rounded-3xl overflow-hidden shadow-2xl border border-white/60 dark:border-white/15 bg-[#201524]">
+                <ResilientImage
+                  src={SCENE_IMAGES.dining3dTerrace}
+                  alt="CITY MALL Dining Terrace"
+                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10 pointer-events-none" />
 
-            {/* Subtitle */}
-            <p className="text-base sm:text-lg text-[#5D5070] dark:text-[#D8CEE9] leading-relaxed max-w-xl">
-              Live table grills, crispy golden chicken &amp; oven-baked pizzas served across CITY MALL&apos;s sunlit culinary deck.
-            </p>
-          </div>
+                {/* Floating Top-Left Badge */}
+                <div className="absolute top-4 left-4 z-20 flex items-center gap-2 bg-black/75 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/20 text-white">
+                  <Sparkles className="w-3.5 h-3.5 text-[#FFA07A]" />
+                  <span className="text-[11px] font-bold tracking-wider uppercase text-white/95">
+                    9 Approved Outlets
+                  </span>
+                </div>
 
-          {/* Floating Rounded Brand Badges Dock (Matching Reference Screenshot 3) */}
-          <div data-motion="reveal" className="pt-2">
-            <div className="inline-flex flex-wrap items-center gap-3 p-2.5 rounded-3xl bg-white/85 dark:bg-[#1D1628]/85 backdrop-blur-xl border border-[#2D1D48]/14 dark:border-white/15 shadow-2xl">
-              {/* KFC */}
-              <button
-                type="button"
-                onClick={() => {
-                  setSelectedOutletIndex(2); // KFC
-                  scrollToSection('dining-flame');
-                }}
-                className="flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-[#E4002B] text-white font-black text-xs tracking-wider shadow-md hover:scale-105 transition-transform cursor-pointer"
-              >
-                <span className="font-black">KFC</span>
-              </button>
+                {/* Floating Bottom-Left Card */}
+                <div className="absolute bottom-4 left-4 z-20 max-w-[210px] bg-black/75 backdrop-blur-md p-3 rounded-2xl border border-white/20 text-white space-y-0.5">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#FFA07A]">
+                    Third Floor Terrace
+                  </span>
+                  <p className="text-xs text-white/90 font-medium leading-tight">
+                    Sunlit Promenade &amp; Social Culinary Deck
+                  </p>
+                </div>
 
-              {/* Barbeque Nation */}
-              <button
-                type="button"
-                onClick={() => {
-                  setSelectedOutletIndex(0); // Barbeque Nation
-                  scrollToSection('dining-flame');
-                }}
-                className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#C9523C] text-white font-bold text-xs tracking-wider shadow-md hover:scale-105 transition-transform cursor-pointer"
-              >
-                <Flame className="w-3.5 h-3.5" />
-                <span>Barbeque Nation</span>
-              </button>
-
-              {/* Pizza Hut */}
-              <button
-                type="button"
-                onClick={() => scrollToSection('dining-pizza')}
-                className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#006699] text-white font-bold text-xs tracking-wider shadow-md hover:scale-105 transition-transform cursor-pointer"
-              >
-                <Pizza className="w-3.5 h-3.5" />
-                <span>Pizza Hut</span>
-              </button>
+                {/* Overlapping Floating Thumbnail on bottom right */}
+                <div
+                  onClick={() => scrollToSection('dining-flame')}
+                  title="Explore live table grills"
+                  className="absolute bottom-4 right-4 z-20 w-32 sm:w-36 aspect-[16/11] rounded-2xl overflow-hidden border-2 border-white/50 shadow-2xl bg-black/80 cursor-pointer group hover:scale-105 transition-all"
+                >
+                  <ResilientImage
+                    src={BRAND_IMAGES.barbequeNation}
+                    alt="Barbeque live skewer grill"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-black/35 group-hover:bg-black/10 transition-colors flex items-end p-1.5">
+                    <span className="text-[9px] font-mono text-white/95 bg-black/75 px-1.5 py-0.5 rounded backdrop-blur-xs">
+                      Live Grills
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -985,71 +1066,6 @@ export function DiningPage({ onInspectBrand }) {
               alt="Culinary terrace ambience inside CITY MALL"
               className="w-full h-full object-cover"
             />
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          SECTION 6: COMPLETE 9-RESTAURANT DIRECTORY
-          ========================================================================= */}
-      <section
-        ref={directoryRef}
-        id="dining-directory"
-        className="relative overflow-hidden py-16 sm:py-24 bg-[#100404] text-[#F6EFE7]"
-      >
-        <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 space-y-10">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-white/10 pb-6">
-            <div>
-              <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[#FFA07A]">
-                Official Directory
-              </span>
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#FFF6EA] mt-1">
-                All 9 Approved Dining Destinations
-              </h2>
-            </div>
-            <span className="text-xs font-mono text-white/60">
-              Third Floor Culinary Level · CITY MALL, Gorakhpur
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {APPROVED_DINING_OUTLETS.map((outlet, idx) => (
-              <div
-                key={outlet.id}
-                onClick={() => {
-                  setSelectedOutletIndex(idx);
-                  scrollToSection('dining-flame');
-                }}
-                className="group p-5 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all duration-300 cursor-pointer space-y-3"
-              >
-                <div className="flex items-center justify-between">
-                  <span
-                    className="w-2.5 h-2.5 rounded-full"
-                    style={{ backgroundColor: outlet.accentColor || '#FFA07A' }}
-                  />
-                  <span className="text-[10px] font-mono text-white/60">
-                    {outlet.floor}
-                  </span>
-                </div>
-
-                <div>
-                  <h3 className="font-display text-lg font-bold text-white group-hover:text-[#FFA07A] transition-colors">
-                    {outlet.name}
-                  </h3>
-                  <p className="text-xs text-white/65 line-clamp-2 mt-1">
-                    {outlet.description}
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-between pt-2 border-t border-white/10 text-[11px] text-[#FFA07A]">
-                  <span>{outlet.hours}</span>
-                  <span className="font-semibold group-hover:translate-x-0.5 transition-transform inline-flex items-center gap-1">
-                    <span>View Showcase</span>
-                    <span>→</span>
-                  </span>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </section>

@@ -13,20 +13,20 @@ const SECTIONS = [
  * Matches reference scroll storytelling with live scroll-spy, glowing active dot,
  * and hover tooltip indicators.
  */
-export function RightVerticalSectionNav() {
-  const [activeSection, setActiveSection] = useState('home-hero');
+export function RightVerticalSectionNav({ sections = SECTIONS }) {
+  const [activeSection, setActiveSection] = useState(sections[0]?.id || 'home-hero');
   const [hoveredSection, setHoveredSection] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollPos = window.scrollY + window.innerHeight * 0.42;
 
-      for (let i = SECTIONS.length - 1; i >= 0; i--) {
-        const el = document.getElementById(SECTIONS[i].id);
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sections[i].id);
         if (el) {
           const top = el.offsetTop;
           if (scrollPos >= top) {
-            setActiveSection(SECTIONS[i].id);
+            setActiveSection(sections[i].id);
             break;
           }
         }
@@ -37,7 +37,7 @@ export function RightVerticalSectionNav() {
     handleScroll();
 
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [sections]);
 
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
@@ -48,13 +48,13 @@ export function RightVerticalSectionNav() {
 
   return (
     <aside
-      aria-label="Homepage Section Navigation"
+      aria-label="Section Navigation"
       className="fixed right-3 sm:right-6 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-center gap-3.5 select-none pointer-events-auto"
     >
       {/* Subtle vertical spine track */}
       <div className="absolute inset-y-2 w-px bg-[#2D1D48]/14 dark:bg-[#E2D4FF]/16 pointer-events-none" />
 
-      {SECTIONS.map((sec) => {
+      {sections.map((sec) => {
         const isActive = activeSection === sec.id;
         const isHovered = hoveredSection === sec.id;
 

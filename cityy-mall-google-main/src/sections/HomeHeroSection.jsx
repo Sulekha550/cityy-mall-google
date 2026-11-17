@@ -8,7 +8,7 @@ import { VideoSectionBackground } from '../components/VideoSectionBackground';
 import { ResilientImage } from '../components/ResilientImage';
 import { BrandInsignia } from '../components/BrandInsignia';
 
-const HERO_FEATURE_IDS = ['louis-philippe', 'tanishq', 'inox-cinemas', 'barbeque-nation'];
+const HERO_FEATURE_IDS = ['louis-philippe', 'tanishq', 'titan-world', 'inox-cinemas'];
 
 export function HomeHeroSection({ onInspectBrand }) {
   const sectionRef = useRef(null);
@@ -87,89 +87,90 @@ export function HomeHeroSection({ onInspectBrand }) {
             </div>
           </div>
 
-          {/* Sequential One-by-One Layered Architectural Composition Right */}
-          <div className="lg:col-span-5 relative min-h-[380px] sm:min-h-[460px] flex items-center justify-end">
-            {/* Sequential Image 1: Background Grand Atrium Perspective (Enters First) */}
+          {/* Featured Brand Architectural Showcase Right */}
+          <div className="lg:col-span-5 relative flex items-center justify-center lg:justify-end">
+            {/* Main Luxury Vitrine Card */}
             <div
-              data-motion="seq-img"
-              data-seq-index="0"
-              data-seq-from="left"
-              className="absolute -left-4 sm:-left-8 top-0 w-[65%] aspect-[4/3] border border-[#2D1D48]/16 dark:border-[#E2D4FF]/16 bg-[#FFFBF6]/80 dark:bg-[#1D1630]/80 shadow-lg overflow-hidden hidden sm:block"
+              data-motion="reveal"
+              className="relative z-10 w-full max-w-sm sm:max-w-md rounded-3xl border border-white/80 dark:border-white/12 bg-white/95 dark:bg-[#1C152B]/95 shadow-2xl overflow-hidden backdrop-blur-md transition-all duration-300"
             >
-              <ResilientImage
-                src={ARCHITECTURAL_GALLERY[1]}
-                alt="CITY MALL Gorakhpur sunlit architectural promenade"
-                priority
-                className="w-full h-full object-cover opacity-90 transition-transform duration-700 hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#151021]/60 via-transparent to-transparent pointer-events-none" />
-              <span className="absolute bottom-2 left-3 text-[10px] font-mono uppercase tracking-wider text-white/90">
-                Gorakhpur Promenade Atrium
-              </span>
-            </div>
-
-            {/* Sequential Image 2: Foreground Featured Brand Vitrine (Enters Second with Stagger) */}
-            <div
-              data-motion="seq-img"
-              data-seq-index="1"
-              data-seq-from="up"
-              className="relative z-10 w-full max-w-sm sm:max-w-md border border-[#2D1D48]/18 dark:border-[#E2D4FF]/20 bg-[#FFFBF6]/95 dark:bg-[#1D1630]/95 shadow-2xl overflow-hidden mt-8 sm:mt-0"
-            >
-              <div className="relative aspect-[4/3] overflow-hidden bg-[#EFE6FA] dark:bg-[#231B38]">
+              <div className="relative aspect-[16/11] overflow-hidden bg-[#EFE6FA] dark:bg-[#231B38]">
                 <ResilientImage
+                  key={activeBrand?.id}
                   src={activeBrand?.image || ARCHITECTURAL_GALLERY[0]}
                   alt={activeBrand?.name || 'CITY MALL Gorakhpur'}
                   priority
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/10 pointer-events-none" />
+
+                {/* Floating Top-Left Glass Badge */}
+                <div className="absolute top-3.5 left-3.5 z-20 flex items-center gap-2 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full text-white border border-white/20">
+                  <span
+                    className="w-2 h-2 rounded-full"
+                    style={{ backgroundColor: activeBrand?.accentColor || '#C9523C' }}
+                  />
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-white/90">
+                    Premier Collection
+                  </span>
+                </div>
               </div>
 
-              <div className="p-5 sm:p-6 flex items-center justify-between gap-4">
-                <div className="min-w-0">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#0E7C71] dark:text-[#5EEAD4]">
-                    {activeBrand?.categoryName}
-                  </p>
+              {/* Card Information Body */}
+              <div className="p-5 sm:p-6 space-y-3">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="min-w-0">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#0E7C71] dark:text-[#5EEAD4]">
+                      {activeBrand?.categoryName}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => activeBrand && onInspectBrand(activeBrand)}
+                      className="font-display text-2xl font-bold text-left text-[#1B1325] dark:text-[#F6EFE7] hover:text-[#C9523C] dark:hover:text-[#F48C74] transition-colors cursor-pointer truncate block mt-0.5"
+                    >
+                      {activeBrand?.name}
+                    </button>
+                    <p className="text-xs text-[#5D5070] dark:text-[#B5A7D0] truncate mt-0.5">
+                      {activeBrand?.tagline}
+                    </p>
+                  </div>
+
+                  {activeBrand && (
+                    <BrandInsignia
+                      monogram={activeBrand.monogram}
+                      accentColor={activeBrand.accentColor}
+                      size="md"
+                    />
+                  )}
+                </div>
+
+                {/* Interactive switcher dots & inspect link */}
+                <div className="pt-3 flex items-center justify-between border-t border-[#2D1D48]/10 dark:border-white/10">
+                  <div className="flex items-center gap-1.5">
+                    {featuredBrands.map((b, idx) => (
+                      <button
+                        key={b.id}
+                        type="button"
+                        onClick={() => setActiveIndex(idx)}
+                        aria-label={`Preview ${b.name}`}
+                        className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                          idx === activeIndex
+                            ? 'w-7 bg-[#C9523C] dark:bg-[#F48C74]'
+                            : 'w-2 bg-[#2D1D48]/20 dark:bg-white/25 hover:bg-[#683BA4]'
+                        }`}
+                      />
+                    ))}
+                  </div>
+
                   <button
                     type="button"
                     onClick={() => activeBrand && onInspectBrand(activeBrand)}
-                    className="font-display text-2xl font-semibold text-left hover:text-[#C9523C] dark:hover:text-[#F48C74] transition-colors cursor-pointer truncate block"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#683BA4] dark:text-[#BFA1FF] hover:underline cursor-pointer"
                   >
-                    {activeBrand?.name}
+                    <span>Inspect House</span>
+                    <span>→</span>
                   </button>
                 </div>
-
-                {activeBrand && (
-                  <BrandInsignia
-                    monogram={activeBrand.monogram}
-                    accentColor={activeBrand.accentColor}
-                  />
-                )}
-              </div>
-
-              {/* Interactive switcher dots */}
-              <div className="px-5 sm:px-6 pb-4 flex items-center justify-between border-t border-[#2D1D48]/10 dark:border-[#E2D4FF]/10 pt-3">
-                <div className="flex items-center gap-2">
-                  {featuredBrands.map((b, idx) => (
-                    <button
-                      key={b.id}
-                      type="button"
-                      onClick={() => setActiveIndex(idx)}
-                      aria-label={`Preview ${b.name}`}
-                      className={`h-2 transition-all cursor-pointer ${
-                        idx === activeIndex
-                          ? 'w-7 bg-[#C9523C] dark:bg-[#F48C74]'
-                          : 'w-2.5 bg-[#2D1D48]/25 dark:bg-[#E2D4FF]/25 hover:bg-[#683BA4]'
-                      }`}
-                    />
-                  ))}
-                </div>
-                <button
-                  type="button"
-                  onClick={() => activeBrand && onInspectBrand(activeBrand)}
-                  className="text-xs font-semibold text-[#683BA4] dark:text-[#BFA1FF] hover:underline cursor-pointer"
-                >
-                  Inspect House
-                </button>
               </div>
             </div>
           </div>

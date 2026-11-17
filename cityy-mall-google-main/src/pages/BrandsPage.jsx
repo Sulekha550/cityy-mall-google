@@ -175,6 +175,74 @@ export function BrandsPage({ onInspectBrand }) {
           })}
         </div>
 
+        {/* Section 2: PREMIER BRAND STRIP · 13 APPROVED HOUSES (Matching Reference Screenshot 4) */}
+        <div className="space-y-3 pt-1">
+          <div className="flex items-center justify-between text-xs border-b border-[#2D1D48]/10 dark:border-[#E2D4FF]/10 pb-2">
+            <span className="font-semibold uppercase tracking-[0.18em] text-[#683BA4] dark:text-[#BFA1FF] text-[11px]">
+              PREMIER BRAND STRIP · 13 APPROVED HOUSES
+            </span>
+            <span className="text-[11px] text-[#5D5070] dark:text-[#B5A7D0] italic">
+              Hover to preview · Click to inspect
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2.5">
+            {premier13Brands.map((brand) => {
+              const isSelected = activeBrandId === brand.id;
+              const matchesFilter =
+                selectedCategory === 'all' || brand.categoryId === selectedCategory;
+
+              return (
+                <div
+                  key={brand.id}
+                  onMouseEnter={() => setActiveBrandId(brand.id)}
+                  onClick={() => {
+                    setActiveBrandId(brand.id);
+                    onInspectBrand?.(brand);
+                  }}
+                  className={`group relative p-3 rounded-sm border transition-all duration-200 cursor-pointer flex flex-col justify-between min-h-[96px] ${
+                    isSelected
+                      ? 'border-[#683BA4] dark:border-[#BFA1FF] bg-[#FFFBF6] dark:bg-[#1F1730] shadow-md -translate-y-0.5 ring-1 ring-[#683BA4]/30'
+                      : matchesFilter
+                      ? 'border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#FFFBF6]/85 dark:bg-[#1A1328]/85 hover:border-[#683BA4]/50 dark:hover:border-[#BFA1FF]/50 hover:-translate-y-0.5'
+                      : 'opacity-40 border-[#2D1D48]/8 dark:border-[#E2D4FF]/8 bg-transparent'
+                  }`}
+                >
+                  {/* Top: Monogram box + Floor label */}
+                  <div className="flex items-start justify-between gap-1.5 mb-2">
+                    <div className="relative w-8 h-8 rounded-xs border border-[#2D1D48]/15 dark:border-[#E2D4FF]/20 bg-white dark:bg-[#151021] flex items-center justify-center font-bold text-[11px] text-[#1B1325] dark:text-[#F6EFE7]">
+                      {/* Little accent square on top-left corner */}
+                      <span
+                        className="absolute top-0.5 left-0.5 w-1.5 h-1.5 rounded-[1px]"
+                        style={{ backgroundColor: brand.accentColor || '#683BA4' }}
+                      />
+                      <span>{brand.monogram}</span>
+                    </div>
+                    <span className="text-[9px] font-mono text-[#5D5070] dark:text-[#B5A7D0] text-right truncate">
+                      {BRAND_FLOOR_MAP[brand.id]?.split('·')[0]?.trim()}
+                    </span>
+                  </div>
+
+                  {/* Bottom: Brand Name + Category */}
+                  <div>
+                    <h3
+                      className={`font-display text-xs font-semibold leading-tight line-clamp-1 transition-colors ${
+                        isSelected
+                          ? 'text-[#683BA4] dark:text-[#BFA1FF]'
+                          : 'text-[#1B1325] dark:text-[#F6EFE7] group-hover:text-[#683BA4]'
+                      }`}
+                    >
+                      {brand.name}
+                    </h3>
+                    <p className="text-[9px] text-[#5D5070] dark:text-[#B5A7D0] truncate mt-0.5">
+                      {brand.categoryName}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
 
         {/* Section 3: Editorial Asymmetric Brand Pavilion (Compact Stage, NOT oversized) */}
         {activeBrand ? (

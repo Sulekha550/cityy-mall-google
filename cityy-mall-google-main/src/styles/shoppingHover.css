@@ -1,0 +1,54 @@
+/* =========================================================================
+   SHOPPING PAGE EXCLUSIVE — LUXURY IMAGE HOVER ANIMATION
+   Strictly scoped to .shopping-page-scope only.
+   - Smooth scale(1.06) zoom
+   - Subtle upward lift translateY(-8px)
+   - Soft shadow and elegant depth effect
+   - Smooth 500ms transition with natural easing
+   - Zero layout shift, no image overflow
+   ========================================================================= */
+
+/* Ensure image containers preserve boundary and prepare for smooth lift */
+.shopping-page-scope div:has(> img):not([aria-hidden="true"]):not(.pointer-events-none) {
+  transition: transform 500ms cubic-bezier(0.25, 1, 0.5, 1),
+              box-shadow 500ms cubic-bezier(0.25, 1, 0.5, 1) !important;
+  will-change: transform, box-shadow;
+  overflow: hidden;
+}
+
+/* Image inside container - smooth zoom */
+.shopping-page-scope div:has(> img):not([aria-hidden="true"]):not(.pointer-events-none) img {
+  transition: transform 500ms cubic-bezier(0.25, 1, 0.5, 1) !important;
+  will-change: transform;
+  transform-origin: center center;
+}
+
+/* Hover effect on direct image wrapper or parent card hover */
+.shopping-page-scope div:has(> img):not([aria-hidden="true"]):not(.pointer-events-none):hover,
+.shopping-page-scope article:hover div:has(> img):not([aria-hidden="true"]):not(.pointer-events-none),
+.shopping-page-scope .group:hover div:has(> img):not([aria-hidden="true"]):not(.pointer-events-none) {
+  transform: translateY(-8px) !important;
+  box-shadow: 0 20px 32px -8px rgba(27, 19, 37, 0.28),
+              0 10px 16px -4px rgba(27, 19, 37, 0.16) !important;
+  z-index: 10;
+}
+
+/* Dark theme depth shadow */
+html.dark .shopping-page-scope div:has(> img):not([aria-hidden="true"]):not(.pointer-events-none):hover,
+html.dark .shopping-page-scope article:hover div:has(> img):not([aria-hidden="true"]):not(.pointer-events-none),
+html.dark .shopping-page-scope .group:hover div:has(> img):not([aria-hidden="true"]):not(.pointer-events-none) {
+  box-shadow: 0 20px 32px -8px rgba(0, 0, 0, 0.78),
+              0 10px 16px -4px rgba(226, 212, 255, 0.14) !important;
+}
+
+/* Zoom in image to 1.06 on hover */
+.shopping-page-scope div:has(> img):not([aria-hidden="true"]):not(.pointer-events-none):hover img,
+.shopping-page-scope article:hover div:has(> img):not([aria-hidden="true"]):not(.pointer-events-none) img,
+.shopping-page-scope .group:hover div:has(> img):not([aria-hidden="true"]):not(.pointer-events-none) img {
+  transform: scale(1.06) !important;
+}
+
+/* Direct img hover fallback */
+.shopping-page-scope img:not([aria-hidden="true"]):hover {
+  transform: scale(1.06) !important;
+}

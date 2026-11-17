@@ -25,22 +25,22 @@ function ZoneHeader({
     : zone.listedLabel;
 
   return (
-    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 p-6 sm:p-7 mb-10 bg-[#141311]/60 backdrop-blur-sm border border-white/15">
+    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 p-6 sm:p-7 mb-10 bg-[#FAF8F4]/88 backdrop-blur-md border border-[#DFD7C8] shadow-sm">
       <div className="max-w-2xl">
-        <div className="flex items-center gap-2.5 text-xs tracking-[0.18em] uppercase mb-3 text-[#DFC496]">
+        <div className="flex items-center gap-2.5 text-xs tracking-[0.18em] uppercase mb-3 text-[#8C6F47] font-medium">
           <span className="tabular-nums">{zone.indexLabel}</span>
           <span aria-hidden="true">·</span>
           <span>Metropolis Exhibition</span>
         </div>
-        <h2 className="font-serif text-3xl sm:text-4xl lg:text-[2.75rem] font-medium tracking-tight leading-[1.12] text-[#FAF8F4]">
+        <h2 className="font-serif text-3xl sm:text-4xl lg:text-[2.75rem] font-medium tracking-tight leading-[1.12] text-[#1A1816]">
           {numericIndex}. {zone.title}
         </h2>
-        <p className="mt-3 text-[15px] leading-relaxed text-[#EAE3D7]">
+        <p className="mt-3 text-[15px] leading-relaxed text-[#4A433B]">
           {zone.subtitle}
         </p>
       </div>
 
-      <div className="text-xs tracking-[0.14em] uppercase tabular-nums shrink-0 text-[#DFC496]">
+      <div className="text-xs tracking-[0.14em] uppercase tabular-nums shrink-0 text-[#8C6F47] font-medium">
         {countText}
       </div>
     </div>
@@ -133,13 +133,17 @@ export function ZoneShowcaseSection({
   return (
     <section
       id={`zone-${zone.id}`}
-      className="relative overflow-hidden py-16 sm:py-24 bg-[#141311] text-[#1A1816] border-b border-[#2C2721]"
+      className="relative overflow-hidden py-16 sm:py-24 bg-[#F7F4EE] text-[#1A1816] border-b border-[#DED5C7]"
     >
       <ScrollVideoBackground
         src={zone.video}
         poster={zone.poster}
+        scenes={zone.scenes}
+        triggerSelector={`#zone-${zone.id}`}
         label={zone.videoLabel}
-        videoOpacityClassName="opacity-100"
+        playbackSpeed={0.25}
+        videoOpacityClassName="opacity-55"
+        blendModeClassName="mix-blend-normal"
         overlayClassName={`bg-gradient-to-b ${zone.backdropTone}`}
       />
 
@@ -179,7 +183,7 @@ export function ZoneShowcaseSection({
           <AnchorMonographLayout
             brand={brands[0]}
             onExplore={onExplore}
-            isDark={true}
+            isDark={false}
             highlightHeading="Experience Highlights"
           />
         )}
@@ -305,9 +309,9 @@ function FootwearLayout({
           {anchors.map((brand) => (
             <article
               key={brand.id}
-              className="group bg-[#191816]/94 text-[#F7F4EE] border border-[#38322B] overflow-hidden flex flex-col shadow-xl"
+              className="group bg-[#FAF8F4]/95 text-[#1A1816] border border-[#DFD7C8] overflow-hidden flex flex-col shadow-lg"
             >
-              <div className="aspect-[16/9] overflow-hidden bg-[#24211E]">
+              <div className="aspect-[16/9] overflow-hidden bg-[#EAE3D7]">
                 <ExhibitionImage
                   src={brand.image}
                   alt={brand.name}
@@ -316,24 +320,23 @@ function FootwearLayout({
               </div>
               <div className="p-7 sm:p-8 flex-1 flex flex-col justify-between gap-6">
                 <div>
-                  <p className="text-xs tracking-[0.14em] uppercase text-[#C6A87A] mb-2">
+                  <p className="text-xs tracking-[0.14em] uppercase text-[#7A6852] mb-2">
                     {brand.category}
                   </p>
-                  <h3 className="font-serif text-3xl font-medium text-[#F7F4EE] mb-3">
+                  <h3 className="font-serif text-3xl font-medium text-[#1A1816] mb-3">
                     {brand.name}
                   </h3>
                   {brand.description && (
-                    <p className="text-[15px] leading-relaxed text-[#CFC7BA] mb-5">
+                    <p className="text-[15px] leading-relaxed text-[#474139] mb-5">
                       {brand.description}
                     </p>
                   )}
-                  <BrandMetaLine brand={brand} isDark />
+                  <BrandMetaLine brand={brand} />
                 </div>
-                <div className="pt-4 border-t border-[#2E2A25]">
+                <div className="pt-4 border-t border-[#E6DED0]">
                   <ExploreAction
                     label={brand.buttonLabel}
                     onClick={() => onExplore(brand)}
-                    isDark
                     prominent
                   />
                 </div>
@@ -345,11 +348,11 @@ function FootwearLayout({
 
       {promenade.length > 0 && (
         <div>
-          <div className="flex items-center justify-between mb-4">
-            <p className="text-xs tracking-[0.16em] uppercase text-[#DFC496]">
+          <div className="flex items-center justify-between mb-4 bg-[#FAF8F4]/80 px-4 py-2.5 border border-[#E5DDD0]">
+            <p className="text-xs tracking-[0.16em] uppercase text-[#7A6852] font-medium">
               Footwear Promenade Gallery
             </p>
-            <span className="text-xs text-[#DFC496] sm:hidden">
+            <span className="text-xs text-[#7A6852] sm:hidden">
               Swipe to explore
             </span>
           </div>
@@ -406,9 +409,9 @@ function JewelleryLayout({
           key={brand.id}
           className={`${
             idx === 0 ? 'lg:col-span-7' : 'lg:col-span-5'
-          } group bg-[#1B1916]/94 border border-[#38322A] overflow-hidden flex flex-col shadow-xl`}
+          } group bg-[#FAF8F4]/96 border border-[#DFD7C8] overflow-hidden flex flex-col shadow-lg`}
         >
-          <div className="aspect-[16/10] overflow-hidden bg-[#24211D]">
+          <div className="aspect-[16/10] overflow-hidden bg-[#EAE3D7]">
             <ExhibitionImage
               src={brand.image}
               alt={brand.name}
@@ -417,24 +420,23 @@ function JewelleryLayout({
           </div>
           <div className="p-7 sm:p-9 flex-1 flex flex-col justify-between gap-6">
             <div>
-              <p className="text-xs tracking-[0.14em] uppercase text-[#C6A87A] mb-2">
+              <p className="text-xs tracking-[0.14em] uppercase text-[#7A6852] mb-2">
                 {brand.category}
               </p>
-              <h3 className="font-serif text-3xl sm:text-4xl font-medium text-[#F7F4EE] mb-3">
+              <h3 className="font-serif text-3xl sm:text-4xl font-medium text-[#1A1816] mb-3">
                 {brand.name}
               </h3>
               {brand.description && (
-                <p className="text-[15px] leading-relaxed text-[#CFC7BA] mb-5">
+                <p className="text-[15px] leading-relaxed text-[#474139] mb-5">
                   {brand.description}
                 </p>
               )}
-              <BrandMetaLine brand={brand} isDark />
+              <BrandMetaLine brand={brand} />
             </div>
-            <div className="pt-4 border-t border-[#322D25]">
+            <div className="pt-4 border-t border-[#E6DED0]">
               <ExploreAction
                 label={brand.buttonLabel}
                 onClick={() => onExplore(brand)}
-                isDark
                 prominent
               />
             </div>
@@ -657,11 +659,11 @@ function DiningLayout({
 
       {culinaryRest.length > 0 && (
         <div>
-          <div className="flex items-center justify-between mb-5">
-            <p className="text-xs tracking-[0.16em] uppercase text-[#DFC496]">
+          <div className="flex items-center justify-between mb-5 bg-[#FAF8F4]/85 px-5 py-3 border border-[#DFD7C8]">
+            <p className="text-xs tracking-[0.16em] uppercase text-[#7A6852] font-medium">
               Culinary Salon & Bistro Collection
             </p>
-            <span className="text-xs text-[#DFC496] tabular-nums">
+            <span className="text-xs text-[#7A6852] tabular-nums">
               Second Floor · Level 2
             </span>
           </div>

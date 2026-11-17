@@ -1,260 +1,115 @@
 import { useEffect, useRef, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { ChevronDown, Menu, X } from 'lucide-react';
-import { FilterId } from '../data/exhibitionData';
 
-export type NavSectionId =
-  | 'home'
-  | 'discover'
-  | 'brands'
-  | 'shopping'
-  | 'dining'
-  | 'entertainment'
-  | 'whats-on'
-  | 'visit-us';
-
-export interface NavAction {
-  navId: NavSectionId;
-  filterZone?: FilterId;
-  searchHint?: string;
-  targetElementId?: string;
-}
-
-interface DropdownItem {
+interface DropdownRouteItem {
   label: string;
-  action: NavAction;
+  to: string;
 }
 
 interface NavMenuItem {
-  id: NavSectionId;
+  id: string;
   label: string;
-  action?: NavAction;
-  items?: DropdownItem[];
+  to: string;
+  matchPrefix?: string;
+  items?: DropdownRouteItem[];
 }
 
 const NAV_ITEMS: NavMenuItem[] = [
   {
     id: 'home',
     label: 'HOME',
-    action: { navId: 'home', targetElementId: 'hero-atrium' },
+    to: '/',
   },
   {
     id: 'discover',
     label: 'DISCOVER',
-    action: { navId: 'discover', targetElementId: 'discover-architecture' },
+    to: '/discover',
+    matchPrefix: '/discover',
   },
   {
     id: 'brands',
     label: 'BRANDS',
-    action: {
-      navId: 'brands',
-      filterZone: 'all',
-      targetElementId: 'exhibition-catalogue',
-    },
+    to: '/brands',
+    matchPrefix: '/brands',
   },
   {
     id: 'shopping',
     label: 'SHOPPING',
+    to: '/shopping',
+    matchPrefix: '/shopping',
     items: [
-      {
-        label: 'Fashion',
-        action: {
-          navId: 'shopping',
-          filterZone: 'fashion',
-          targetElementId: 'zone-fashion',
-        },
-      },
-      {
-        label: 'Footwear',
-        action: {
-          navId: 'shopping',
-          filterZone: 'footwear',
-          targetElementId: 'zone-footwear',
-        },
-      },
-      {
-        label: 'Jewellery & Watches',
-        action: {
-          navId: 'shopping',
-          filterZone: 'jewellery',
-          targetElementId: 'zone-jewellery',
-        },
-      },
-      {
-        label: 'Beauty & Lifestyle',
-        action: {
-          navId: 'shopping',
-          filterZone: 'beauty',
-          targetElementId: 'zone-beauty',
-        },
-      },
-      {
-        label: 'Electronics',
-        action: {
-          navId: 'shopping',
-          filterZone: 'supermarket',
-          targetElementId: 'zone-supermarket',
-        },
-      },
-      {
-        label: 'Toys & Kids',
-        action: {
-          navId: 'shopping',
-          filterZone: 'supermarket',
-          targetElementId: 'zone-supermarket',
-        },
-      },
+      { label: 'Fashion', to: '/shopping/fashion' },
+      { label: 'Footwear', to: '/shopping/footwear' },
+      { label: 'Jewellery & Watches', to: '/shopping/jewellery' },
+      { label: 'Beauty & Lifestyle', to: '/shopping/beauty' },
+      { label: 'Electronics', to: '/shopping/electronics' },
+      { label: 'Toys & Kids', to: '/shopping/toys-kids' },
     ],
   },
   {
     id: 'dining',
     label: 'DINING',
+    to: '/dining',
+    matchPrefix: '/dining',
     items: [
-      {
-        label: 'Restaurants',
-        action: {
-          navId: 'dining',
-          filterZone: 'dining',
-          targetElementId: 'zone-dining',
-        },
-      },
-      {
-        label: 'Food Court',
-        action: {
-          navId: 'dining',
-          filterZone: 'dining',
-          targetElementId: 'zone-dining',
-        },
-      },
-      {
-        label: 'Cafes',
-        action: {
-          navId: 'dining',
-          filterZone: 'dining',
-          targetElementId: 'zone-dining',
-        },
-      },
-      {
-        label: 'Fine Dining',
-        action: {
-          navId: 'dining',
-          filterZone: 'dining',
-          targetElementId: 'zone-dining',
-        },
-      },
+      { label: 'Restaurants', to: '/dining/restaurants' },
+      { label: 'Food Court', to: '/dining/food-court' },
+      { label: 'Cafes', to: '/dining/cafes' },
+      { label: 'Fine Dining', to: '/dining/fine-dining' },
     ],
   },
   {
     id: 'entertainment',
     label: 'ENTERTAINMENT',
+    to: '/entertainment',
+    matchPrefix: '/entertainment',
     items: [
-      {
-        label: 'Cinema',
-        action: {
-          navId: 'entertainment',
-          filterZone: 'cinema',
-          targetElementId: 'zone-cinema',
-        },
-      },
-      {
-        label: 'Gaming & Arcade',
-        action: {
-          navId: 'entertainment',
-          filterZone: 'cinema',
-          targetElementId: 'zone-cinema',
-        },
-      },
-      {
-        label: 'Kids Play Zone',
-        action: {
-          navId: 'entertainment',
-          targetElementId: 'events-experiences',
-        },
-      },
+      { label: 'Cinema', to: '/entertainment/cinema' },
+      { label: 'Gaming & Arcade', to: '/entertainment/gaming' },
+      { label: 'Kids Play Zone', to: '/entertainment/kids-play-zone' },
     ],
   },
   {
     id: 'whats-on',
     label: "WHAT'S ON",
+    to: '/whats-on',
+    matchPrefix: '/whats-on',
     items: [
-      {
-        label: 'Events',
-        action: {
-          navId: 'whats-on',
-          targetElementId: 'events-experiences',
-        },
-      },
-      {
-        label: 'Offers & Promotions',
-        action: {
-          navId: 'whats-on',
-          targetElementId: 'events-experiences',
-        },
-      },
-      {
-        label: 'Gift Cards',
-        action: {
-          navId: 'whats-on',
-          targetElementId: 'destination-footer',
-        },
-      },
+      { label: 'Events', to: '/whats-on/events' },
+      { label: 'Offers & Promotions', to: '/whats-on/offers' },
+      { label: 'Gift Cards', to: '/whats-on/gift-cards' },
     ],
   },
   {
     id: 'visit-us',
     label: 'VISIT US',
+    to: '/visit-us',
+    matchPrefix: '/visit-us',
     items: [
-      {
-        label: 'Mall Map',
-        action: {
-          navId: 'visit-us',
-          targetElementId: 'discover-architecture',
-        },
-      },
-      {
-        label: 'Floor Directory',
-        action: {
-          navId: 'visit-us',
-          targetElementId: 'discover-architecture',
-        },
-      },
-      {
-        label: 'Parking',
-        action: {
-          navId: 'visit-us',
-          targetElementId: 'destination-footer',
-        },
-      },
-      {
-        label: 'Mall Services',
-        action: {
-          navId: 'visit-us',
-          targetElementId: 'destination-footer',
-        },
-      },
-      {
-        label: 'Contact Us',
-        action: {
-          navId: 'visit-us',
-          targetElementId: 'destination-footer',
-        },
-      },
+      { label: 'Mall Map', to: '/visit-us/map' },
+      { label: 'Floor Directory', to: '/visit-us/floor-directory' },
+      { label: 'Parking', to: '/visit-us/parking' },
+      { label: 'Mall Services', to: '/visit-us/services' },
+      { label: 'Contact Us', to: '/visit-us/contact' },
     ],
   },
 ];
 
-interface NavbarProps {
-  activeNav: NavSectionId;
-  onNavigate: (action: NavAction) => void;
-}
-
-export function Navbar({ activeNav, onNavigate }: NavbarProps) {
-  const [openDropdown, setOpenDropdown] = useState<NavSectionId | null>(null);
+export function Navbar() {
+  const { pathname } = useLocation();
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [mobileExpanded, setMobileExpanded] = useState<NavSectionId | null>(
-    'shopping'
-  );
+  const [mobileExpanded, setMobileExpanded] = useState<string | null>('shopping');
+
   const closeTimeoutRef = useRef<number | null>(null);
   const headerRef = useRef<HTMLElement>(null);
+
+  // Close menus whenever route changes
+  useEffect(() => {
+    setOpenDropdown(null);
+    setMobileMenuOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -277,16 +132,12 @@ export function Navbar({ activeNav, onNavigate }: NavbarProps) {
     };
   }, []);
 
-  const handleMouseEnter = (id: NavSectionId, hasItems: boolean) => {
+  const handleMouseEnter = (id: string, hasItems: boolean) => {
     if (closeTimeoutRef.current) {
       clearTimeout(closeTimeoutRef.current);
       closeTimeoutRef.current = null;
     }
-    if (hasItems) {
-      setOpenDropdown(id);
-    } else {
-      setOpenDropdown(null);
-    }
+    setOpenDropdown(hasItems ? id : null);
   };
 
   const handleMouseLeave = () => {
@@ -295,10 +146,9 @@ export function Navbar({ activeNav, onNavigate }: NavbarProps) {
     }, 140);
   };
 
-  const triggerAction = (action: NavAction) => {
-    setOpenDropdown(null);
-    setMobileMenuOpen(false);
-    onNavigate(action);
+  const isItemActive = (item: NavMenuItem) => {
+    if (item.to === '/') return pathname === '/';
+    return item.matchPrefix ? pathname.startsWith(item.matchPrefix) : pathname === item.to;
   };
 
   return (
@@ -308,18 +158,14 @@ export function Navbar({ activeNav, onNavigate }: NavbarProps) {
     >
       <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-10 flex items-center justify-between gap-6">
         {/* Left Logo */}
-        <a
-          href="#hero-atrium"
-          onClick={(e) => {
-            e.preventDefault();
-            triggerAction({ navId: 'home', targetElementId: 'hero-atrium' });
-          }}
+        <Link
+          to="/"
           className="font-serif text-lg sm:text-xl font-semibold tracking-[0.12em] text-[#1A1816] whitespace-nowrap shrink-0"
         >
           CITY MALL
-        </a>
+        </Link>
 
-        {/* Right Compact Desktop Navigation — Exactly 8 Items */}
+        {/* Right Compact Desktop Navigation — Exactly 8 Main Items */}
         <nav
           aria-label="CITY MALL Navigation"
           className="hidden lg:flex items-center gap-4 xl:gap-6 shrink-0"
@@ -328,7 +174,7 @@ export function Navbar({ activeNav, onNavigate }: NavbarProps) {
           {NAV_ITEMS.map((item) => {
             const hasDropdown = Boolean(item.items && item.items.length > 0);
             const isOpen = openDropdown === item.id;
-            const isActive = activeNav === item.id;
+            const isActive = isItemActive(item);
 
             return (
               <div
@@ -336,18 +182,11 @@ export function Navbar({ activeNav, onNavigate }: NavbarProps) {
                 className="relative"
                 onMouseEnter={() => handleMouseEnter(item.id, hasDropdown)}
               >
-                <button
-                  type="button"
+                <Link
+                  to={item.to}
                   aria-expanded={hasDropdown ? isOpen : undefined}
                   aria-haspopup={hasDropdown ? 'menu' : undefined}
-                  onClick={() => {
-                    if (item.action) {
-                      triggerAction(item.action);
-                    } else if (hasDropdown) {
-                      setOpenDropdown(isOpen ? null : item.id);
-                    }
-                  }}
-                  className={`inline-flex items-center gap-1 py-1.5 text-[11px] xl:text-xs tracking-[0.14em] uppercase font-medium transition-colors whitespace-nowrap shrink-0 cursor-pointer border-b-2 ${
+                  className={`inline-flex items-center gap-1 py-1.5 text-[11px] xl:text-xs tracking-[0.14em] uppercase font-medium transition-colors whitespace-nowrap shrink-0 border-b-2 ${
                     isActive || isOpen
                       ? 'text-[#1A1816] border-[#9A7B4F]'
                       : 'text-[#524B42] border-transparent hover:text-[#1A1816] hover:border-[#C6A87A]'
@@ -361,7 +200,7 @@ export function Navbar({ activeNav, onNavigate }: NavbarProps) {
                       }`}
                     />
                   )}
-                </button>
+                </Link>
 
                 {/* Dropdown Panel */}
                 {hasDropdown && item.items && (
@@ -374,17 +213,23 @@ export function Navbar({ activeNav, onNavigate }: NavbarProps) {
                     }`}
                   >
                     <div className="bg-[#FAF8F4] border border-[#D8CFC0] shadow-xl py-2">
-                      {item.items.map((sub) => (
-                        <button
-                          key={sub.label}
-                          role="menuitem"
-                          type="button"
-                          onClick={() => triggerAction(sub.action)}
-                          className="w-full text-left px-4 py-2 text-xs tracking-[0.06em] text-[#2F2A24] hover:bg-[#EFEAE1] hover:text-[#9A7B4F] transition-colors cursor-pointer"
-                        >
-                          {sub.label}
-                        </button>
-                      ))}
+                      {item.items.map((sub) => {
+                        const subActive = pathname === sub.to;
+                        return (
+                          <Link
+                            key={sub.to}
+                            to={sub.to}
+                            role="menuitem"
+                            className={`block w-full text-left px-4 py-2 text-xs tracking-[0.06em] transition-colors ${
+                              subActive
+                                ? 'bg-[#EFEAE1] text-[#9A7B4F] font-medium'
+                                : 'text-[#2F2A24] hover:bg-[#EFEAE1] hover:text-[#9A7B4F]'
+                            }`}
+                          >
+                            {sub.label}
+                          </Link>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
@@ -416,45 +261,58 @@ export function Navbar({ activeNav, onNavigate }: NavbarProps) {
             {NAV_ITEMS.map((item) => {
               const hasDropdown = Boolean(item.items && item.items.length > 0);
               const isExpanded = mobileExpanded === item.id;
-              const isActive = activeNav === item.id;
+              const isActive = isItemActive(item);
 
               return (
                 <div key={item.id} className="border-b border-[#E5DDD0] py-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (item.action) {
-                        triggerAction(item.action);
-                      } else if (hasDropdown) {
-                        setMobileExpanded(isExpanded ? null : item.id);
-                      }
-                    }}
-                    className={`w-full flex items-center justify-between py-2.5 text-xs tracking-[0.16em] uppercase font-medium cursor-pointer ${
-                      isActive ? 'text-[#9A7B4F]' : 'text-[#1A1816]'
-                    }`}
-                  >
-                    <span>{item.label}</span>
+                  <div className="flex items-center justify-between gap-2">
+                    <Link
+                      to={item.to}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`flex-1 py-2.5 text-xs tracking-[0.16em] uppercase font-medium ${
+                        isActive ? 'text-[#9A7B4F]' : 'text-[#1A1816]'
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+
                     {hasDropdown && (
-                      <ChevronDown
-                        className={`w-4 h-4 transition-transform duration-200 ${
-                          isExpanded ? 'rotate-180 text-[#9A7B4F]' : ''
-                        }`}
-                      />
+                      <button
+                        type="button"
+                        aria-label={`Toggle ${item.label} submenu`}
+                        onClick={() =>
+                          setMobileExpanded(isExpanded ? null : item.id)
+                        }
+                        className="p-2 text-[#524B42] hover:text-[#1A1816] cursor-pointer"
+                      >
+                        <ChevronDown
+                          className={`w-4 h-4 transition-transform duration-200 ${
+                            isExpanded ? 'rotate-180 text-[#9A7B4F]' : ''
+                          }`}
+                        />
+                      </button>
                     )}
-                  </button>
+                  </div>
 
                   {hasDropdown && isExpanded && item.items && (
                     <div className="pl-3 pb-2 space-y-1">
-                      {item.items.map((sub) => (
-                        <button
-                          key={sub.label}
-                          type="button"
-                          onClick={() => triggerAction(sub.action)}
-                          className="w-full text-left py-2 text-sm text-[#4A433B] hover:text-[#9A7B4F] transition-colors cursor-pointer"
-                        >
-                          {sub.label}
-                        </button>
-                      ))}
+                      {item.items.map((sub) => {
+                        const subActive = pathname === sub.to;
+                        return (
+                          <Link
+                            key={sub.to}
+                            to={sub.to}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className={`block w-full text-left py-2 text-sm transition-colors ${
+                              subActive
+                                ? 'text-[#9A7B4F] font-medium'
+                                : 'text-[#4A433B] hover:text-[#9A7B4F]'
+                            }`}
+                          >
+                            {sub.label}
+                          </Link>
+                        );
+                      })}
                     </div>
                   )}
                 </div>

@@ -27,6 +27,11 @@ export interface BrandFlagship {
   keywords: string[];
 }
 
+export interface ArchitecturalScene {
+  src: string;
+  title: string;
+}
+
 export interface ZoneDefinition {
   id: ZoneId;
   indexLabel: string;
@@ -40,18 +45,157 @@ export interface ZoneDefinition {
   sceneThemeColor: string;
   video: string;
   poster: string;
+  scenes: ArchitecturalScene[];
   videoLabel: string;
 }
+
+export type Page3DKey =
+  | 'home'
+  | 'discover'
+  | 'brands'
+  | 'shopping'
+  | 'dining'
+  | 'entertainment'
+  | 'whats-on'
+  | 'visit-us';
+
+export interface Page3DAsset {
+  key: Page3DKey;
+  video3d: string;
+  poster3d: string;
+  scenes: ArchitecturalScene[];
+  cameraConcept: string;
+  label: string;
+}
+
+export const PAGE_3D_MEDIA: Record<Page3DKey, Page3DAsset> = {
+  home: {
+    key: 'home',
+    video3d: '/videos/home-3d.mp4',
+    poster3d: '/posters/home-3d.jpg',
+    scenes: [
+      { src: '/posters/home-scene-2.jpg', title: 'Grand Mall Exterior & Reflecting Plaza' },
+      { src: '/posters/home-scene-3.jpg', title: 'Monumental Travertine Entrance Foyer' },
+      { src: '/posters/home-3d.jpg', title: 'Sunlit Central Atrium & Glass Elevators' },
+      { src: '/posters/home-scene-4.jpg', title: 'Pearl-White Escalators & Shopping Avenue' },
+    ],
+    cameraConcept:
+      'Exterior arrival glide into the sunlit pearl-white grand atrium, glass skylight canopy, elevators and interior greenery.',
+    label: '0.25x 3D architectural sequence from grand exterior plaza into central atrium',
+  },
+  discover: {
+    key: 'discover',
+    video3d: '/videos/discover-3d.mp4',
+    poster3d: '/posters/discover-3d.jpg',
+    scenes: [
+      { src: '/posters/discover-3d.jpg', title: 'Multi-Tier Bridges & Cascading Oculus' },
+      { src: '/posters/discover-scene-2.jpg', title: 'Indoor Botanical Conservatory Garden' },
+      { src: '/posters/discover-scene-3.jpg', title: 'Undulating Glass-Blue Sky Bridges' },
+      { src: '/posters/discover-scene-4.jpg', title: 'Champagne Mezzanine Sculpture Lounge' },
+    ],
+    cameraConcept:
+      'Slow elevated 3D fly-through across travertine sky bridges, atrium gardens, water sculptures and elliptical glass oculus.',
+    label: '0.25x 3D architectural exploration of bridges, indoor gardens and mezzanine lounges',
+  },
+  brands: {
+    key: 'brands',
+    video3d: '/videos/brands-3d.mp4',
+    poster3d: '/posters/brands-3d.jpg',
+    scenes: [
+      { src: '/posters/brands-3d.jpg', title: 'Fluted Travertine Colonnade Storefronts' },
+      { src: '/posters/brands-scene-2.jpg', title: 'Curved Glass Haute Couture Gallery' },
+      { src: '/posters/brands-scene-3.jpg', title: 'Minimalist Alabaster Flagship Interior' },
+      { src: '/posters/brands-scene-4.jpg', title: 'Horology & Maison Vitrines Arcade' },
+    ],
+    cameraConcept:
+      'Forward architectural dolly along fluted champagne-stone colonnades and frameless glass luxury brand storefronts.',
+    label: '0.25x 3D walkthrough along luxury brand storefronts, vitrines and gallery interiors',
+  },
+  shopping: {
+    key: 'shopping',
+    video3d: '/videos/shopping-3d.mp4',
+    poster3d: '/posters/shopping-3d.jpg',
+    scenes: [
+      { src: '/posters/shopping-3d.jpg', title: 'Haute Fashion & Boutique Pavilion' },
+      { src: '/posters/shopping-scene-2.jpg', title: 'Minimalist Terrazzo Footwear Gallery' },
+      { src: '/posters/shopping-scene-3.jpg', title: 'Frosted Crystal Jewellery Showroom' },
+      { src: '/posters/shopping-scene-4.jpg', title: 'Botanical Beauty & Lifestyle Corridor' },
+    ],
+    cameraConcept:
+      'Continuous 3D gallery pan spanning haute apparel salons, sculpted footwear plinths, frosted crystal jewellery counters and lifestyle wings.',
+    label: '0.25x 3D walkthrough of fashion boutiques, footwear plinths and fine jewellery salons',
+  },
+  dining: {
+    key: 'dining',
+    video3d: '/videos/dining-3d.mp4',
+    poster3d: '/posters/dining-3d.jpg',
+    scenes: [
+      { src: '/posters/dining-3d.jpg', title: 'Sunlit Rooftop Bistros & Peach Parasols' },
+      { src: '/posters/dining-scene-2.jpg', title: 'Travertine Arches Fine Dining Hall' },
+      { src: '/posters/dining-scene-3.jpg', title: 'Marble Patisserie & Sunlit Cafe Lounge' },
+      { src: '/posters/dining-scene-4.jpg', title: 'Oak & Glass-Blue Culinary Pavilion' },
+    ],
+    cameraConcept:
+      'Sun-drenched 3D terrace glide across travertine bistros, soft peach linen umbrellas, olive planters and glass-blue skylights.',
+    label: '0.25x 3D culinary promenade spanning fine dining rooms, cafes and glass terraces',
+  },
+  entertainment: {
+    key: 'entertainment',
+    video3d: '/videos/entertainment-3d.mp4',
+    poster3d: '/posters/entertainment-3d.jpg',
+    scenes: [
+      { src: '/posters/entertainment-3d.jpg', title: 'Sunlit IMAX & Gaming Dome Concourse' },
+      { src: '/posters/entertainment-scene-2.jpg', title: 'INOX Cinema Multiplex Sanctuary' },
+      { src: '/posters/discover-scene-3.jpg', title: 'Panoramic Glass Mezzanine Walkway' },
+      { src: '/posters/discover-scene-4.jpg', title: 'Champagne Family Leisure Lounge' },
+    ],
+    cameraConcept:
+      'Futuristic daylight 3D dome camera sweep past curved acoustic ribs, glass gaming lounges and IMAX multiplex portals.',
+    label: '0.25x 3D architectural tour of daylight entertainment dome and cinema suites',
+  },
+  'whats-on': {
+    key: 'whats-on',
+    video3d: '/videos/whats-on-3d.mp4',
+    poster3d: '/posters/whats-on-3d.jpg',
+    scenes: [
+      { src: '/posters/whats-on-3d.jpg', title: 'Reflecting Pool Runway & Floral Sculptures' },
+      { src: '/posters/brands-scene-2.jpg', title: 'Seasonal Couture Exhibition Gallery' },
+      { src: '/posters/brands-scene-3.jpg', title: 'Sculptural Vitrine Celebration Hall' },
+      { src: '/posters/home-scene-4.jpg', title: 'Central Atrium Escalator Showcase' },
+    ],
+    cameraConcept:
+      'Serene museum-grade 3D atrium runway and suspended floral sculptures mirrored over limestone reflecting pools.',
+    label: '0.25x 3D exhibition sequence of runway galleries and floral art installations',
+  },
+  'visit-us': {
+    key: 'visit-us',
+    video3d: '/videos/visit-us-3d.mp4',
+    poster3d: '/posters/visit-us-3d.jpg',
+    scenes: [
+      { src: '/posters/visit-us-3d.jpg', title: 'Aerial Arrival Plaza & Fountain Portico' },
+      { src: '/posters/visit-us-scene-2.jpg', title: 'Grand Reception & Concierge Atrium' },
+      { src: '/posters/home-scene-2.jpg', title: 'Glass Facade & Valet Reflecting Pool' },
+      { src: '/posters/home-scene-3.jpg', title: 'Travertine Directory & Arrival Vaults' },
+    ],
+    cameraConcept:
+      'Sweeping aerial 3D approach over sculpted ivory arrival canopy, fountain plaza, botanical gardens and clear glass curtain facade.',
+    label: '0.25x 3D arrival plaza flyover, reception hall and visitor concierge courts',
+  },
+};
 
 export const HERO_ATRIUM_IMAGE =
   '/src/assets/images/hero_city_mall_atrium_1794890880703.jpg';
 
-export const HERO_VIDEO = '/videos/mall-hero.mp4';
-export const HERO_POSTER = '/posters/mall-hero.webp';
-export const DISCOVER_ARCHITECTURE_VIDEO = '/videos/mall-architecture.mp4';
-export const DISCOVER_ARCHITECTURE_POSTER = '/posters/mall-architecture.webp';
-export const EVENTS_EXPERIENCES_VIDEO = '/videos/events.mp4';
-export const EVENTS_EXPERIENCES_POSTER = '/posters/events.webp';
+export const HERO_VIDEO = PAGE_3D_MEDIA.home.video3d;
+export const HERO_POSTER = PAGE_3D_MEDIA.home.poster3d;
+export const BRANDS_STOREFRONTS_VIDEO = PAGE_3D_MEDIA.brands.video3d;
+export const BRANDS_STOREFRONTS_POSTER = PAGE_3D_MEDIA.brands.poster3d;
+export const DISCOVER_ARCHITECTURE_VIDEO = PAGE_3D_MEDIA.discover.video3d;
+export const DISCOVER_ARCHITECTURE_POSTER = PAGE_3D_MEDIA.discover.poster3d;
+export const EVENTS_EXPERIENCES_VIDEO = PAGE_3D_MEDIA['whats-on'].video3d;
+export const EVENTS_EXPERIENCES_POSTER = PAGE_3D_MEDIA['whats-on'].poster3d;
+export const VISIT_US_VIDEO = PAGE_3D_MEDIA['visit-us'].video3d;
+export const VISIT_US_POSTER = PAGE_3D_MEDIA['visit-us'].poster3d;
 
 export const ZONES: ZoneDefinition[] = [
   {
@@ -64,11 +208,17 @@ export const ZONES: ZoneDefinition[] = [
     listedLabel: '6 Flagships Listed',
     count: 6,
     theme: 'light',
-    backdropTone: 'from-[#141311]/38 via-[#141311]/15 to-[#141311]/42',
+    backdropTone: 'from-[#FAF8F4]/72 via-[#F7F4EE]/36 to-[#EFEAE1]/76',
     sceneThemeColor: '#C6A87A',
-    video: '/videos/fashion-retail.mp4',
-    poster: '/posters/fashion-retail.webp',
-    videoLabel: 'Luxury fashion boutique interior footage',
+    video: PAGE_3D_MEDIA.brands.video3d,
+    poster: '/posters/brands-scene-2.jpg',
+    scenes: [
+      { src: '/posters/brands-scene-2.jpg', title: 'Couture Glass Window Gallery' },
+      { src: '/posters/shopping-3d.jpg', title: 'Fashion Boutique Pavilion' },
+      { src: '/posters/brands-3d.jpg', title: 'Fluted Travertine Colonnade' },
+      { src: '/posters/brands-scene-3.jpg', title: 'Minimalist Alabaster Showroom' },
+    ],
+    videoLabel: '0.25x 3D luxury fashion boutiques and tailoring salon corridor',
   },
   {
     id: 'footwear',
@@ -80,11 +230,17 @@ export const ZONES: ZoneDefinition[] = [
     listedLabel: '6 Flagships Listed',
     count: 6,
     theme: 'travertine',
-    backdropTone: 'from-[#141311]/38 via-[#141311]/15 to-[#141311]/42',
+    backdropTone: 'from-[#FAF8F4]/72 via-[#F7F4EE]/36 to-[#EAE5DC]/76',
     sceneThemeColor: '#8B7D6B',
-    video: '/videos/footwear-sportswear.mp4',
-    poster: '/posters/footwear-sportswear.webp',
-    videoLabel: 'Sneaker displays and footwear retail store footage',
+    video: PAGE_3D_MEDIA.shopping.video3d,
+    poster: '/posters/shopping-scene-2.jpg',
+    scenes: [
+      { src: '/posters/shopping-scene-2.jpg', title: 'Terrazzo Footwear Display Gallery' },
+      { src: '/posters/shopping-3d.jpg', title: 'Sculpted Footwear Plinths' },
+      { src: '/posters/home-scene-4.jpg', title: 'Level 0 Sports Promenade' },
+      { src: '/posters/brands-3d.jpg', title: 'Athletic Flagship Colonnade' },
+    ],
+    videoLabel: '0.25x 3D footwear displays and sunlit athletic gallery walkthrough',
   },
   {
     id: 'jewellery',
@@ -95,12 +251,18 @@ export const ZONES: ZoneDefinition[] = [
       'Sovereign 22K/24K gold craftsmanship, certified solitaires & precision chronographs.',
     listedLabel: '2 Flagships Listed',
     count: 2,
-    theme: 'dark',
-    backdropTone: 'from-[#11100E]/42 via-[#11100E]/18 to-[#11100E]/46',
+    theme: 'light',
+    backdropTone: 'from-[#FAF8F4]/72 via-[#F7F4EE]/36 to-[#EFEAE1]/76',
     sceneThemeColor: '#D4AF37',
-    video: '/videos/jewellery-watches.mp4',
-    poster: '/posters/jewellery-watches.webp',
-    videoLabel: 'Fine jewellery showcase and macro diamond footage',
+    video: PAGE_3D_MEDIA.shopping.video3d,
+    poster: '/posters/shopping-scene-3.jpg',
+    scenes: [
+      { src: '/posters/shopping-scene-3.jpg', title: 'Frosted Crystal Jewellery Salon' },
+      { src: '/posters/brands-scene-4.jpg', title: 'Champagne Horology Arcade' },
+      { src: '/posters/brands-scene-3.jpg', title: 'Travertine Viewing Vitrines' },
+      { src: '/posters/shopping-3d.jpg', title: 'Luminous Fine Retail Rotunda' },
+    ],
+    videoLabel: '0.25x 3D fine jewellery showcase and luminous horology salon',
   },
   {
     id: 'beauty',
@@ -112,11 +274,17 @@ export const ZONES: ZoneDefinition[] = [
     listedLabel: '2 Flagships Listed',
     count: 2,
     theme: 'light',
-    backdropTone: 'from-[#141311]/38 via-[#141311]/15 to-[#141311]/42',
+    backdropTone: 'from-[#FAF8F4]/72 via-[#F7F4EE]/36 to-[#EFEAE1]/76',
     sceneThemeColor: '#B89778',
-    video: '/videos/beauty-lifestyle.mp4',
-    poster: '/posters/beauty-lifestyle.webp',
-    videoLabel: 'Luxury beauty and hair salon styling footage',
+    video: PAGE_3D_MEDIA.shopping.video3d,
+    poster: '/posters/shopping-scene-4.jpg',
+    scenes: [
+      { src: '/posters/shopping-scene-4.jpg', title: 'Botanical Beauty & Apothecary Wing' },
+      { src: '/posters/discover-scene-2.jpg', title: 'Sunlit Indoor Olive Conservatory' },
+      { src: '/posters/discover-scene-4.jpg', title: 'Serene Wellness Lounge Terrace' },
+      { src: '/posters/shopping-3d.jpg', title: 'Daylight Lifestyle Promenade' },
+    ],
+    videoLabel: '0.25x 3D beauty sanctuary and botanical lifestyle promenade',
   },
   {
     id: 'supermarket',
@@ -128,11 +296,17 @@ export const ZONES: ZoneDefinition[] = [
     listedLabel: '1 Flagship Listed',
     count: 1,
     theme: 'travertine',
-    backdropTone: 'from-[#141311]/38 via-[#141311]/15 to-[#141311]/42',
+    backdropTone: 'from-[#FAF8F4]/72 via-[#F7F4EE]/36 to-[#EAE5DC]/76',
     sceneThemeColor: '#6F7D65',
-    video: '/videos/supermarket.mp4',
-    poster: '/posters/supermarket.webp',
-    videoLabel: 'Gourmet supermarket aisle and fresh retail footage',
+    video: PAGE_3D_MEDIA.discover.video3d,
+    poster: '/posters/dining-scene-4.jpg',
+    scenes: [
+      { src: '/posters/dining-scene-4.jpg', title: 'Gourmet Timber & Glass Market Hall' },
+      { src: '/posters/dining-scene-3.jpg', title: 'Artisanal Bakery & Coffee Bar' },
+      { src: '/posters/discover-scene-2.jpg', title: 'Fresh Conservatory Concourse' },
+      { src: '/posters/home-3d.jpg', title: 'Ground Level Anchor Atrium' },
+    ],
+    videoLabel: '0.25x 3D gourmet market hall and sunlit retail concourse',
   },
   {
     id: 'cinema',
@@ -143,12 +317,13 @@ export const ZONES: ZoneDefinition[] = [
       'VIP IMAX® 4K laser projection suites, Dolby Atmos® soundscapes & Insignia butler lounges.',
     listedLabel: '1 Flagship Listed',
     count: 1,
-    theme: 'dark',
-    backdropTone: 'from-[#0E0D0C]/42 via-[#0E0D0C]/18 to-[#0E0D0C]/46',
+    theme: 'light',
+    backdropTone: 'from-[#FAF8F4]/72 via-[#F7F4EE]/36 to-[#EFEAE1]/76',
     sceneThemeColor: '#8C7A5B',
-    video: '/videos/cinema.mp4',
-    poster: '/posters/cinema.webp',
-    videoLabel: 'Luxury cinema theatre auditorium footage',
+    video: PAGE_3D_MEDIA.entertainment.video3d,
+    poster: '/posters/entertainment-3d.jpg',
+    scenes: PAGE_3D_MEDIA.entertainment.scenes,
+    videoLabel: '0.25x 3D daylight entertainment dome and IMAX multiplex portals',
   },
   {
     id: 'dining',
@@ -160,11 +335,12 @@ export const ZONES: ZoneDefinition[] = [
     listedLabel: '9 Flagships Listed',
     count: 9,
     theme: 'light',
-    backdropTone: 'from-[#141311]/38 via-[#141311]/15 to-[#141311]/42',
+    backdropTone: 'from-[#FAF8F4]/72 via-[#F7F4EE]/36 to-[#EFEAE1]/76',
     sceneThemeColor: '#A86E44',
-    video: '/videos/dining.mp4',
-    poster: '/posters/dining.webp',
-    videoLabel: 'Upscale restaurant interior and gourmet dining ambiance footage',
+    video: PAGE_3D_MEDIA.dining.video3d,
+    poster: '/posters/dining-3d.jpg',
+    scenes: PAGE_3D_MEDIA.dining.scenes,
+    videoLabel: '0.25x 3D rooftop bistros, cafes and sunlit fine dining arches',
   },
 ];
 

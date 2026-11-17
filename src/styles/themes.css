@@ -1,0 +1,59 @@
+:root {
+  /* Light Theme — Warm Cream, Lavender, Peach Coral, Mint Turquoise & Sky Blue */
+  --surface-base: #fbf4eb;
+  --surface-lavender: #efe6fa;
+  --surface-peach: #fde8df;
+  --surface-mint: #e4f5f0;
+  --surface-sky: #e6f1fc;
+  --surface-blush: #fae4ec;
+  --surface-elevated: rgba(255, 251, 246, 0.86);
+
+  --text-primary: #1b1325;
+  --text-secondary: #433754;
+  --text-muted: #5d5070;
+
+  --accent-coral: #c9523c;
+  --accent-plum: #683ba4;
+  --accent-teal: #0e7c71;
+  --accent-amber: #b36624;
+
+  --border-subtle: rgba(45, 29, 72, 0.14);
+  --border-strong: rgba(45, 29, 72, 0.28);
+
+  --scrim-light-soft: linear-gradient(
+    180deg,
+    rgba(251, 244, 235, 0.62) 0%,
+    rgba(239, 230, 250, 0.34) 48%,
+    rgba(253, 232, 223, 0.68) 100%
+  );
+}
+
+html.dark {
+  /* Dark Theme — Twilight Plum, Midnight Teal, Deep Indigo & Warm Obsidian (No pure black) */
+  --surface-base: #151021;
+  --surface-lavender: #1d1630;
+  --surface-peach: #241724;
+  --surface-mint: #112226;
+  --surface-sky: #131c2e;
+  --surface-blush: #231526;
+  --surface-elevated: rgba(29, 22, 46, 0.86);
+
+  --text-primary: #f6efe7;
+  --text-secondary: #d8cee9;
+  --text-muted: #b5a7d0;
+
+  --accent-coral: #f48c74;
+  --accent-plum: #bfa1ff;
+  --accent-teal: #5eead4;
+  --accent-amber: #f0b97a;
+
+  --border-subtle: rgba(226, 212, 255, 0.14);
+  --border-strong: rgba(226, 212, 255, 0.28);
+
+  --scrim-light-soft: linear-gradient(
+    180deg,
+    rgba(21, 16, 33, 0.56) 0%,
+    rgba(29, 22, 48, 0.32) 48%,
+    rgba(21, 16, 33, 0.64) 100%
+  );
+}

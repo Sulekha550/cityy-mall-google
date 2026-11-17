@@ -1,0 +1,6 @@
+{
+  "name": "CITY MALL — Sovereign Retail Exhibition",
+  "description": "An international luxury retail exhibition across 27 verified flagship houses: haute couture, fine horology, activewear, Michelin-standard gastronomy, and IMAX laser cinema.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -178,10 +178,32 @@ export function AbstractSectionBackground({
       wakeMouseActivity(1.0);
     };
 
+    const handleTouchStart = (e) => {
+      wakeMouseActivity(1.2);
+      if (e.touches && e.touches[0] && hostSection) {
+        const touch = e.touches[0];
+        const rect = hostSection.getBoundingClientRect();
+        targetMouseX = ((touch.clientX - rect.left) / rect.width) * 2 - 1;
+        targetMouseY = ((touch.clientY - rect.top) / rect.height) * 2 - 1;
+      }
+    };
+
+    const handleTouchMove = (e) => {
+      wakeMouseActivity(1.4);
+      if (e.touches && e.touches[0] && hostSection) {
+        const touch = e.touches[0];
+        const rect = hostSection.getBoundingClientRect();
+        targetMouseX = ((touch.clientX - rect.left) / rect.width) * 2 - 1;
+        targetMouseY = ((touch.clientY - rect.top) / rect.height) * 2 - 1;
+      }
+    };
+
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
     window.addEventListener('wheel', handleWheel, { passive: true });
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('pointerdown', handlePointerDown, { passive: true });
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
 
     if (hostSection) {
       hostSection.addEventListener('mouseleave', handleMouseLeave, { passive: true });
@@ -281,9 +303,9 @@ export function AbstractSectionBackground({
         mouseActivity = 0;
       }
 
-      // TIME & ANIMATION RUN ONLY WHEN MOUSE IS ACTIVELY USED:
-      // When mouse is idle/untouched, motionSpeed is 0 and animation stays completely stopped
-      const motionSpeed = mouseActivity;
+      // CONTINUOUS GENTLE AMBIENT BREATHING (0.20): Ensures background lines, waves & circles
+      // are ALWAYS active & luminous on mobile & idle screens, accelerating dynamically on touch/mouse/scroll!
+      const motionSpeed = 0.20 + mouseActivity * 0.80;
       time += dt * 0.45 * motionSpeed * speedFactor;
 
       // Mouse lerp
@@ -360,6 +382,8 @@ export function AbstractSectionBackground({
       window.removeEventListener('wheel', handleWheel);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('pointerdown', handlePointerDown);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
       if (hostSection) {
         hostSection.removeEventListener('mouseleave', handleMouseLeave);
       }
@@ -405,10 +429,10 @@ function drawBaseAtmosphere(ctx, w, h, t, isDark, variant) {
   if (variant === 'entertainment' || variant === 'cinema') {
     // Lighter, luminous royal violet & mulberry plum background (matching reference screenshot)
     const cinemaGrad = ctx.createLinearGradient(0, 0, w, h);
-    cinemaGrad.addColorStop(0, '#462170');
-    cinemaGrad.addColorStop(0.32, '#38185C');
-    cinemaGrad.addColorStop(0.68, '#280F44');
-    cinemaGrad.addColorStop(1, '#1E0A34');
+    cinemaGrad.addColorStop(0, '#5C2B8D');
+    cinemaGrad.addColorStop(0.35, '#481E73');
+    cinemaGrad.addColorStop(0.7, '#341457');
+    cinemaGrad.addColorStop(1, '#240C3E');
     ctx.fillStyle = cinemaGrad;
     ctx.fillRect(0, 0, w, h);
     return;
@@ -822,22 +846,24 @@ function drawBakeAtmosphere(ctx, w, h, t, isDark) {
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, w, h);
 
-  // 2. Faint Concentric Golden Rings Centered Behind Content (as seen in reference screenshot)
-  const cx = w * 0.52;
-  const cy = h * 0.48;
+  const isMobile = w < 640;
+
+  // 2. Concentric Golden Oven Rings Centered Behind Content (Fully scaled for mobile viewports)
+  const cx = isMobile ? w * 0.5 : w * 0.52;
+  const cy = isMobile ? Math.min(320, h * 0.32) : h * 0.48;
   const ringCount = 5;
 
   for (let r = 1; r <= ringCount; r++) {
-    const baseRadius = r * 140;
-    const pulse = Math.sin(t * 0.5 + r * 0.8) * 12;
+    const baseRadius = isMobile ? r * 65 : r * 140;
+    const pulse = Math.sin(t * 0.5 + r * 0.8) * (isMobile ? 5 : 12);
     const radius = baseRadius + pulse;
 
     ctx.beginPath();
     ctx.arc(cx, cy, radius, 0, Math.PI * 2);
     ctx.strokeStyle = isDark
-      ? `rgba(240, 180, 80, ${0.12 - r * 0.015})`
-      : `rgba(212, 140, 40, ${0.18 - r * 0.025})`;
-    ctx.lineWidth = 1.2;
+      ? `rgba(240, 180, 80, ${0.28 - r * 0.035})`
+      : `rgba(212, 140, 40, ${0.35 - r * 0.045})`;
+    ctx.lineWidth = isMobile ? 1.6 : 1.4;
     ctx.stroke();
   }
 
@@ -885,55 +911,58 @@ function drawDiningHeroAtmosphere(ctx, w, h, t, isDark) {
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, w, h);
 
-  // 2. Smooth Flowing Wavy Golden Lines on the Right Side (as in screenshot)
+  const isMobile = w < 640;
+
+  // 2. Smooth Flowing Wavy Golden Lines (Gracefully positioned across both mobile & desktop)
   const lineCount = 3;
   for (let l = 0; l < lineCount; l++) {
-    const baseX = w * (0.65 + l * 0.12);
+    const baseX = isMobile ? w * (0.32 + l * 0.26) : w * (0.65 + l * 0.12);
     ctx.beginPath();
     ctx.moveTo(baseX, 0);
 
-    for (let y = 0; y <= h; y += 40) {
+    for (let y = 0; y <= h; y += 30) {
       const waveX =
         baseX +
-        Math.sin(y * 0.004 + t * 0.5 + l * 0.8) * 45 +
-        Math.cos(y * 0.002 - t * 0.3) * 20;
+        Math.sin(y * 0.005 + t * 0.5 + l * 0.8) * (isMobile ? 30 : 45) +
+        Math.cos(y * 0.003 - t * 0.3) * (isMobile ? 15 : 20);
       ctx.lineTo(waveX, y);
     }
 
     ctx.strokeStyle = isDark
-      ? `rgba(240, 200, 110, ${0.14 - l * 0.02})`
-      : `rgba(212, 160, 50, ${0.22 - l * 0.03})`;
-    ctx.lineWidth = 1.5;
+      ? `rgba(240, 200, 110, ${0.30 - l * 0.06})`
+      : `rgba(212, 160, 50, ${0.40 - l * 0.07})`;
+    ctx.lineWidth = isMobile ? 1.8 : 1.5;
     ctx.stroke();
   }
 
-  // 3. Floating Golden Dots/Orbs (Floating points as seen in screenshot)
+  // 3. Floating Golden Dots/Orbs
   const dots = [
-    { bx: 0.22, by: 0.32, r: 3.5, speed: 0.3, seed: 1.5 },
+    { bx: 0.18, by: 0.22, r: 3.5, speed: 0.3, seed: 1.5 },
     { bx: 0.42, by: 0.24, r: 4.5, speed: 0.35, seed: 2.8 },
     { bx: 0.65, by: 0.28, r: 5, speed: 0.28, seed: 4.2 },
     { bx: 0.72, by: 0.62, r: 4, speed: 0.4, seed: 5.6 },
     { bx: 0.58, by: 0.78, r: 5.5, speed: 0.32, seed: 7.1 },
     { bx: 0.85, by: 0.42, r: 3.5, speed: 0.45, seed: 8.5 },
     { bx: 0.15, by: 0.68, r: 4, speed: 0.3, seed: 10.1 },
+    { bx: 0.32, by: 0.52, r: 3.5, speed: 0.38, seed: 11.7 },
   ];
 
   dots.forEach((d) => {
-    const dx = w * d.bx + Math.sin(t * d.speed + d.seed) * 25;
-    const dy = h * d.by + Math.cos(t * d.speed + d.seed) * 20;
+    const dx = w * d.bx + Math.sin(t * d.speed + d.seed) * 20;
+    const dy = h * d.by + Math.cos(t * d.speed + d.seed) * 18;
 
     ctx.beginPath();
     ctx.arc(dx, dy, d.r, 0, Math.PI * 2);
     ctx.fillStyle = isDark
-      ? 'rgba(240, 180, 80, 0.45)'
-      : 'rgba(212, 140, 30, 0.55)';
+      ? 'rgba(240, 180, 80, 0.55)'
+      : 'rgba(212, 140, 30, 0.65)';
     ctx.fill();
 
     ctx.beginPath();
     ctx.arc(dx, dy, d.r * 2.2, 0, Math.PI * 2);
     ctx.fillStyle = isDark
-      ? 'rgba(240, 180, 80, 0.12)'
-      : 'rgba(212, 140, 30, 0.15)';
+      ? 'rgba(240, 180, 80, 0.16)'
+      : 'rgba(212, 140, 30, 0.20)';
     ctx.fill();
   });
 }
@@ -952,28 +981,36 @@ function drawEntertainmentAtmosphere(ctx, w, h, t, isDark) {
 
   // 1. Wide Ambient Theatrical Stage Glow (Lightens & softens the background)
   const ambientGlow = ctx.createRadialGradient(originX, originY, 0, w * 0.45, h * 0.45, w * 0.95);
-  ambientGlow.addColorStop(0, 'rgba(255, 240, 195, 0.42)');
-  ambientGlow.addColorStop(0.32, 'rgba(195, 135, 255, 0.32)');
-  ambientGlow.addColorStop(0.65, 'rgba(135, 60, 210, 0.20)');
+  ambientGlow.addColorStop(0, 'rgba(255, 245, 210, 0.55)');
+  ambientGlow.addColorStop(0.32, 'rgba(215, 155, 255, 0.42)');
+  ambientGlow.addColorStop(0.65, 'rgba(155, 80, 230, 0.28)');
   ambientGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
   ctx.fillStyle = ambientGlow;
+  ctx.fillRect(0, 0, w, h);
+
+  // Soft Ambient Fill on Left Half to ensure background stays light and glowing behind headings
+  const leftAmbient = ctx.createRadialGradient(w * 0.22, h * 0.45, 0, w * 0.22, h * 0.45, w * 0.65);
+  leftAmbient.addColorStop(0, 'rgba(195, 125, 255, 0.26)');
+  leftAmbient.addColorStop(0.5, 'rgba(145, 70, 215, 0.16)');
+  leftAmbient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+  ctx.fillStyle = leftAmbient;
   ctx.fillRect(0, 0, w, h);
 
   // 2. Broad Outer Projector Beam Cone (Spreading diagonally to the left)
   const beamAngle = Math.sin(t * 0.35) * 0.035;
   ctx.beginPath();
   ctx.moveTo(originX, originY);
-  ctx.lineTo(0, h * (0.10 + beamAngle));
+  ctx.lineTo(0, h * (0.08 + beamAngle));
   ctx.lineTo(0, h * (0.95 + beamAngle));
   ctx.lineTo(w * 0.65, h);
   ctx.closePath();
 
   const outerBeamGrad = ctx.createLinearGradient(originX, originY, 0, h * 0.55);
-  outerBeamGrad.addColorStop(0, 'rgba(255, 252, 235, 0.92)');
-  outerBeamGrad.addColorStop(0.15, 'rgba(255, 228, 155, 0.65)');
-  outerBeamGrad.addColorStop(0.38, 'rgba(215, 180, 255, 0.38)');
-  outerBeamGrad.addColorStop(0.68, 'rgba(124, 77, 194, 0.16)');
-  outerBeamGrad.addColorStop(1, 'rgba(15, 6, 28, 0)');
+  outerBeamGrad.addColorStop(0, 'rgba(255, 252, 235, 0.96)');
+  outerBeamGrad.addColorStop(0.15, 'rgba(255, 235, 165, 0.75)');
+  outerBeamGrad.addColorStop(0.38, 'rgba(225, 195, 255, 0.48)');
+  outerBeamGrad.addColorStop(0.68, 'rgba(145, 95, 215, 0.25)');
+  outerBeamGrad.addColorStop(1, 'rgba(30, 10, 50, 0)');
 
   ctx.fillStyle = outerBeamGrad;
   ctx.fill();
@@ -981,17 +1018,17 @@ function drawEntertainmentAtmosphere(ctx, w, h, t, isDark) {
   // 3. Intense Brilliant Core Light Fan
   ctx.beginPath();
   ctx.moveTo(originX, originY);
-  ctx.lineTo(0, h * (0.24 + beamAngle));
+  ctx.lineTo(0, h * (0.22 + beamAngle));
   ctx.lineTo(0, h * (0.72 + beamAngle));
   ctx.lineTo(w * 0.42, h * 0.92);
   ctx.closePath();
 
   const coreGrad = ctx.createLinearGradient(originX, originY, 0, h * 0.48);
-  coreGrad.addColorStop(0, 'rgba(255, 255, 255, 0.98)');
-  coreGrad.addColorStop(0.2, 'rgba(255, 240, 185, 0.78)');
-  coreGrad.addColorStop(0.5, 'rgba(240, 210, 255, 0.35)');
-  coreGrad.addColorStop(0.85, 'rgba(180, 130, 255, 0.12)');
-  coreGrad.addColorStop(1, 'rgba(20, 8, 36, 0)');
+  coreGrad.addColorStop(0, 'rgba(255, 255, 255, 1)');
+  coreGrad.addColorStop(0.2, 'rgba(255, 245, 195, 0.88)');
+  coreGrad.addColorStop(0.5, 'rgba(245, 220, 255, 0.48)');
+  coreGrad.addColorStop(0.85, 'rgba(200, 150, 255, 0.20)');
+  coreGrad.addColorStop(1, 'rgba(30, 10, 50, 0)');
 
   ctx.fillStyle = coreGrad;
   ctx.fill();
@@ -999,56 +1036,56 @@ function drawEntertainmentAtmosphere(ctx, w, h, t, isDark) {
   // 4. Razor-Sharp Projector Center Shaft
   ctx.beginPath();
   ctx.moveTo(originX, originY);
-  ctx.lineTo(0, h * (0.38 + beamAngle));
+  ctx.lineTo(0, h * (0.36 + beamAngle));
   ctx.lineTo(0, h * (0.50 + beamAngle));
   ctx.lineTo(w * 0.25, h * 0.75);
   ctx.closePath();
 
   const shaftGrad = ctx.createLinearGradient(originX, originY, 0, h * 0.44);
   shaftGrad.addColorStop(0, 'rgba(255, 255, 255, 1)');
-  shaftGrad.addColorStop(0.3, 'rgba(255, 245, 210, 0.85)');
-  shaftGrad.addColorStop(0.7, 'rgba(255, 225, 160, 0.35)');
+  shaftGrad.addColorStop(0.3, 'rgba(255, 248, 220, 0.92)');
+  shaftGrad.addColorStop(0.7, 'rgba(255, 230, 175, 0.45)');
   shaftGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
 
   ctx.fillStyle = shaftGrad;
   ctx.fill();
 
   // 5. Radiant Projector Lens Bloom & Halo Rings
-  const flareGrad = ctx.createRadialGradient(originX, originY, 0, originX, originY, w * 0.38);
+  const flareGrad = ctx.createRadialGradient(originX, originY, 0, originX, originY, w * 0.42);
   flareGrad.addColorStop(0, 'rgba(255, 255, 255, 1)');
-  flareGrad.addColorStop(0.08, 'rgba(255, 245, 200, 0.90)');
-  flareGrad.addColorStop(0.22, 'rgba(255, 215, 130, 0.60)');
-  flareGrad.addColorStop(0.48, 'rgba(191, 150, 255, 0.35)');
-  flareGrad.addColorStop(0.78, 'rgba(104, 59, 164, 0.14)');
-  flareGrad.addColorStop(1, 'rgba(15, 6, 28, 0)');
+  flareGrad.addColorStop(0.08, 'rgba(255, 248, 210, 0.95)');
+  flareGrad.addColorStop(0.22, 'rgba(255, 225, 145, 0.70)');
+  flareGrad.addColorStop(0.48, 'rgba(205, 165, 255, 0.45)');
+  flareGrad.addColorStop(0.78, 'rgba(130, 75, 195, 0.22)');
+  flareGrad.addColorStop(1, 'rgba(25, 10, 45, 0)');
 
   ctx.fillStyle = flareGrad;
   ctx.beginPath();
-  ctx.arc(originX, originY, w * 0.38, 0, Math.PI * 2);
+  ctx.arc(originX, originY, w * 0.42, 0, Math.PI * 2);
   ctx.fill();
 
   // Concentric lens ripples
   for (let r = 1; r <= 4; r++) {
     const radius = 28 * r + Math.sin(t * 2.2 + r) * 5;
-    ctx.strokeStyle = `rgba(255, 240, 185, ${0.45 / r})`;
-    ctx.lineWidth = 1.4;
+    ctx.strokeStyle = `rgba(255, 245, 200, ${0.55 / r})`;
+    ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.arc(originX, originY, radius, 0, Math.PI * 2);
     ctx.stroke();
   }
 
   // 6. Floating Theatrical Stardust Particles in Beam Path
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 35; i++) {
     const speed = 0.016 + (i % 6) * 0.005;
-    const progress = (i * 0.035 + t * speed) % 1;
+    const progress = (i * 0.032 + t * speed) % 1;
     const px = originX - progress * (w * 0.94);
     const py = originY + progress * (h * 0.78) + Math.sin(t * 1.8 + i) * 20;
-    const size = (i % 4 === 0) ? 3 : (i % 2 === 0 ? 2 : 1.4);
-    const alpha = 0.5 + Math.sin(t * 2.2 + i) * 0.4;
+    const size = (i % 4 === 0) ? 3.2 : (i % 2 === 0 ? 2.2 : 1.5);
+    const alpha = 0.55 + Math.sin(t * 2.2 + i) * 0.4;
 
     ctx.fillStyle = i % 2 === 0
-      ? `rgba(255, 248, 220, ${alpha})`
-      : `rgba(225, 195, 255, ${alpha})`;
+      ? `rgba(255, 250, 230, ${alpha})`
+      : `rgba(235, 210, 255, ${alpha})`;
     ctx.beginPath();
     ctx.arc(px, py, size, 0, Math.PI * 2);
     ctx.fill();
@@ -1076,8 +1113,8 @@ function drawEntertainmentAtmosphere(ctx, w, h, t, isDark) {
 
   // 8. Soft Warm Stage Floor Uplight (Illuminates bottom)
   const floorUplight = ctx.createLinearGradient(0, h, 0, h * 0.75);
-  floorUplight.addColorStop(0, 'rgba(168, 85, 247, 0.16)');
-  floorUplight.addColorStop(0.5, 'rgba(251, 146, 60, 0.08)');
+  floorUplight.addColorStop(0, 'rgba(180, 100, 255, 0.22)');
+  floorUplight.addColorStop(0.5, 'rgba(251, 146, 60, 0.12)');
   floorUplight.addColorStop(1, 'rgba(0, 0, 0, 0)');
   ctx.fillStyle = floorUplight;
   ctx.fillRect(0, h * 0.75, w, h * 0.25);

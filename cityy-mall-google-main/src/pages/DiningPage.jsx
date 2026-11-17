@@ -505,12 +505,12 @@ export function DiningPage({ onInspectBrand }) {
                 </div>
 
                 {/* Display Headline */}
-                <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-normal tracking-tight text-[#1B1325] dark:text-[#F6EFE7] leading-[1.04]">
+                <h1 className="font-display text-3xl sm:text-6xl lg:text-7xl font-normal tracking-tight text-[#1B1325] dark:text-[#F6EFE7] leading-[1.08] sm:leading-[1.04]">
                   Third Floor Flavours
                 </h1>
 
                 {/* Subtitle */}
-                <p className="text-base sm:text-lg text-[#5D5070] dark:text-[#D8CEE9] leading-relaxed max-w-xl">
+                <p className="text-sm sm:text-lg text-[#5D5070] dark:text-[#D8CEE9] leading-relaxed max-w-xl">
                   Live table grills, crispy golden chicken &amp; oven-baked pizzas served across CITY MALL&apos;s sunlit culinary deck.
                 </p>
 
@@ -522,7 +522,7 @@ export function DiningPage({ onInspectBrand }) {
 
               {/* Floating Rounded Brand Badges Dock */}
               <div className="pt-1">
-                <div className="inline-flex flex-wrap items-center gap-3 p-2.5 rounded-3xl bg-white/85 dark:bg-[#1D1628]/85 backdrop-blur-xl border border-[#2D1D48]/14 dark:border-white/15 shadow-2xl">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 p-2 sm:p-2.5 rounded-2xl sm:rounded-3xl bg-white/85 dark:bg-[#1D1628]/85 backdrop-blur-xl border border-[#2D1D48]/14 dark:border-white/15 shadow-2xl">
                   {/* KFC */}
                   <button
                     type="button"
@@ -530,7 +530,7 @@ export function DiningPage({ onInspectBrand }) {
                       setSelectedOutletIndex(2); // KFC
                       scrollToSection('dining-flame');
                     }}
-                    className="flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-[#E4002B] text-white font-black text-xs tracking-wider shadow-md hover:scale-105 transition-transform cursor-pointer"
+                    className="flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl bg-[#E4002B] text-white font-black text-[11px] sm:text-xs tracking-wider shadow-md hover:scale-105 transition-transform cursor-pointer"
                   >
                     <span className="font-black">KFC</span>
                   </button>
@@ -542,7 +542,7 @@ export function DiningPage({ onInspectBrand }) {
                       setSelectedOutletIndex(0); // Barbeque Nation
                       scrollToSection('dining-flame');
                     }}
-                    className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#C9523C] text-white font-bold text-xs tracking-wider shadow-md hover:scale-105 transition-transform cursor-pointer"
+                    className="flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl bg-[#C9523C] text-white font-bold text-[11px] sm:text-xs tracking-wider shadow-md hover:scale-105 transition-transform cursor-pointer"
                   >
                     <Flame className="w-3.5 h-3.5" />
                     <span>Barbeque Nation</span>
@@ -552,7 +552,7 @@ export function DiningPage({ onInspectBrand }) {
                   <button
                     type="button"
                     onClick={() => scrollToSection('dining-pizza')}
-                    className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#006699] text-white font-bold text-xs tracking-wider shadow-md hover:scale-105 transition-transform cursor-pointer"
+                    className="flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl bg-[#006699] text-white font-bold text-[11px] sm:text-xs tracking-wider shadow-md hover:scale-105 transition-transform cursor-pointer"
                   >
                     <Pizza className="w-3.5 h-3.5" />
                     <span>Pizza Hut</span>
@@ -561,7 +561,7 @@ export function DiningPage({ onInspectBrand }) {
               </div>
 
               {/* Key Quick Highlights Strip */}
-              <div className="pt-2 flex flex-wrap items-center gap-6 text-xs text-[#5D5070] dark:text-[#B5A7D0] font-mono border-t border-[#2D1D48]/10 dark:border-white/10">
+              <div className="pt-2 flex flex-wrap items-center gap-4 sm:gap-6 text-xs text-[#5D5070] dark:text-[#B5A7D0] font-mono border-t border-[#2D1D48]/10 dark:border-white/10">
                 <div className="flex items-center gap-2">
                   <Clock className="w-3.5 h-3.5 text-[#B36624] dark:text-[#E39857]" />
                   <span>11:00 AM – 11:00 PM Daily</span>
@@ -575,7 +575,7 @@ export function DiningPage({ onInspectBrand }) {
 
             {/* Right Column: Visual Showcase Frame with Overlapping Thumbnail (5 cols) */}
             <div data-motion="reveal" className="lg:col-span-5 relative">
-              <div className="relative aspect-[4/3] sm:aspect-[16/11] rounded-3xl overflow-hidden shadow-2xl border border-white/60 dark:border-white/15 bg-[#201524]">
+              <div className="relative aspect-[4/3] sm:aspect-[16/11] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-white/60 dark:border-white/15 bg-[#201524]">
                 <ResilientImage
                   src={SCENE_IMAGES.dining3dTerrace}
                   alt="CITY MALL Dining Terrace"
@@ -584,15 +584,15 @@ export function DiningPage({ onInspectBrand }) {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10 pointer-events-none" />
 
                 {/* Floating Top-Left Badge */}
-                <div className="absolute top-4 left-4 z-20 flex items-center gap-2 bg-black/75 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/20 text-white">
-                  <Sparkles className="w-3.5 h-3.5 text-[#FFA07A]" />
-                  <span className="text-[11px] font-bold tracking-wider uppercase text-white/95">
+                <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 flex items-center gap-1.5 sm:gap-2 bg-black/75 backdrop-blur-md px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-lg sm:rounded-xl border border-white/20 text-white">
+                  <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#FFA07A]" />
+                  <span className="text-[10px] sm:text-[11px] font-bold tracking-wider uppercase text-white/95">
                     9 Approved Outlets
                   </span>
                 </div>
 
-                {/* Floating Bottom-Left Card */}
-                <div className="absolute bottom-4 left-4 z-20 max-w-[210px] bg-black/75 backdrop-blur-md p-3 rounded-2xl border border-white/20 text-white space-y-0.5">
+                {/* Floating Bottom-Left Card (hidden on narrow mobile to avoid overlap with thumbnail) */}
+                <div className="hidden sm:block absolute bottom-4 left-4 z-20 max-w-[210px] bg-black/75 backdrop-blur-md p-3 rounded-2xl border border-white/20 text-white space-y-0.5">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[#FFA07A]">
                     Third Floor Terrace
                   </span>
@@ -605,7 +605,7 @@ export function DiningPage({ onInspectBrand }) {
                 <div
                   onClick={() => scrollToSection('dining-flame')}
                   title="Explore live table grills"
-                  className="absolute bottom-4 right-4 z-20 w-32 sm:w-36 aspect-[16/11] rounded-2xl overflow-hidden border-2 border-white/50 shadow-2xl bg-black/80 cursor-pointer group hover:scale-105 transition-all"
+                  className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-20 w-28 sm:w-36 aspect-[16/11] rounded-xl sm:rounded-2xl overflow-hidden border-2 border-white/50 shadow-2xl bg-black/80 cursor-pointer group hover:scale-105 transition-all"
                 >
                   <ResilientImage
                     src={BRAND_IMAGES.barbequeNation}

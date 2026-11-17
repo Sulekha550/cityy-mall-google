@@ -93,19 +93,19 @@ export function EntertainmentPage({ onInspectBrand }) {
   }, []);
 
   return (
-    <div className="bg-[#0A0314] text-[#F6EFE7]">
+    <div className="bg-[#240C3E] text-[#F6EFE7]">
       {/* Right-Side Vertical Scroll-Spy Navigation (matching reference screenshots) */}
       <RightVerticalSectionNav sections={CINEMA_SECTIONS} />
 
       {/* =========================================================================
           SECTION 1: THEATRICAL HERO — PVR INOX CINEMAS
-          Matches Reference Screenshot: Deep midnight violet, sweeping top-right
+          Matches Reference Screenshot: Luminous royal violet & mulberry plum, sweeping top-right
           projector light beam, floating stardust, PVR INOX badge, and red beacon dot.
           ========================================================================= */}
       <section
         ref={heroRef}
         id="cinema-hero"
-        className="relative overflow-hidden min-h-[100vh] flex flex-col justify-between py-12 sm:py-16 px-5 sm:px-8 lg:px-12 border-b border-white/15 bg-gradient-to-b from-[#1E0D36] via-[#140826] to-[#0D041A]"
+        className="relative overflow-hidden min-h-[100vh] flex flex-col justify-between py-12 sm:py-16 px-5 sm:px-8 lg:px-12 border-b border-white/15 bg-gradient-to-b from-[#562684] via-[#401A64] to-[#2A0F46]"
       >
         {/* Procedural Canvas Background with Sweeping Projector Beam (Zero Humans) */}
         <VideoSectionBackground
@@ -119,40 +119,43 @@ export function EntertainmentPage({ onInspectBrand }) {
         {/* Ambient Top Projector Lens Flare, Beams & Stage Lighting */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden z-1">
           {/* Radiant Lens Bloom at Top-Right */}
-          <div className="absolute -top-20 -right-20 w-[420px] sm:w-[580px] h-[420px] sm:h-[580px] rounded-full bg-radial from-[#FFFFFF] via-[#FFE4A0]/75 via-[#C084FC]/40 to-transparent blur-3xl opacity-90" />
+          <div className="absolute -top-20 -right-20 w-[450px] sm:w-[620px] h-[450px] sm:h-[620px] rounded-full bg-radial from-[#FFFFFF] via-[#FFE4A0]/85 via-[#C084FC]/50 to-transparent blur-3xl opacity-95" />
 
           {/* Broad Ambient Warm-Gold / Violet Stage Lighting across upper half */}
-          <div className="absolute top-0 right-0 w-full h-[65%] bg-gradient-to-bl from-[#FFE8A3]/18 via-[#A855F7]/14 to-transparent blur-3xl" />
+          <div className="absolute top-0 right-0 w-full h-[70%] bg-gradient-to-bl from-[#FFE8A3]/24 via-[#C084FC]/20 to-transparent blur-3xl" />
+
+          {/* Soft Left Ambient Fill to keep text area bright and glowing */}
+          <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-[#6B2E9E]/25 to-transparent pointer-events-none" />
 
           {/* Primary Sweeping Projector Beam Diagonal Cone */}
           <div
-            className="absolute -top-16 -right-10 w-[170%] sm:w-[140%] h-[150%] opacity-60 mix-blend-screen"
+            className="absolute -top-16 -right-10 w-[170%] sm:w-[140%] h-[150%] opacity-75 mix-blend-screen"
             style={{
               background:
-                'radial-gradient(ellipse 95% 75% at 94% 8%, rgba(255, 252, 235, 0.92) 0%, rgba(255, 228, 155, 0.60) 25%, rgba(215, 180, 255, 0.32) 55%, transparent 75%)',
+                'radial-gradient(ellipse 95% 75% at 94% 8%, rgba(255, 252, 235, 0.96) 0%, rgba(255, 232, 165, 0.70) 25%, rgba(225, 190, 255, 0.40) 55%, transparent 75%)',
               clipPath: 'polygon(96% 0%, 0% 28%, 0% 98%, 100% 88%)',
             }}
           />
 
           {/* Secondary Intense Bright Core Shaft */}
           <div
-            className="absolute -top-10 -right-5 w-[140%] sm:w-[110%] h-[120%] opacity-45 mix-blend-screen"
+            className="absolute -top-10 -right-5 w-[140%] sm:w-[110%] h-[120%] opacity-60 mix-blend-screen"
             style={{
               background:
-                'linear-gradient(220deg, rgba(255, 255, 245, 0.98) 0%, rgba(255, 235, 175, 0.65) 30%, rgba(220, 185, 255, 0.25) 65%, transparent 80%)',
+                'linear-gradient(220deg, rgba(255, 255, 245, 1) 0%, rgba(255, 238, 185, 0.75) 30%, rgba(225, 195, 255, 0.35) 65%, transparent 80%)',
               clipPath: 'polygon(98% 5%, 0% 48%, 15% 92%, 100% 65%)',
             }}
           />
 
           {/* Floating Theatrical Light Particles inside the beam */}
-          <div className="absolute top-[28%] right-[32%] w-2.5 h-2.5 rounded-full bg-white/90 blur-[0.4px] animate-pulse" />
-          <div className="absolute top-[42%] right-[52%] w-2 h-2 rounded-full bg-[#FFE8A3]/90 blur-[0.4px]" />
-          <div className="absolute top-[56%] right-[38%] w-2.5 h-2.5 rounded-full bg-violet-300/85 blur-[0.6px]" />
-          <div className="absolute top-[36%] right-[20%] w-2 h-2 rounded-full bg-white/80" />
-          <div className="absolute top-[66%] right-[68%] w-1.5 h-1.5 rounded-full bg-[#FFE8A3]/80" />
+          <div className="absolute top-[28%] right-[32%] w-2.5 h-2.5 rounded-full bg-white/95 blur-[0.4px] animate-pulse" />
+          <div className="absolute top-[42%] right-[52%] w-2 h-2 rounded-full bg-[#FFE8A3]/95 blur-[0.4px]" />
+          <div className="absolute top-[56%] right-[38%] w-2.5 h-2.5 rounded-full bg-violet-200/90 blur-[0.6px]" />
+          <div className="absolute top-[36%] right-[20%] w-2 h-2 rounded-full bg-white/85" />
+          <div className="absolute top-[66%] right-[68%] w-1.5 h-1.5 rounded-full bg-[#FFE8A3]/85" />
 
           {/* Soft Stage Uplighting at bottom of viewport */}
-          <div className="absolute bottom-0 inset-x-0 h-44 bg-gradient-to-t from-[#A855F7]/18 via-[#FB923C]/10 to-transparent blur-2xl" />
+          <div className="absolute bottom-0 inset-x-0 h-48 bg-gradient-to-t from-[#C084FC]/22 via-[#FB923C]/14 to-transparent blur-2xl" />
 
           {/* Red Pulsing Cinema Beacon Dot (from reference screenshot) */}
           <div className="absolute right-4 sm:right-7 top-1/2 -translate-y-1/2">
@@ -249,11 +252,11 @@ export function EntertainmentPage({ onInspectBrand }) {
       <section
         ref={audisRef}
         id="cinema-auditoriums"
-        className="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-b from-[#140826] via-[#1E0D36] to-[#120722] border-b border-white/12"
+        className="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-b from-[#2A0F46] via-[#38165B] to-[#260C40] border-b border-white/12"
       >
         {/* Ambient Stage Lighting Glow Pools */}
-        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[420px] h-[420px] rounded-full bg-[#A855F7]/14 blur-3xl pointer-events-none" />
-        <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[420px] h-[420px] rounded-full bg-[#FFA07A]/12 blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[480px] h-[480px] rounded-full bg-[#C084FC]/20 blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[480px] h-[480px] rounded-full bg-[#FFA07A]/18 blur-3xl pointer-events-none" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 space-y-12">
           <div data-motion="reveal" className="max-w-2xl space-y-2">
@@ -263,7 +266,7 @@ export function EntertainmentPage({ onInspectBrand }) {
             <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight">
               Crafted for Cinematic Immersion
             </h2>
-            <p className="text-sm sm:text-base text-white/75 leading-relaxed">
+            <p className="text-sm sm:text-base text-white/85 leading-relaxed">
               Every auditorium inside PVR INOX at CITY MALL features acoustic architecture tailored for pristine fidelity, crystal-clear 4K projection, and ultimate seating comfort.
             </p>
           </div>
@@ -274,7 +277,7 @@ export function EntertainmentPage({ onInspectBrand }) {
               return (
                 <div
                   key={feature.title}
-                  className="p-6 rounded-2xl border border-white/16 bg-white/[0.07] hover:bg-white/[0.12] transition-all duration-300 hover:-translate-y-1 shadow-xl hover:shadow-[0_0_35px_rgba(255,160,122,0.18)] hover:border-[#FFA07A]/50 backdrop-blur-md space-y-3"
+                  className="p-6 rounded-2xl border border-white/20 bg-white/[0.09] hover:bg-white/[0.15] transition-all duration-300 hover:-translate-y-1 shadow-2xl hover:shadow-[0_0_35px_rgba(255,160,122,0.22)] hover:border-[#FFA07A]/60 backdrop-blur-md space-y-3"
                 >
                   <div
                     className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg"
@@ -285,7 +288,7 @@ export function EntertainmentPage({ onInspectBrand }) {
                   <h3 className="font-display text-lg font-bold text-white tracking-tight">
                     {feature.title}
                   </h3>
-                  <p className="text-xs sm:text-sm text-white/70 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-white/75 leading-relaxed">
                     {feature.description}
                   </p>
                 </div>
@@ -301,7 +304,7 @@ export function EntertainmentPage({ onInspectBrand }) {
       <section
         ref={featuresRef}
         id="cinema-screenings"
-        className="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-b from-[#120722] via-[#1A0A30] to-[#0D0418] border-b border-white/12"
+        className="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-b from-[#260C40] via-[#321252] to-[#200A38] border-b border-white/12"
       >
         <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 space-y-10">
           <div
@@ -400,7 +403,7 @@ export function EntertainmentPage({ onInspectBrand }) {
       <section
         ref={concourseRef}
         id="cinema-concourse"
-        className="relative overflow-hidden py-16 sm:py-20 bg-gradient-to-t from-[#1E0D36] via-[#140826] to-[#0D0418]"
+        className="relative overflow-hidden py-16 sm:py-20 bg-gradient-to-t from-[#361556] via-[#260C40] to-[#1E0A34]"
       >
         <div className="relative z-10 max-w-4xl mx-auto px-5 sm:px-8 text-center space-y-6">
           <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#5EEAD4]">

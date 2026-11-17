@@ -9,6 +9,10 @@ import {
   Compass,
   Building2,
   ExternalLink,
+  ChevronLeft,
+  ChevronRight,
+  LayoutGrid,
+  Layers,
 } from 'lucide-react';
 import { VIDEO_ASSETS } from '../assets/mediaManifest';
 import {
@@ -52,6 +56,7 @@ export function BrandsPage({ onInspectBrand }) {
   const [query, setQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [activeBrandId, setActiveBrandId] = useState('louis-philippe');
+  const [viewMode, setViewMode] = useState('rail'); // 'rail' (Boutique Story Slider) | 'grid' (Gallery Grid)
 
   // Filter out any dining/filler brands, keeping strictly the 13 premier retail houses
   const premier13Brands = useMemo(() => {
@@ -80,6 +85,17 @@ export function BrandsPage({ onInspectBrand }) {
     const found = filteredBrands.find((b) => b.id === activeBrandId);
     return found || filteredBrands[0] || premier13Brands[0];
   }, [filteredBrands, activeBrandId, premier13Brands]);
+
+  // Interactive Carousel Next / Prev navigation
+  const currentBrandIndex = premier13Brands.findIndex((b) => b.id === activeBrand.id);
+  const handlePrevBrand = () => {
+    const newIdx = (currentBrandIndex - 1 + premier13Brands.length) % premier13Brands.length;
+    setActiveBrandId(premier13Brands[newIdx].id);
+  };
+  const handleNextBrand = () => {
+    const newIdx = (currentBrandIndex + 1) % premier13Brands.length;
+    setActiveBrandId(premier13Brands[newIdx].id);
+  };
 
   return (
     <div className="relative min-h-screen bg-[#FBF4EB] dark:bg-[#151021] text-[#1B1325] dark:text-[#F6EFE7]">
@@ -175,105 +191,226 @@ export function BrandsPage({ onInspectBrand }) {
           })}
         </div>
 
-        {/* Section 2: PREMIER BRAND STRIP · 13 APPROVED HOUSES (Matching Reference Screenshot 4) */}
-        <div className="space-y-3 pt-1">
-          <div className="flex items-center justify-between text-xs border-b border-[#2D1D48]/10 dark:border-[#E2D4FF]/10 pb-2">
-            <span className="font-semibold uppercase tracking-[0.18em] text-[#683BA4] dark:text-[#BFA1FF] text-[11px]">
-              PREMIER BRAND STRIP · 13 APPROVED HOUSES
-            </span>
-            <span className="text-[11px] text-[#5D5070] dark:text-[#B5A7D0] italic">
-              Hover to preview · Click to inspect
-            </span>
+        {/* Section 2: PREMIER BRAND STRIP · 13 APPROVED HOUSES (With Boutique Slider & Gallery Grid Toggle) */}
+        <div className="space-y-4 pt-1">
+          <div className="flex flex-wrap items-center justify-between gap-3 text-xs border-b border-[#2D1D48]/10 dark:border-[#E2D4FF]/10 pb-2.5">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-3.5 h-3.5 text-[#C9523C] dark:text-[#FFA07A]" />
+              <span className="font-semibold uppercase tracking-[0.18em] text-[#683BA4] dark:text-[#BFA1FF] text-[11px] sm:text-xs">
+                PREMIER BRAND SHOWCASE · 13 APPROVED HOUSES
+              </span>
+            </div>
+
+            {/* Unique View Mode Switcher */}
+            <div className="flex items-center gap-1 p-0.5 rounded-xl bg-[#2D1D48]/8 dark:bg-white/10 border border-[#2D1D48]/10 dark:border-white/10">
+              <button
+                type="button"
+                onClick={() => setViewMode('rail')}
+                title="Boutique Slider"
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                  viewMode === 'rail'
+                    ? 'bg-white dark:bg-[#251A38] text-[#1B1325] dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10'
+                    : 'text-[#5D5070] dark:text-[#B5A7D0] hover:text-[#1B1325] dark:hover:text-white'
+                }`}
+              >
+                <Layers className="w-3 h-3 text-[#C9523C] dark:text-[#FFA07A]" />
+                <span>Slider</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode('grid')}
+                title="Gallery Grid"
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                  viewMode === 'grid'
+                    ? 'bg-white dark:bg-[#251A38] text-[#1B1325] dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10'
+                    : 'text-[#5D5070] dark:text-[#B5A7D0] hover:text-[#1B1325] dark:hover:text-white'
+                }`}
+              >
+                <LayoutGrid className="w-3 h-3 text-[#C9523C] dark:text-[#FFA07A]" />
+                <span>Grid</span>
+              </button>
+            </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2.5">
-            {premier13Brands.map((brand) => {
-              const isSelected = activeBrandId === brand.id;
-              const matchesFilter =
-                selectedCategory === 'all' || brand.categoryId === selectedCategory;
+          {/* View Mode A: Interactive Horizontal Boutique Rail (Smooth Swipeable Cards with Real Images) */}
+          {viewMode === 'rail' ? (
+            <div className="relative">
+              <div className="flex items-center gap-3 overflow-x-auto pb-3 pt-1 scrollbar-none snap-x snap-mandatory px-0.5">
+                {premier13Brands.map((brand, idx) => {
+                  const isSelected = activeBrandId === brand.id;
+                  const matchesFilter =
+                    selectedCategory === 'all' || brand.categoryId === selectedCategory;
 
-              return (
-                <div
-                  key={brand.id}
-                  onMouseEnter={() => setActiveBrandId(brand.id)}
-                  onClick={() => {
-                    setActiveBrandId(brand.id);
-                    onInspectBrand?.(brand);
-                  }}
-                  className={`group relative p-3 rounded-sm border transition-all duration-200 cursor-pointer flex flex-col justify-between min-h-[96px] ${
-                    isSelected
-                      ? 'border-[#683BA4] dark:border-[#BFA1FF] bg-[#FFFBF6] dark:bg-[#1F1730] shadow-md -translate-y-0.5 ring-1 ring-[#683BA4]/30'
-                      : matchesFilter
-                      ? 'border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#FFFBF6]/85 dark:bg-[#1A1328]/85 hover:border-[#683BA4]/50 dark:hover:border-[#BFA1FF]/50 hover:-translate-y-0.5'
-                      : 'opacity-40 border-[#2D1D48]/8 dark:border-[#E2D4FF]/8 bg-transparent'
-                  }`}
-                >
-                  {/* Top: Monogram box + Floor label */}
-                  <div className="flex items-start justify-between gap-1.5 mb-2">
-                    <div className="relative w-8 h-8 rounded-xs border border-[#2D1D48]/15 dark:border-[#E2D4FF]/20 bg-white dark:bg-[#151021] flex items-center justify-center font-bold text-[11px] text-[#1B1325] dark:text-[#F6EFE7]">
-                      {/* Little accent square on top-left corner */}
-                      <span
-                        className="absolute top-0.5 left-0.5 w-1.5 h-1.5 rounded-[1px]"
-                        style={{ backgroundColor: brand.accentColor || '#683BA4' }}
-                      />
-                      <span>{brand.monogram}</span>
-                    </div>
-                    <span className="text-[9px] font-mono text-[#5D5070] dark:text-[#B5A7D0] text-right truncate">
-                      {BRAND_FLOOR_MAP[brand.id]?.split('·')[0]?.trim()}
-                    </span>
-                  </div>
-
-                  {/* Bottom: Brand Name + Category */}
-                  <div>
-                    <h3
-                      className={`font-display text-xs font-semibold leading-tight line-clamp-1 transition-colors ${
+                  return (
+                    <div
+                      key={brand.id}
+                      onClick={() => {
+                        setActiveBrandId(brand.id);
+                        onInspectBrand?.(brand);
+                      }}
+                      className={`group relative shrink-0 w-[148px] sm:w-[185px] aspect-[4/5] rounded-2xl overflow-hidden border transition-all duration-300 cursor-pointer snap-start flex flex-col justify-between p-3 select-none ${
                         isSelected
-                          ? 'text-[#683BA4] dark:text-[#BFA1FF]'
-                          : 'text-[#1B1325] dark:text-[#F6EFE7] group-hover:text-[#683BA4]'
+                          ? 'ring-2 ring-[#FFA07A] ring-offset-2 ring-offset-[#FBF4EB] dark:ring-offset-[#151021] border-[#FFA07A] shadow-xl -translate-y-1 scale-[1.02]'
+                          : matchesFilter
+                          ? 'border-white/50 dark:border-white/15 shadow-md hover:shadow-lg hover:-translate-y-0.5 opacity-100 bg-[#251833]'
+                          : 'opacity-40 border-transparent bg-[#251833]'
                       }`}
                     >
-                      {brand.name}
-                    </h3>
-                    <p className="text-[9px] text-[#5D5070] dark:text-[#B5A7D0] truncate mt-0.5">
-                      {brand.categoryName}
-                    </p>
+                      {/* Storefront Background Image */}
+                      <ResilientImage
+                        src={brand.image}
+                        alt={brand.name}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/25 pointer-events-none" />
+
+                      {/* Top: Insignia Badge + Floor Tag */}
+                      <div className="relative z-10 flex items-start justify-between gap-1">
+                        <div className="w-7 h-7 rounded-lg bg-white/95 dark:bg-[#151021]/95 backdrop-blur-md shadow-md flex items-center justify-center font-bold text-[10px] text-[#1B1325] dark:text-[#F6EFE7] border border-white/40">
+                          <span
+                            className="absolute top-1 left-1 w-1.5 h-1.5 rounded-full"
+                            style={{ backgroundColor: brand.accentColor || '#683BA4' }}
+                          />
+                          <span>{brand.monogram}</span>
+                        </div>
+                        <span className="text-[9px] font-mono font-medium px-2 py-0.5 rounded-full bg-black/60 text-white/90 backdrop-blur-sm border border-white/20">
+                          {BRAND_FLOOR_MAP[brand.id]?.split('·')[0]?.trim()}
+                        </span>
+                      </div>
+
+                      {/* Bottom: Brand Name + Category */}
+                      <div className="relative z-10 space-y-0.5">
+                        <span className="text-[9px] font-bold uppercase tracking-wider text-[#FFA07A] block">
+                          0{idx + 1} · {brand.categoryName.split('&')[0].trim()}
+                        </span>
+                        <h3 className="font-display text-xs sm:text-sm font-bold text-white tracking-tight leading-tight line-clamp-1 group-hover:text-[#FFA07A] transition-colors">
+                          {brand.name}
+                        </h3>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            /* View Mode B: Visual Gallery Grid (High-Fashion Tiles) */
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2.5 sm:gap-3">
+              {premier13Brands.map((brand, idx) => {
+                const isSelected = activeBrandId === brand.id;
+                const matchesFilter =
+                  selectedCategory === 'all' || brand.categoryId === selectedCategory;
+
+                return (
+                  <div
+                    key={brand.id}
+                    onClick={() => {
+                      setActiveBrandId(brand.id);
+                      onInspectBrand?.(brand);
+                    }}
+                    className={`group relative aspect-[4/5] rounded-2xl overflow-hidden border transition-all duration-300 cursor-pointer flex flex-col justify-between p-3 select-none ${
+                      isSelected
+                        ? 'ring-2 ring-[#FFA07A] ring-offset-2 ring-offset-[#FBF4EB] dark:ring-offset-[#151021] border-[#FFA07A] shadow-xl -translate-y-1 scale-[1.02]'
+                        : matchesFilter
+                        ? 'border-white/50 dark:border-white/15 shadow-md hover:shadow-lg hover:-translate-y-0.5 bg-[#251833]'
+                        : 'opacity-40 border-transparent bg-[#251833]'
+                    }`}
+                  >
+                    <ResilientImage
+                      src={brand.image}
+                      alt={brand.name}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/25 pointer-events-none" />
+
+                    {/* Top: Insignia Badge + Floor Tag */}
+                    <div className="relative z-10 flex items-start justify-between gap-1">
+                      <div className="w-7 h-7 rounded-lg bg-white/95 dark:bg-[#151021]/95 backdrop-blur-md shadow-md flex items-center justify-center font-bold text-[10px] text-[#1B1325] dark:text-[#F6EFE7] border border-white/40">
+                        <span
+                          className="absolute top-1 left-1 w-1.5 h-1.5 rounded-full"
+                          style={{ backgroundColor: brand.accentColor || '#683BA4' }}
+                        />
+                        <span>{brand.monogram}</span>
+                      </div>
+                      <span className="text-[9px] font-mono font-medium px-2 py-0.5 rounded-full bg-black/60 text-white/90 backdrop-blur-sm border border-white/20">
+                        {BRAND_FLOOR_MAP[brand.id]?.split('·')[0]?.trim()}
+                      </span>
+                    </div>
+
+                    {/* Bottom: Brand Name + Category */}
+                    <div className="relative z-10 space-y-0.5">
+                      <span className="text-[9px] font-bold uppercase tracking-wider text-[#FFA07A] block">
+                        0{idx + 1} · {brand.categoryName.split('&')[0].trim()}
+                      </span>
+                      <h3 className="font-display text-xs sm:text-sm font-bold text-white tracking-tight leading-tight line-clamp-1 group-hover:text-[#FFA07A] transition-colors">
+                        {brand.name}
+                      </h3>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
-        {/* Section 3: Editorial Asymmetric Brand Pavilion (Compact Stage, NOT oversized) */}
+        {/* Section 3: Editorial Asymmetric Brand Pavilion (With Interactive Left/Right Cycle Arrows) */}
         {activeBrand ? (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch pt-2">
             {/* Left: Dynamic Visual Vitrine of the Active / Hovered Brand (7 cols) */}
-            <div className="lg:col-span-7 relative border border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#FFFBF6]/95 dark:bg-[#1A1328]/95 overflow-hidden flex flex-col justify-between shadow-lg">
-              <div className="relative aspect-[16/9] sm:aspect-[21/10] overflow-hidden bg-[#231B38]">
+            <div className="lg:col-span-7 relative rounded-2xl sm:rounded-3xl border border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#FFFBF6]/95 dark:bg-[#1A1328]/95 overflow-hidden flex flex-col justify-between shadow-xl">
+              <div className="relative aspect-[16/10] sm:aspect-[21/10] overflow-hidden bg-[#231B38]">
                 <ResilientImage
                   src={activeBrand.image}
                   alt={activeBrand.name}
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#151021]/85 via-[#151021]/30 to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#151021]/90 via-[#151021]/35 to-black/20 pointer-events-none" />
 
-                {/* Top badges */}
-                <div className="absolute top-4 left-4 right-4 flex items-center justify-between gap-2 pointer-events-none">
-                  <span className="px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] bg-[#151021]/80 text-[#F6EFE7] backdrop-blur-sm border border-white/15">
+                {/* Top badges + Next / Previous Navigation Controls */}
+                <div className="absolute top-3 left-3 right-3 sm:top-4 sm:left-4 sm:right-4 flex items-center justify-between gap-2 z-20">
+                  <span className="px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] bg-[#151021]/80 text-[#F6EFE7] backdrop-blur-md border border-white/15 rounded-lg">
                     {activeBrand.categoryName}
                   </span>
-                  <span className="px-2.5 py-1 text-[10px] font-mono tracking-tight bg-[#683BA4]/90 text-white backdrop-blur-sm">
-                    {BRAND_FLOOR_MAP[activeBrand.id] || 'CITY MALL Floor'}
-                  </span>
+
+                  {/* Left / Right Fast Cycle Buttons */}
+                  <div className="flex items-center gap-1 bg-black/65 backdrop-blur-md p-1 rounded-full border border-white/20">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handlePrevBrand();
+                      }}
+                      title="Previous Boutique"
+                      className="w-7 h-7 rounded-full flex items-center justify-center text-white/80 hover:text-white hover:bg-white/20 transition-colors cursor-pointer"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </button>
+                    <span className="text-[10px] font-mono text-white/70 px-1">
+                      {currentBrandIndex + 1}/{premier13Brands.length}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleNextBrand();
+                      }}
+                      title="Next Boutique"
+                      className="w-7 h-7 rounded-full flex items-center justify-center text-white/80 hover:text-white hover:bg-white/20 transition-colors cursor-pointer"
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
 
                 {/* Bottom title on image */}
-                <div className="absolute bottom-4 left-4 right-4 text-white flex items-end justify-between gap-4">
-                  <div>
-                    <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight">
+                <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 text-white flex items-end justify-between gap-4 z-20">
+                  <div className="space-y-1">
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-[#FFA07A] block">
+                      {BRAND_FLOOR_MAP[activeBrand.id] || 'Ground Floor'}
+                    </span>
+                    <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-white drop-shadow-md">
                       {activeBrand.name}
                     </h2>
-                    <p className="text-xs sm:text-sm text-white/85 mt-0.5 line-clamp-1">
+                    <p className="text-xs sm:text-sm text-white/85 line-clamp-1 max-w-md">
                       {activeBrand.tagline}
                     </p>
                   </div>
@@ -286,7 +423,7 @@ export function BrandsPage({ onInspectBrand }) {
               </div>
 
               {/* Action Bar */}
-              <div className="p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4 border-t border-[#2D1D48]/10 dark:border-[#E2D4FF]/10 bg-[#FFFBF6] dark:bg-[#1D1630]">
+              <div className="p-3.5 sm:p-5 flex flex-wrap items-center justify-between gap-3 border-t border-[#2D1D48]/10 dark:border-[#E2D4FF]/10 bg-[#FFFBF6] dark:bg-[#1D1630]">
                 <div className="flex items-center gap-2 text-xs text-[#5D5070] dark:text-[#B5A7D0]">
                   <MapPin className="w-3.5 h-3.5 text-[#C9523C] dark:text-[#F48C74]" />
                   <span>{BRAND_FLOOR_MAP[activeBrand.id]}</span>
@@ -294,7 +431,7 @@ export function BrandsPage({ onInspectBrand }) {
                 <button
                   type="button"
                   onClick={() => onInspectBrand?.(activeBrand)}
-                  className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] bg-[#1B1325] dark:bg-[#F48C74] text-[#FBF4EB] dark:text-[#151021] hover:opacity-90 transition-opacity cursor-pointer"
+                  className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] bg-[#1B1325] dark:bg-[#F48C74] text-[#FBF4EB] dark:text-[#151021] hover:opacity-90 rounded-full transition-opacity cursor-pointer shadow-md"
                 >
                   <span>Inspect Outlet Details</span>
                   <ArrowRight className="w-3.5 h-3.5" />

@@ -12,6 +12,7 @@ import {
   Users,
   Heart,
   Pizza,
+  UtensilsCrossed,
 } from 'lucide-react';
 import { ARCHITECTURAL_GALLERY } from '../assets/mediaManifest';
 import { BRAND_IMAGES, SCENE_IMAGES } from '../assets/imageRegistry';
@@ -398,17 +399,18 @@ const PIZZA_TABS = [
 
 export function DiningPage({ onInspectBrand }) {
   const heroRef = useRef(null);
+  const flameRef = useRef(null);
   const pizzaRef = useRef(null);
   const mosaicRef = useRef(null);
   const terraceRef = useRef(null);
   const directoryRef = useRef(null);
 
-  // Active restaurant & active panel selection for Section 1 (Dark Burgundy Showcase)
+  // Active restaurant selection for Section 2 (Dark Burgundy Flame Grill Showcase)
   const [selectedOutletIndex, setSelectedOutletIndex] = useState(0);
   const [selectedPanelIndex, setSelectedPanelIndex] = useState(0);
   const [swappedImage, setSwappedImage] = useState(false);
 
-  // Active tab & swapped state for Section 2 (Warm Champagne Stone-Baked Showcase)
+  // Active tab & swapped state for Section 3 (Warm Champagne Stone-Baked Showcase)
   const [activePizzaTab, setActivePizzaTab] = useState(0);
   const [swappedPizzaImage, setSwappedPizzaImage] = useState(false);
 
@@ -421,8 +423,16 @@ export function DiningPage({ onInspectBrand }) {
     setSwappedImage(false);
   };
 
+  const scrollToSection = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   useEffect(() => {
     const cleanHero = registerSectionMotion(heroRef.current, 'editorial');
+    const cleanFlame = registerSectionMotion(flameRef.current, 'editorial');
     const cleanPizza = registerSectionMotion(pizzaRef.current, 'editorial');
     const cleanMosaic = registerSectionMotion(mosaicRef.current, 'cascade');
     const cleanTerrace = registerSectionMotion(terraceRef.current, 'editorial');
@@ -430,6 +440,7 @@ export function DiningPage({ onInspectBrand }) {
 
     return () => {
       cleanHero();
+      cleanFlame();
       cleanPizza();
       cleanMosaic();
       cleanTerrace();
@@ -437,7 +448,7 @@ export function DiningPage({ onInspectBrand }) {
     };
   }, []);
 
-  // Visuals for Section 1
+  // Visuals for Section 2
   const primaryVisual = swappedImage
     ? activeOutlet.interiorImage
     : activePanel.image || activeOutlet.foodImage;
@@ -446,22 +457,101 @@ export function DiningPage({ onInspectBrand }) {
     ? activePanel.image || activeOutlet.foodImage
     : activeOutlet.interiorImage;
 
-  // Visuals for Section 2
+  // Visuals for Section 3
   const currentPizza = PIZZA_TABS[activePizzaTab];
   const pizzaMainVisual = swappedPizzaImage ? currentPizza.thumb : currentPizza.image;
   const pizzaThumbVisual = swappedPizzaImage ? currentPizza.image : currentPizza.thumb;
 
   return (
-    <div className="bg-[#140605] text-[#F6EFE7]">
+    <div className="bg-[#FBF5EE] dark:bg-[#140605] text-[#1B1325] dark:text-[#F6EFE7] transition-colors duration-300">
       {/* =========================================================================
-          SECTION 1: HERO — CINEMATIC DEEP BURGUNDY RESTAURANT SHOWCASE (ZERO HUMANS)
+          SECTION 1: HERO — "THIRD FLOOR FLAVOURS" (Matching Screenshot 3)
+          Soft champagne & lavender gradient + flowing golden wavy lines + floating dots
+          Pure abstract geometry: ZERO men, ZERO women, ZERO human figures!
           ========================================================================= */}
       <section
         ref={heroRef}
         id="dining-hero"
-        className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-16 sm:py-20 border-b border-[#D63F28]/25 bg-[#170605]"
+        className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-20 border-b border-[#2D1D48]/14 dark:border-white/10"
       >
-        {/* Pure Abstract Procedural Canvas: Glowing horizontal amber streaks & floating golden bokeh (NO MEN, NO WOMEN) */}
+        {/* Soft Champagne & Golden Wave Lines Canvas (Zero Humans) */}
+        <VideoSectionBackground
+          variant="dining-hero"
+          eager
+          videoOpacityClassName="opacity-95"
+          tintClassName="bg-transparent"
+        />
+
+        <div className="relative z-10 max-w-7xl w-full mx-auto px-5 sm:px-8 lg:px-12 space-y-8">
+          <div data-motion="reveal" className="space-y-4 max-w-2xl">
+            {/* Kicker with Cutlery Icon */}
+            <div className="flex items-center gap-2 text-xs font-semibold tracking-[0.2em] uppercase text-[#B36624] dark:text-[#E39857]">
+              <UtensilsCrossed className="w-4 h-4" />
+              <span>THIRD FLOOR PAVILION</span>
+            </div>
+
+            {/* Display Headline */}
+            <h1 className="font-display text-5xl sm:text-7xl lg:text-[5.5rem] font-normal tracking-tight text-[#1B1325] dark:text-[#F6EFE7] leading-[1.04]">
+              Third Floor Flavours
+            </h1>
+
+            {/* Subtitle */}
+            <p className="text-base sm:text-lg text-[#5D5070] dark:text-[#D8CEE9] leading-relaxed max-w-xl">
+              Live table grills, crispy golden chicken &amp; oven-baked pizzas served across CITY MALL&apos;s sunlit culinary deck.
+            </p>
+          </div>
+
+          {/* Floating Rounded Brand Badges Dock (Matching Reference Screenshot 3) */}
+          <div data-motion="reveal" className="pt-2">
+            <div className="inline-flex flex-wrap items-center gap-3 p-2.5 rounded-3xl bg-white/85 dark:bg-[#1D1628]/85 backdrop-blur-xl border border-[#2D1D48]/14 dark:border-white/15 shadow-2xl">
+              {/* KFC */}
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedOutletIndex(2); // KFC
+                  scrollToSection('dining-flame');
+                }}
+                className="flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-[#E4002B] text-white font-black text-xs tracking-wider shadow-md hover:scale-105 transition-transform cursor-pointer"
+              >
+                <span className="font-black">KFC</span>
+              </button>
+
+              {/* Barbeque Nation */}
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedOutletIndex(0); // Barbeque Nation
+                  scrollToSection('dining-flame');
+                }}
+                className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#C9523C] text-white font-bold text-xs tracking-wider shadow-md hover:scale-105 transition-transform cursor-pointer"
+              >
+                <Flame className="w-3.5 h-3.5" />
+                <span>Barbeque Nation</span>
+              </button>
+
+              {/* Pizza Hut */}
+              <button
+                type="button"
+                onClick={() => scrollToSection('dining-pizza')}
+                className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#006699] text-white font-bold text-xs tracking-wider shadow-md hover:scale-105 transition-transform cursor-pointer"
+              >
+                <Pizza className="w-3.5 h-3.5" />
+                <span>Pizza Hut</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          SECTION 2: FLAME GRILL & SIZZLING RESTAURANT SHOWCASE (Screenshot 1)
+          Deep burgundy & glowing horizontal amber streaks (Zero Humans)
+          ========================================================================= */}
+      <section
+        ref={flameRef}
+        id="dining-flame"
+        className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-16 sm:py-24 border-b border-[#D63F28]/25 bg-[#170605] text-[#F6EFE7]"
+      >
         <VideoSectionBackground
           variant="dining"
           eager
@@ -518,12 +608,10 @@ export function DiningPage({ onInspectBrand }) {
                 </div>
               </div>
 
-              {/* Large Display Headline */}
-              <h1 className="font-display text-3xl sm:text-4xl lg:text-[2.85rem] font-bold leading-[1.08] text-[#FFF6EA] tracking-tight">
+              <h2 className="font-display text-3xl sm:text-4xl lg:text-[2.85rem] font-bold leading-[1.08] text-[#FFF6EA] tracking-tight">
                 {activeOutlet.headline}
-              </h1>
+              </h2>
 
-              {/* Short Restaurant Description */}
               <p className="text-sm sm:text-base text-white/80 leading-relaxed max-w-xl">
                 {activeOutlet.description}
               </p>
@@ -595,14 +683,12 @@ export function DiningPage({ onInspectBrand }) {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/15 pointer-events-none" />
 
-                {/* Bottom Left Active Caption Badge */}
                 <div className="absolute bottom-4 left-4 z-20 bg-black/75 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/20">
                   <span className="text-xs font-bold uppercase tracking-wider text-[#FFA07A]">
                     {activePanel.title}
                   </span>
                 </div>
 
-                {/* Smaller Overlapping Restaurant-Interior Thumbnail at Bottom-Right */}
                 <div
                   onClick={() => setSwappedImage(!swappedImage)}
                   title="Click to switch view"
@@ -626,15 +712,14 @@ export function DiningPage({ onInspectBrand }) {
       </section>
 
       {/* =========================================================================
-          SECTION 2: WARM CHAMPAGNE STONE-BAKED OVEN SHOWCASE (Matching Screenshot 2)
-          Pure abstract concentric rings: ZERO men, ZERO women, ZERO human figures!
+          SECTION 3: WARM CHAMPAGNE STONE-BAKED OVEN SHOWCASE (Screenshot 2)
+          Pure abstract concentric rings: ZERO men, ZERO women!
           ========================================================================= */}
       <section
         ref={pizzaRef}
         id="dining-pizza"
         className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-16 sm:py-24 border-b border-[#2D1D48]/14 bg-[#FDF7EE] dark:bg-[#1A0F0B] text-[#1B1325] dark:text-[#F6EFE7]"
       >
-        {/* Concentric Golden Oven Circles Backdrop (100% Abstract, Zero Humans) */}
         <VideoSectionBackground
           variant="bake"
           eager
@@ -647,16 +732,15 @@ export function DiningPage({ onInspectBrand }) {
             {/* LEFT COLUMN: Floating Rounded Card with Stone-Baked Freshness (6 cols) */}
             <div className="lg:col-span-6">
               <div className="bg-[#FFFDF9]/95 dark:bg-[#20141D]/95 backdrop-blur-md p-7 sm:p-9 rounded-3xl border border-white/80 dark:border-white/10 shadow-2xl space-y-5">
-                {/* Brand Header & Stone-Baked Kicker */}
                 <div className="space-y-1.5">
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-xl bg-[#D63F28] text-white flex items-center justify-center font-black text-xs shadow-md">
                       PH
                     </div>
                     <div>
-                      <h2 className="font-display text-xl font-bold text-[#1B1325] dark:text-[#F6EFE7] tracking-tight">
+                      <h3 className="font-display text-xl font-bold text-[#1B1325] dark:text-[#F6EFE7] tracking-tight">
                         Pizza Hut
-                      </h2>
+                      </h3>
                       <span className="text-[10px] font-bold uppercase tracking-widest text-[#D63F28]">
                         OVEN-BAKED FRESHNESS
                       </span>
@@ -669,17 +753,15 @@ export function DiningPage({ onInspectBrand }) {
                   </div>
                 </div>
 
-                {/* Display Headline */}
                 <h3 className="font-display text-3xl sm:text-4xl font-bold leading-[1.08] text-[#1B1325] dark:text-[#F6EFE7] tracking-tight">
                   Fresh Dough. 450° Oven Heat.
                 </h3>
 
-                {/* Description */}
                 <p className="text-sm leading-relaxed text-[#5D5070] dark:text-[#D8CEE9]">
                   Hand-stretched dough with bubbling mozzarella, stuffed garlic breadsticks, and warm choco lava cakes baked fresh to order.
                 </p>
 
-                {/* Interactive Pill Tabs: [ Hand-Tossed ] [ Cheese Burst ] [ Choco Lava ] */}
+                {/* Interactive Pill Tabs */}
                 <div className="flex flex-wrap items-center gap-2.5 pt-1">
                   {PIZZA_TABS.map((tab, idx) => {
                     const isActive = idx === activePizzaTab;
@@ -703,7 +785,7 @@ export function DiningPage({ onInspectBrand }) {
                   })}
                 </div>
 
-                {/* Dynamic Detail Text based on active tab */}
+                {/* Dynamic Detail Text */}
                 <div className="p-4 rounded-2xl bg-[#0E5A7A]/6 dark:bg-[#0E5A7A]/15 border border-[#0E5A7A]/15 space-y-1">
                   <h4 className="font-display text-sm sm:text-base font-bold text-[#0E5A7A] dark:text-[#5EEAD4]">
                     {currentPizza.title}
@@ -727,7 +809,7 @@ export function DiningPage({ onInspectBrand }) {
               </div>
             </div>
 
-            {/* RIGHT COLUMN: Large Pizza Food Image + Overlapping Secondary Dish Thumbnail (6 cols) */}
+            {/* RIGHT COLUMN: Large Pizza Food Image + Overlapping Secondary Dish Thumbnail */}
             <div className="lg:col-span-6 relative">
               <div className="relative aspect-[16/11] sm:aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border border-white/60 dark:border-white/15 bg-[#251812]">
                 <ResilientImage
@@ -738,14 +820,12 @@ export function DiningPage({ onInspectBrand }) {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
 
-                {/* Floating Bottom Left Caption */}
                 <div className="absolute bottom-4 left-4 z-20 bg-white/90 dark:bg-black/80 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/40 shadow-sm">
                   <span className="text-xs font-bold uppercase tracking-wider text-[#0E5A7A] dark:text-[#5EEAD4]">
                     {currentPizza.title}
                   </span>
                 </div>
 
-                {/* Floating Overlapping Thumbnail at Bottom-Right (Click to switch view) */}
                 <div
                   onClick={() => setSwappedPizzaImage(!swappedPizzaImage)}
                   title="Click to switch view"
@@ -769,12 +849,12 @@ export function DiningPage({ onInspectBrand }) {
       </section>
 
       {/* =========================================================================
-          SECTION 3: FOUR SIGNATURE CULINARY AMBIANCES (ZERO HUMANS)
+          SECTION 4: FOUR SIGNATURE CULINARY AMBIANCES (ZERO HUMANS)
           ========================================================================= */}
       <section
         ref={mosaicRef}
         id="dining-styles"
-        className="relative overflow-hidden py-16 sm:py-24 bg-[#1B0A08] border-b border-white/10"
+        className="relative overflow-hidden py-16 sm:py-24 bg-[#1B0A08] border-b border-white/10 text-[#F6EFE7]"
       >
         <VideoSectionBackground
           variant="events"
@@ -849,12 +929,12 @@ export function DiningPage({ onInspectBrand }) {
       </section>
 
       {/* =========================================================================
-          SECTION 4: SUNLIT DINING TERRACE PROMENADE (ZERO HUMANS)
+          SECTION 5: SUNLIT DINING TERRACE PROMENADE (ZERO HUMANS)
           ========================================================================= */}
       <section
         ref={terraceRef}
         id="dining-terrace"
-        className="relative overflow-hidden py-16 sm:py-24 bg-[#140605] border-b border-white/10"
+        className="relative overflow-hidden py-16 sm:py-24 bg-[#140605] border-b border-white/10 text-[#F6EFE7]"
       >
         <VideoSectionBackground
           variant="explore"
@@ -910,12 +990,12 @@ export function DiningPage({ onInspectBrand }) {
       </section>
 
       {/* =========================================================================
-          SECTION 5: COMPLETE 9-RESTAURANT DIRECTORY
+          SECTION 6: COMPLETE 9-RESTAURANT DIRECTORY
           ========================================================================= */}
       <section
         ref={directoryRef}
         id="dining-directory"
-        className="relative overflow-hidden py-16 sm:py-24 bg-[#100404]"
+        className="relative overflow-hidden py-16 sm:py-24 bg-[#100404] text-[#F6EFE7]"
       >
         <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 space-y-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-white/10 pb-6">
@@ -938,7 +1018,7 @@ export function DiningPage({ onInspectBrand }) {
                 key={outlet.id}
                 onClick={() => {
                   setSelectedOutletIndex(idx);
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                  scrollToSection('dining-flame');
                 }}
                 className="group p-5 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all duration-300 cursor-pointer space-y-3"
               >

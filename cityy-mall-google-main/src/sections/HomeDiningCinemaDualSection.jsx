@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ExternalLink, Utensils, Film, Sparkles } from 'lucide-react';
 import { registerSectionMotion } from '../animations/scrollAnimations';
+import { BrandLogo } from '../components/BrandLogo';
 
 /**
  * Premium Dual Stage Showcase: Dining Terrace (Left) & PVR INOX Cinemas (Right)
@@ -19,9 +20,9 @@ export function HomeDiningCinemaDualSection({ onInspectBrand }) {
     <section
       ref={sectionRef}
       id="home-dining-cinema"
-      className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#140C20]/85 backdrop-blur-md"
+      className="relative min-h-0 lg:min-h-screen flex flex-col justify-start lg:justify-center overflow-visible lg:overflow-hidden border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#140C20]/85 backdrop-blur-md"
     >
-      <div className="w-full grid grid-cols-1 lg:grid-cols-2 min-h-[100vh] items-stretch">
+      <div className="w-full grid grid-cols-1 lg:grid-cols-2 min-h-0 lg:min-h-screen items-stretch">
         {/* =====================================================================
             LEFT HALF: DINING TERRACE (Third Floor)
            ===================================================================== */}
@@ -54,31 +55,11 @@ export function HomeDiningCinemaDualSection({ onInspectBrand }) {
               Live table grills, wood-fired pizzas &amp; social dining promenade.
             </p>
 
-            {/* Brand Pills Chips */}
+            {/* Authentic Brand Logos */}
             <div className="flex flex-wrap items-center gap-2.5 pt-2">
-              {/* Barbeque Nation Chip */}
-              <div className="bg-[#1D142A]/90 hover:bg-[#281C38] border border-white/12 px-3 py-1.5 rounded-xl flex items-center gap-2 text-xs text-white shadow-md transition-colors">
-                <span className="w-5 h-5 rounded-full bg-[#C9523C] text-white flex items-center justify-center font-bold text-[9px] font-mono">
-                  BN
-                </span>
-                <span className="font-medium">Barbeque Nation</span>
-              </div>
-
-              {/* KFC Chip */}
-              <div className="bg-[#1D142A]/90 hover:bg-[#281C38] border border-white/12 px-3 py-1.5 rounded-xl flex items-center gap-2 text-xs text-white shadow-md transition-colors">
-                <span className="px-1.5 py-0.5 rounded bg-white text-[#C9523C] font-extrabold text-[10px] tracking-tight">
-                  KFC
-                </span>
-                <span className="font-medium">KFC</span>
-              </div>
-
-              {/* Pizza Hut Chip */}
-              <div className="bg-[#1D142A]/90 hover:bg-[#281C38] border border-white/12 px-3 py-1.5 rounded-xl flex items-center gap-2 text-xs text-white shadow-md transition-colors">
-                <span className="w-4 h-4 rounded-full bg-[#C9523C] text-white flex items-center justify-center font-serif text-[10px] italic font-bold">
-                  P
-                </span>
-                <span className="font-medium">Pizza Hut</span>
-              </div>
+              <BrandLogo brandId="barbeque-nation" variant="badge" />
+              <BrandLogo brandId="kfc" variant="badge" />
+              <BrandLogo brandId="pizza-hut" variant="badge" />
             </div>
 
             {/* Gold CTA Button */}
@@ -137,12 +118,9 @@ export function HomeDiningCinemaDualSection({ onInspectBrand }) {
 
           {/* Right Content */}
           <div className="relative z-10 space-y-6 max-w-xl" data-motion="reveal">
-            {/* PVR INOX Logo Badge */}
-            <div>
-              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-white text-[#1B1325] font-extrabold tracking-tight text-sm shadow-md">
-                <span className="text-[#C9523C]">PVR</span>
-                <span className="text-[#1B1325]">INOX</span>
-              </span>
+            {/* PVR INOX Official Brand Logo */}
+            <div className="inline-flex bg-white/10 dark:bg-black/20 p-2 rounded-xl backdrop-blur-md border border-white/20">
+              <BrandLogo brandId="inox-cinemas" variant="showcase" />
             </div>
 
             {/* Kicker */}

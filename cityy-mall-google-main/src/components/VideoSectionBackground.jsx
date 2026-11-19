@@ -36,33 +36,12 @@ export function VideoSectionBackground({
       video.playbackRate = playbackRate;
     }
 
-    const isMobile =
-      typeof window !== 'undefined' &&
-      (window.innerWidth < 768 || 'ontouchstart' in window || navigator.maxTouchPoints > 0);
+    // Strictly start paused - zero unwanted autoplay
+    video.pause();
 
     // =========================================================================
-    // MOBILE / PHONE VIEW: Continuous hardware-accelerated playback
-    // Avoids rapid pause/play calls that stall mobile decoders and cause stutter
-    // =========================================================================
-    if (isMobile) {
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => setIsPlaying(true))
-          .catch(() => {
-            // Autoplay with muted fallback
-            video.muted = true;
-            video.play().then(() => setIsPlaying(true)).catch(() => {});
-          });
-      }
-
-      return () => {
-        video.pause();
-      };
-    }
-
-    // =========================================================================
-    // DESKTOP VIEW: Activity-based controller with gentle idle pause
+    // Activity-based controller: Video plays ONLY when mouse / touch is actively moving
+    // The moment mouse stops, cleanly pauses the video.
     // =========================================================================
     let isVideoPlaying = false;
     let stopTimeout = null;
@@ -76,13 +55,19 @@ export function VideoSectionBackground({
           p.then(() => {
             isVideoPlaying = true;
             setIsPlaying(true);
-          }).catch(() => {});
+          }).catch(() => {
+            video.muted = true;
+            video.play().then(() => {
+              isVideoPlaying = true;
+              setIsPlaying(true);
+            }).catch(() => {});
+          });
         }
       }
     };
 
     const pauseVideo = () => {
-      if (isVideoPlaying) {
+      if (isVideoPlaying || !video.paused) {
         video.pause();
         isVideoPlaying = false;
         setIsPlaying(false);
@@ -93,9 +78,10 @@ export function VideoSectionBackground({
       if (distance > 0.5) {
         playVideo();
         if (stopTimeout) clearTimeout(stopTimeout);
+        // Cleanly pause 800ms after interaction stops
         stopTimeout = setTimeout(() => {
           pauseVideo();
-        }, 1200);
+        }, 800);
       }
     };
 
@@ -108,28 +94,34 @@ export function VideoSectionBackground({
 
     const handleWheel = (e) => {
       const delta = Math.abs(e.deltaY) + Math.abs(e.deltaX);
-      handleActivity(delta);
+      if (delta > 0) handleActivity(5);
     };
 
     const handlePointerDown = () => {
       handleActivity(5);
     };
 
+    const handleScroll = () => {
+      handleActivity(5);
+    };
+
+    const handleTouchMove = () => {
+      handleActivity(5);
+    };
+
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
     window.addEventListener('wheel', handleWheel, { passive: true });
     window.addEventListener('pointerdown', handlePointerDown, { passive: true });
-
-    // Initial play check
-    playVideo();
-    stopTimeout = setTimeout(() => {
-      pauseVideo();
-    }, 1500);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
 
     return () => {
       if (stopTimeout) clearTimeout(stopTimeout);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('wheel', handleWheel);
       window.removeEventListener('pointerdown', handlePointerDown);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('touchmove', handleTouchMove);
       video.pause();
     };
   }, [videoSrc, playbackRate]);

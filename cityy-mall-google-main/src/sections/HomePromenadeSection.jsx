@@ -46,7 +46,7 @@ export function HomePromenadeSection() {
     <section
       ref={sectionRef}
       id="home-promenade"
-      className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-16 sm:py-24 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-transparent transition-colors duration-300"
+      className="relative min-h-0 lg:min-h-screen flex flex-col justify-start lg:justify-center overflow-visible lg:overflow-hidden py-10 sm:py-16 lg:py-24 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-transparent transition-colors duration-300"
     >
       {/* Animated Warm Golden/Champagne Geometric Atmosphere */}
       <VideoSectionBackground
@@ -63,13 +63,13 @@ export function HomePromenadeSection() {
           {/* =========================================================================
               LEFT COLUMN: ELEGANT ARCHITECTURAL FLOW (Clean Direct Typography)
              ========================================================================= */}
-          <div className="lg:col-span-5 space-y-6" data-motion="reveal">
+          <div className="lg:col-span-5 space-y-5 sm:space-y-6" data-motion="reveal">
             {/* Top Kicker */}
             <div className="space-y-2">
               <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#0D9488] dark:text-[#2DD4BF] block">
                 ARCHITECTURE &amp; FLOW
               </span>
-              <h2 className="font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-[#1D1129] dark:text-[#FAF0F8] leading-[1.12]">
+              <h2 className="font-display text-2xl sm:text-4xl font-extrabold tracking-tight text-[#1D1129] dark:text-[#FAF0F8] leading-[1.12]">
                 Five Sunlit Levels in{' '}
                 <span className="font-serif italic font-normal inline-block bg-gradient-to-r from-[#0D9488] via-[#14B8A6] to-[#8B5CF6] bg-clip-text text-transparent">
                   Gorakhpur
@@ -126,8 +126,65 @@ export function HomePromenadeSection() {
               RIGHT COLUMN: PANORAMIC HORIZONTALLY OVERLAPPING STADIUM-ROUNDED IMAGES
               Exact match to user's uploaded reference: rounded-[2.5rem], horizontal overlap
              ========================================================================= */}
-          <div className="lg:col-span-7 relative flex items-center justify-start overflow-visible pt-4 lg:pt-0">
-            <div className="flex items-center -space-x-8 sm:-space-x-12 w-full select-none">
+          <div className="lg:col-span-7 relative w-full overflow-hidden sm:overflow-visible pt-4 lg:pt-0">
+            {/* Mobile View: Clean horizontal snap swipe track */}
+            <div className="flex sm:hidden overflow-x-auto snap-x snap-mandatory gap-3 pb-3 no-scrollbar select-none px-1">
+              <div
+                onClick={() => setActiveLevel(0)}
+                className={`relative shrink-0 w-[82%] aspect-[16/11] rounded-2xl overflow-hidden shadow-xl border-2 transition-all snap-center cursor-pointer ${
+                  activeLevel === 0 ? 'border-[#EA580C] ring-2 ring-[#EA580C]/30' : 'border-white/40 dark:border-white/20'
+                }`}
+              >
+                <ResilientImage
+                  src={SCENE_IMAGES.home3dAtrium}
+                  alt="Five sunlit levels atrium"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent pointer-events-none" />
+                <span className="absolute bottom-2.5 left-3 text-[10px] font-mono font-bold uppercase tracking-wider text-white bg-black/70 px-2.5 py-0.5 rounded-full backdrop-blur-md">
+                  Central Atrium
+                </span>
+              </div>
+
+              <div
+                onClick={() => setActiveLevel(1)}
+                className={`relative shrink-0 w-[82%] aspect-[16/11] rounded-2xl overflow-hidden shadow-xl border-2 transition-all snap-center cursor-pointer ${
+                  activeLevel === 1 ? 'border-[#7C3AED] ring-2 ring-[#7C3AED]/30' : 'border-white/40 dark:border-white/20'
+                }`}
+              >
+                <ResilientImage
+                  src={BRAND_IMAGES.louisPhilippe}
+                  alt="Tailored fashion boutique"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent pointer-events-none" />
+                <span className="absolute bottom-2.5 left-3 text-[10px] font-mono font-bold text-white bg-black/70 px-2.5 py-0.5 rounded-full backdrop-blur-md truncate max-w-[85%]">
+                  Fashion Promenade
+                </span>
+              </div>
+
+              <div
+                onClick={() => setActiveLevel(2)}
+                className={`relative shrink-0 w-[82%] aspect-[16/11] rounded-2xl overflow-hidden shadow-xl border-2 transition-all snap-center cursor-pointer ${
+                  activeLevel === 2 ? 'border-[#0D9488] ring-2 ring-[#0D9488]/30' : 'border-white/40 dark:border-white/20'
+                }`}
+              >
+                <ResilientImage
+                  src={BRAND_IMAGES.wForWoman}
+                  alt="Signature outlets gallery"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute bottom-2.5 left-2.5 right-2.5 z-20">
+                  <span className="block w-full text-center px-2 py-0.5 text-[9px] font-mono font-bold uppercase tracking-wider text-white bg-black/80 backdrop-blur-md rounded-full border border-white/20 truncate">
+                    18 APPROVED OUTLETS · FLOOR DIRECTORY
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Desktop View: Classic Overlapping Stadium */}
+            <div className="hidden sm:flex items-center -space-x-4 sm:-space-x-12 w-full select-none overflow-hidden sm:overflow-visible">
               
               {/* IMAGE 1: DOMINANT SUNLIT ATRIUM (Stadium-Rounded Front Canvas) */}
               <div

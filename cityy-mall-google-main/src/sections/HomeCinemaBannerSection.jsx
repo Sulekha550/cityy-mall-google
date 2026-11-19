@@ -21,7 +21,7 @@ export function HomeCinemaBannerSection({ onInspectBrand }) {
     <section
       ref={sectionRef}
       id="home-cinema"
-      className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-16 sm:py-24 bg-transparent"
+      className="relative min-h-0 lg:min-h-screen flex flex-col justify-start lg:justify-center overflow-visible lg:overflow-hidden py-10 sm:py-16 lg:py-24 bg-transparent"
     >
       <VideoSectionBackground
         videoAsset={VIDEO_ASSETS.mallHero}

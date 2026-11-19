@@ -526,6 +526,43 @@ function BrandLogoEmblem({ brandId, className = 'w-full h-full' }) {
         </div>
       );
 
+    case 'pind-balluchi':
+      return (
+        <div className={`flex flex-col items-center justify-center select-none ${className}`}>
+          <div className="w-8 h-8 rounded-full bg-[#D97706] text-white flex items-center justify-center text-sm shadow-xs">
+            🏺
+          </div>
+          <span className="font-serif font-black tracking-wider text-xs sm:text-sm text-[#D97706] uppercase mt-1">
+            PIND BALLUCHI
+          </span>
+        </div>
+      );
+
+    case 'dosa-plaza':
+      return (
+        <div className={`flex flex-col items-center justify-center select-none ${className}`}>
+          <div className="w-8 h-8 rounded-full bg-[#059669] text-white flex items-center justify-center text-sm shadow-xs">
+            🌯
+          </div>
+          <span className="font-display font-black tracking-wider text-xs sm:text-sm text-[#059669] dark:text-[#34D399] uppercase mt-1">
+            DOSA PLAZA
+          </span>
+        </div>
+      );
+
+    case 'arjun-mehendi':
+    case 'arjun-mehendi-art':
+      return (
+        <div className={`flex flex-col items-center justify-center select-none ${className}`}>
+          <div className="w-8 h-8 rounded-full bg-[#78350F] text-amber-200 flex items-center justify-center text-sm shadow-xs">
+            ✨
+          </div>
+          <span className="font-serif font-bold tracking-wider text-xs sm:text-sm text-[#78350F] dark:text-[#FDE68A] uppercase mt-1">
+            ARJUN MEHENDI
+          </span>
+        </div>
+      );
+
     default:
       return (
         <div className={`flex items-center justify-center select-none ${className}`}>
@@ -586,7 +623,7 @@ export function HomeBrandSpotlightSection({ onInspectBrand }) {
       id="home-spotlight"
       onMouseEnter={() => setIsAutoPlaying(false)}
       onMouseLeave={() => setIsAutoPlaying(true)}
-      className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-14 sm:py-20 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-transparent select-none"
+      className="relative min-h-0 lg:min-h-screen flex flex-col justify-start lg:justify-center overflow-visible lg:overflow-hidden py-10 sm:py-16 lg:py-20 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-transparent select-none"
     >
       {/* =========================================================================
           BACKGROUND (Hero Section Signature Interactive Video & Abstract Canvas)
@@ -724,8 +761,8 @@ export function HomeBrandSpotlightSection({ onInspectBrand }) {
                   {/* Floating Frosted Glass Panel Container */}
                   <div
                     className={`relative w-full h-full rounded-3xl p-4 sm:p-5 flex flex-col items-center justify-center transition-all duration-300 border-2 ${isCenter
-                      ? 'bg-white/92 dark:bg-[#1D112E]/92 backdrop-blur-2xl border-white shadow-[0_20px_50px_rgba(236,72,153,0.3)] ring-4 ring-pink-400/30'
-                      : 'bg-white/80 dark:bg-[#1C122C]/80 backdrop-blur-xl border-white/80 dark:border-white/15 shadow-xl hover:border-pink-300 hover:scale-105'
+                        ? 'bg-white/92 dark:bg-[#1D112E]/92 backdrop-blur-2xl border-white shadow-[0_20px_50px_rgba(236,72,153,0.3)] ring-4 ring-pink-400/30'
+                        : 'bg-white/80 dark:bg-[#1C122C]/80 backdrop-blur-xl border-white/80 dark:border-white/15 shadow-xl hover:border-pink-300 hover:scale-105'
                       }`}
                   >
                     {/* Glossy Top Sheen Reflection Diagonal */}
@@ -808,8 +845,8 @@ export function HomeBrandSpotlightSection({ onInspectBrand }) {
                   onClick={() => setActiveIndex(Math.floor((dotIdx / 5) * total))}
                   aria-label={`Go to section ${dotIdx + 1}`}
                   className={`rounded-full transition-all duration-300 cursor-pointer ${isCurrent
-                    ? 'w-2.5 h-2.5 bg-[#9333EA] ring-2 ring-purple-400/50'
-                    : 'w-2 h-2 bg-black/20 dark:bg-white/30 hover:bg-black/40'
+                      ? 'w-2.5 h-2.5 bg-[#9333EA] ring-2 ring-purple-400/50'
+                      : 'w-2 h-2 bg-black/20 dark:bg-white/30 hover:bg-black/40'
                     }`}
                 />
               );

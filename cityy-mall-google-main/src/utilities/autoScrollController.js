@@ -85,7 +85,8 @@ export class AutoScrollController {
     this.rafId = null;
     if (this.state !== 'playing') return;
 
-    const dt = Math.min(0.05, Math.max(0.001, (now - this.lastTime) / 1000));
+    if (!this.lastTime) this.lastTime = now;
+    const dt = Math.min(0.033, Math.max(0.001, (now - this.lastTime) / 1000));
     this.lastTime = now;
 
     const maxScroll = Math.max(
@@ -99,22 +100,30 @@ export class AutoScrollController {
       return;
     }
 
-    // Re-sync if manual scroll shifted position while active
-    if (Math.abs(window.scrollY - this.exactScrollY) > 12) {
+    // Re-sync if manual scroll shifted position significantly while active
+    if (Math.abs(window.scrollY - this.exactScrollY) > 30) {
       this.exactScrollY = window.scrollY;
     }
 
     this.exactScrollY = Math.min(maxScroll, this.exactScrollY + this.speedPxPerSec * dt);
-    window.scrollTo({ top: this.exactScrollY, behavior: 'auto' });
-    this.emit();
+    window.scrollTo(0, this.exactScrollY);
+
+    // Throttle progress event emissions to prevent React lag
+    if (!this.lastEmitTime || now - this.lastEmitTime > 120) {
+      this.lastEmitTime = now;
+      this.emit();
+    }
 
     this.rafId = requestAnimationFrame(this.tick);
   };
 
-  handleManualWheelOrTouch = () => {
+  handleManualWheelOrTouch = (e) => {
     if (this.state === 'playing') {
-      // Allow manual scroll immediately without fighting user by pausing smoothly
-      this.pause();
+      // Only pause if deliberate user scroll action, not micro-touch jitter
+      const delta = Math.abs(e?.deltaY || 0);
+      if (delta > 5 || e.type === 'touchstart') {
+        this.pause();
+      }
     }
   };
 

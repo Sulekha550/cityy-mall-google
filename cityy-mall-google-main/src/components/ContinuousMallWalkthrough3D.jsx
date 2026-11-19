@@ -687,8 +687,8 @@ export function ContinuousMallWalkthrough3D({ className = '' }) {
     <div
       ref={containerRef}
       onPointerMove={handlePointerMove}
-      className={`relative w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-[#2D1D48]/14 dark:border-white/15 bg-[#151021] text-[#F8F0FA] select-none ${className}`}
-      style={{ minHeight: isFullscreen ? '100vh' : '580px' }}
+      className={`relative w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-[#2D1D48]/14 dark:border-white/15 bg-[#151021] text-[#F8F0FA] select-none min-h-[420px] sm:min-h-[520px] lg:min-h-[580px] ${className}`}
+      style={isFullscreen ? { minHeight: '100vh' } : undefined}
     >
       {/* -------------------------------------------------------------------
           LAYER 1: CONTINUOUS ARCHITECTURAL MP4 VIDEO BACKGROUND

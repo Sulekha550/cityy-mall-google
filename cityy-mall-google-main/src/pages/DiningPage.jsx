@@ -559,7 +559,7 @@ export function DiningPage({ onInspectBrand }) {
       <section
         ref={heroRef}
         id="dining-hero"
-        className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-16 sm:py-24 border-b border-[#2D1D48]/14 dark:border-white/10"
+        className="relative min-h-0 lg:min-h-screen flex flex-col justify-start lg:justify-center overflow-visible lg:overflow-hidden py-10 sm:py-16 lg:py-24 border-b border-[#2D1D48]/14 dark:border-white/10"
       >
         {/* Soft Champagne & Golden Wave Lines Canvas (Zero Humans) */}
         <VideoSectionBackground
@@ -706,7 +706,7 @@ export function DiningPage({ onInspectBrand }) {
       <section
         ref={flameRef}
         id="dining-flame"
-        className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-16 sm:py-24 border-b border-[#2D1D48]/14 dark:border-[#D63F28]/25 bg-transparent text-[#1B1325] dark:text-[#F6EFE7]"
+        className="relative min-h-0 lg:min-h-screen flex flex-col justify-start lg:justify-center overflow-visible lg:overflow-hidden py-10 sm:py-16 lg:py-24 border-b border-[#2D1D48]/14 dark:border-[#D63F28]/25 bg-transparent text-[#1B1325] dark:text-[#F6EFE7]"
       >
         <VideoSectionBackground
           variant="dining"
@@ -874,7 +874,7 @@ export function DiningPage({ onInspectBrand }) {
       <section
         ref={pizzaRef}
         id="dining-pizza"
-        className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-16 sm:py-24 border-b border-[#2D1D48]/14 bg-transparent text-[#1B1325] dark:text-[#F6EFE7]"
+        className="relative min-h-0 lg:min-h-screen flex flex-col justify-start lg:justify-center overflow-visible lg:overflow-hidden py-10 sm:py-16 lg:py-24 border-b border-[#2D1D48]/14 bg-transparent text-[#1B1325] dark:text-[#F6EFE7]"
       >
         <VideoSectionBackground
           variant="bake"

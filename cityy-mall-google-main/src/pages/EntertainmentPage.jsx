@@ -101,7 +101,7 @@ export function EntertainmentPage({ onInspectBrand }) {
       <section
         ref={heroRef}
         id="cinema-hero"
-        className="relative overflow-hidden min-h-[100vh] flex flex-col justify-between py-12 sm:py-16 px-5 sm:px-8 lg:px-12 border-b border-[#2D1D48]/14 dark:border-white/10 bg-transparent"
+        className="relative overflow-visible lg:overflow-hidden min-h-0 lg:min-h-screen flex flex-col justify-start lg:justify-between py-10 sm:py-16 px-4 sm:px-8 lg:px-12 border-b border-[#2D1D48]/14 dark:border-white/10 bg-transparent"
       >
         {/* Active Background Video & Procedural Cinema Projector Beam (Zero Humans) */}
         <VideoSectionBackground

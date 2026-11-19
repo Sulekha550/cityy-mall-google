@@ -204,12 +204,11 @@ export function DiscoverPage({ onInspectBrand }) {
           </div>
 
           {/* =========================================================================
-              ARCHITECTURAL COMPOSITION: FROSTED DOSSIER LEFT + OVERLAPPING STADIUM VITRINES RIGHT
-              Exact match to Orion Mall reference design
+              ARCHITECTURAL COMPOSITION: esign
              ========================================================================= */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
 
-            {/* LEFT COLUMN: Clean Direct Typography (Zero Card Box) */}
+            {/* LEFT COox) */}
             <div className="lg:col-span-5 space-y-5" data-motion="reveal">
               <div className="space-y-2">
                 <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#0D9488] dark:text-[#2DD4BF] block">
@@ -277,9 +276,50 @@ export function DiscoverPage({ onInspectBrand }) {
               </div>
             </div>
 
-            {/* RIGHT COLUMN: Horizontally Overlapping Stadium-Rounded Images (7 cols) */}
-            <div className="lg:col-span-7 relative flex items-center justify-start overflow-visible pt-4 lg:pt-0">
-              <div className="flex items-center -space-x-8 sm:-space-x-12 w-full select-none">
+            {/* RIGHT COLUMN: Stadium-Rounded Image Showcase (Mobile Swipe Track + Desktop Overlapping Cards) */}
+            <div className="lg:col-span-7 relative w-full overflow-hidden sm:overflow-visible pt-4 lg:pt-0">
+              {/* Mobile View: Clean horizontal snap swipe track (zero page overflow) */}
+              <div className="flex sm:hidden overflow-x-auto snap-x snap-mandatory gap-3 pb-3 no-scrollbar select-none px-1">
+                {WALKTHROUGH_FLOORS.map((floor, idx) => {
+                  const isMain = idx === activeFloorIndex;
+                  return (
+                    <div
+                      key={floor.level}
+                      onClick={() => setActiveFloorIndex(idx)}
+                      className={`relative shrink-0 w-[82%] aspect-[16/11] rounded-2xl overflow-hidden shadow-xl border-2 transition-all snap-center cursor-pointer ${
+                        isMain
+                          ? 'border-[#7C3AED] ring-2 ring-[#7C3AED]/30 scale-[1.01]'
+                          : 'border-white/40 dark:border-white/20 opacity-90'
+                      }`}
+                    >
+                      <ResilientImage
+                        src={floor.image}
+                        alt={floor.title}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+
+                      {/* Top Floor Tag Badge */}
+                      <div className="absolute top-2.5 left-2.5 z-20 flex items-center gap-1.5 bg-black/80 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-white/25">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#EC4899]" />
+                        <span className="text-[11px] font-bold text-white">
+                          {floor.level} · {floor.tag}
+                        </span>
+                      </div>
+
+                      {/* Bottom Floating Brands Strip */}
+                      <div className="absolute bottom-2.5 left-2.5 right-2.5 z-20">
+                        <span className="block w-full text-center px-2 py-1 text-[9px] font-mono font-bold uppercase tracking-wider text-white bg-black/80 backdrop-blur-md rounded-full border border-white/20 truncate">
+                          {floor.brands.join(' · ')}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Desktop View: Classic Overlapping Stadium Cards */}
+              <div className="hidden sm:flex items-center -space-x-8 sm:-space-x-12 w-full select-none">
                 {WALKTHROUGH_FLOORS.map((floor, idx) => {
                   const isMain = idx === activeFloorIndex;
                   return (
@@ -443,9 +483,37 @@ export function DiscoverPage({ onInspectBrand }) {
                 </div>
               </div>
 
-              {/* Right Column: Horizontally Overlapping Stadium-Rounded Image Showcase */}
-              <div className="lg:col-span-7 relative flex items-center justify-start overflow-visible">
-                <div className="flex items-center -space-x-8 sm:-space-x-12 w-full select-none">
+              {/* Right Column: Stadium-Rounded Image Showcase (Mobile Swipe Track + Desktop Overlapping Cards) */}
+              <div className="lg:col-span-7 relative w-full overflow-hidden sm:overflow-visible pt-4 lg:pt-0">
+                {/* Mobile View: Swipeable Track */}
+                <div className="flex sm:hidden overflow-x-auto snap-x snap-mandatory gap-3 pb-2 no-scrollbar select-none px-1">
+                  {categoryBrands.slice(0, 3).map((brand) => (
+                    <div
+                      key={brand.id}
+                      onClick={() => onInspectBrand?.(brand)}
+                      className="relative shrink-0 w-[82%] aspect-[16/11] rounded-2xl overflow-hidden shadow-xl border-2 border-white/50 dark:border-white/20 snap-center cursor-pointer"
+                    >
+                      <ResilientImage
+                        src={brand.image}
+                        alt={brand.name}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+
+                      <div className="absolute bottom-2.5 left-2.5 right-2.5 z-20 flex items-center justify-between gap-1">
+                        <span className="text-xs font-bold text-white bg-black/70 px-2.5 py-0.5 rounded-full backdrop-blur-md truncate">
+                          {brand.name}
+                        </span>
+                        <span className="text-[10px] font-mono text-[#F472B6] bg-black/70 px-2 py-0.5 rounded-full backdrop-blur-md shrink-0">
+                          Inspect →
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Desktop View: Classic Overlapping Stadium */}
+                <div className="hidden sm:flex items-center -space-x-8 sm:-space-x-12 w-full select-none">
                   {categoryBrands.slice(0, 3).map((brand, idx) => {
                     const isMain = idx === 0;
                     return (

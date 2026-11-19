@@ -18,18 +18,25 @@ export function RightVerticalSectionNav({ sections = SECTIONS }) {
   const [hoveredSection, setHoveredSection] = useState(null);
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      const scrollPos = window.scrollY + window.innerHeight * 0.42;
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollPos = window.scrollY + window.innerHeight * 0.42;
 
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sections[i].id);
-        if (el) {
-          const top = el.offsetTop;
-          if (scrollPos >= top) {
-            setActiveSection(sections[i].id);
-            break;
+          for (let i = sections.length - 1; i >= 0; i--) {
+            const el = document.getElementById(sections[i].id);
+            if (el) {
+              const top = el.offsetTop;
+              if (scrollPos >= top) {
+                setActiveSection(sections[i].id);
+                break;
+              }
+            }
           }
-        }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 

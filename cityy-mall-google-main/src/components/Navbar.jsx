@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { ChevronDown, Menu, Moon, Sun, X } from 'lucide-react';
 import { MAIN_NAV_LINKS } from '../utilities/navigationData';
 import { useTheme } from '../utilities/themeContext';
+import { CityMallLogo } from './CityMallLogo';
 
 export function Navbar() {
   const { pathname } = useLocation();
@@ -66,12 +67,13 @@ export function Navbar() {
       className="sticky top-0 z-40 h-14 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#FBF4EB]/92 dark:bg-[#151021]/92 backdrop-blur-md transition-colors duration-300"
     >
       <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-10 flex items-center justify-between gap-4">
-        {/* Zone 1: Clean Single Wordmark */}
+        {/* Zone 1: Original Signature Logo & Wordmark */}
         <Link
           to="/"
-          className="font-display text-xl font-bold tracking-[0.08em] text-[#1B1325] dark:text-[#F6EFE7] whitespace-nowrap shrink-0"
+          className="group inline-flex items-center whitespace-nowrap shrink-0 transition-opacity hover:opacity-90"
+          aria-label="CITY MALL Homepage"
         >
-          CITY MALL
+          <CityMallLogo size="md" />
         </Link>
 
         {/* Zone 2: Desktop Single-Line Navigation Links */}
@@ -193,9 +195,10 @@ export function Navbar() {
               <Link
                 to="/"
                 onClick={() => setMobileOpen(false)}
-                className="font-display text-xl font-bold tracking-[0.08em] text-[#1B1325] dark:text-[#FAF0F8]"
+                className="group inline-flex items-center whitespace-nowrap"
+                aria-label="CITY MALL Homepage"
               >
-                CITY MALL
+                <CityMallLogo size="md" />
               </Link>
               <div className="flex items-center gap-2">
                 <button

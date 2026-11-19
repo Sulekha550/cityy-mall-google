@@ -12,17 +12,22 @@ const SPEED_OPTIONS = [
 export function AutoScrollBar() {
   const { pathname } = useLocation();
   const controllerRef = useRef(null);
-  const [scrollState, setScrollState] = useState('idle'); // 'idle' | 'playing' | 'paused'
+  const [scrollState, setScrollState] = useState('idle'); 
   const [speed, setSpeed] = useState(90);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    let lastProgressUpdate = 0;
     const controller = new AutoScrollController({
       speedPxPerSec: 90,
       onStateChange: ({ state, speed: s, progress: p }) => {
         setScrollState(state);
         setSpeed(s);
-        setProgress(p);
+        const now = performance.now();
+        if (now - lastProgressUpdate > 120 || p === 0 || p === 1 || state !== 'playing') {
+          lastProgressUpdate = now;
+          setProgress(p);
+        }
       },
     });
     controllerRef.current = controller;
@@ -71,7 +76,7 @@ export function AutoScrollBar() {
               <span>Start Auto Scroll</span>
             </button>
           )}
-
+ 
           {scrollState === 'playing' && (
             <button
               type="button"
@@ -82,7 +87,7 @@ export function AutoScrollBar() {
               <span>Pause</span>
             </button>
           )}
-
+                             
           {scrollState === 'paused' && (
             <button
               type="button"
@@ -134,11 +139,11 @@ export function AutoScrollBar() {
         </div>
       </div>
 
-      {/* Hairline progress indicator */}
-      <div className="h-[2px] w-full bg-transparent">
+      {/* Hairline progress indicator (GPU-accelerated scaleX) */}
+      <div className="h-[2px] w-full bg-black/5 dark:bg-white/10 overflow-hidden">
         <div
-          className="h-full bg-[#C9523C] dark:bg-[#F48C74] transition-[width] duration-150"
-          style={{ width: `${Math.round(progress * 100)}%` }}
+          className="h-full w-full bg-gradient-to-r from-[#DB2777] to-[#7C3AED] origin-left transition-transform duration-100 ease-out will-change-transform"
+          style={{ transform: `scaleX(${progress})` }}
         />
       </div>
     </div>

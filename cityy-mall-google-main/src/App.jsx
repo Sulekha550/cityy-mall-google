@@ -16,10 +16,15 @@ import { EntertainmentPage } from './pages/EntertainmentPage';
 import { WhatsOnPage } from './pages/WhatsOnPage';
 import { VisitUsPage } from './pages/VisitUsPage';
 import { MallPageBackground } from './components/MallPageBackground';
+import { initSmoothScroll } from './utilities/smoothScroll';
 
 function MallRoutesShell() {
   const { pathname } = useLocation();
   const [selectedBrand, setSelectedBrand] = useState(null);
+
+  useEffect(() => {
+    return initSmoothScroll();
+  }, []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });

@@ -7,6 +7,8 @@ import { registerSectionMotion } from '../animations/scrollAnimations';
 import { VideoSectionBackground } from '../components/VideoSectionBackground';
 import { ResilientImage } from '../components/ResilientImage';
 import { BrandInsignia } from '../components/BrandInsignia';
+import { BrandLogo } from '../components/BrandLogo';
+import { CityMallLogo } from '../components/CityMallLogo';
 
 const HERO_FEATURE_IDS = ['louis-philippe', 'tanishq', 'titan-world', 'inox-cinemas'];
 
@@ -35,7 +37,7 @@ export function HomeHeroSection({ onInspectBrand }) {
     <section
       ref={sectionRef}
       id="home-hero"
-      className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-transparent"
+      className="relative min-h-0 lg:min-h-screen flex flex-col justify-start lg:justify-center overflow-visible lg:overflow-hidden border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-transparent"
     >
       <VideoSectionBackground
         videoAsset={VIDEO_ASSETS.mallHero}
@@ -46,17 +48,20 @@ export function HomeHeroSection({ onInspectBrand }) {
         tintClassName="bg-gradient-to-tr from-[#FBF4EB]/82 via-[#EFE6FA]/42 to-[#FDE8DF]/35 dark:from-[#151021]/84 dark:via-[#1D1630]/46 dark:to-[#241724]/38"
       />
 
-      <div className="relative z-10 max-w-7xl w-full mx-auto px-5 sm:px-8 lg:px-12 pt-20 pb-16 sm:py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+      <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-8 lg:px-12 pt-8 pb-12 sm:pt-14 sm:pb-16 lg:py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
           {/* Asymmetric Display Typography Left */}
-          <div className="lg:col-span-7 space-y-6">
-            <div data-motion="reveal" className="space-y-3">
-              <p className="text-xs sm:text-sm font-semibold tracking-[0.18em] uppercase text-[#683BA4] dark:text-[#BFA1FF]">
-                {MALL_IDENTITY.city}, {MALL_IDENTITY.state} · {MALL_IDENTITY.country}
-              </p>
-              <h1 className="font-display text-5xl sm:text-6xl lg:text-[4.5rem] font-bold tracking-tight leading-[1.03] text-[#1B1325] dark:text-[#F6EFE7]">
+          <div className="lg:col-span-7 space-y-5 sm:space-y-6">
+            <div data-motion="reveal" className="space-y-2 sm:space-y-3">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/70 dark:bg-white/10 border border-[#2D1D48]/10 dark:border-white/10 backdrop-blur-md">
+                <CityMallLogo size="xs" showText={false} />
+                <span className="text-xs font-semibold tracking-[0.18em] uppercase text-[#683BA4] dark:text-[#BFA1FF]">
+                  {MALL_IDENTITY.city}, {MALL_IDENTITY.state} · {MALL_IDENTITY.country}
+                </span>
+              </div>
+              <h1 className="font-display text-3xl sm:text-5xl lg:text-[4.5rem] font-bold tracking-tight leading-[1.08] sm:leading-[1.03] text-[#1B1325] dark:text-[#F6EFE7]">
                 CITY MALL
-                <span className="block font-normal italic text-3xl sm:text-4xl lg:text-5xl mt-1 text-[#C9523C] dark:text-[#F48C74]">
+                <span className="block font-normal italic text-2xl sm:text-3xl lg:text-5xl mt-1 sm:mt-1.5 text-[#C9523C] dark:text-[#F48C74]">
                   Gorakhpur&apos;s Living Promenade
                 </span>
               </h1>
@@ -64,22 +69,22 @@ export function HomeHeroSection({ onInspectBrand }) {
 
             <p
               data-motion="reveal"
-              className="text-base sm:text-lg leading-relaxed max-w-xl text-[#433754] dark:text-[#D8CEE9]"
+              className="text-sm sm:text-base lg:text-lg leading-relaxed max-w-xl text-[#433754] dark:text-[#D8CEE9]"
             >
               Premier fashion, fine jewellery, INOX multiplex &amp; dining promenade.
             </p>
 
-            <div data-motion="reveal" className="flex flex-wrap items-center gap-4 pt-2">
+            <div data-motion="reveal" className="flex flex-wrap items-center gap-3 sm:gap-4 pt-1 sm:pt-2">
               <Link
                 to="/brands"
-                className="inline-flex items-center gap-2.5 px-6 py-3 text-xs tracking-[0.12em] uppercase font-semibold bg-[#1B1325] dark:bg-[#F48C74] text-[#FBF4EB] dark:text-[#151021] hover:opacity-90 transition-opacity whitespace-nowrap shrink-0"
+                className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 text-xs tracking-[0.12em] uppercase font-semibold bg-[#1B1325] dark:bg-[#F48C74] text-[#FBF4EB] dark:text-[#151021] hover:opacity-90 transition-opacity whitespace-nowrap"
               >
                 <span>Explore Brand Showcase</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 to="/discover"
-                className="inline-flex items-center gap-2 px-5 py-3 text-xs tracking-[0.12em] uppercase font-semibold border border-[#2D1D48]/30 dark:border-[#E2D4FF]/30 bg-[#FFFBF6]/80 dark:bg-[#1D1630]/80 text-[#1B1325] dark:text-[#F6EFE7] hover:border-[#683BA4] dark:hover:border-[#BFA1FF] transition-colors whitespace-nowrap shrink-0"
+                className="inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 text-xs tracking-[0.12em] uppercase font-semibold border border-[#2D1D48]/30 dark:border-[#E2D4FF]/30 bg-[#FFFBF6]/80 dark:bg-[#1D1630]/80 text-[#1B1325] dark:text-[#F6EFE7] hover:border-[#683BA4] dark:hover:border-[#BFA1FF] transition-colors whitespace-nowrap"
               >
                 <PlayCircle className="w-4 h-4 text-[#0E7C71] dark:text-[#5EEAD4]" />
                 <span>Interactive Discovery</span>
@@ -88,7 +93,7 @@ export function HomeHeroSection({ onInspectBrand }) {
           </div>
 
           {/* Featured Brand Architectural Showcase Right */}
-          <div className="lg:col-span-5 relative flex items-center justify-center lg:justify-end">
+          <div className="lg:col-span-5 relative flex items-center justify-center lg:justify-end pt-4 lg:pt-0">
             {/* Main Luxury Vitrine Card */}
             <div
               data-motion="reveal"
@@ -136,11 +141,12 @@ export function HomeHeroSection({ onInspectBrand }) {
                   </div>
 
                   {activeBrand && (
-                    <BrandInsignia
-                      monogram={activeBrand.monogram}
-                      accentColor={activeBrand.accentColor}
-                      size="md"
-                    />
+                    <div className="shrink-0 bg-[#2D1D48]/5 dark:bg-white/5 p-2 rounded-xl border border-[#2D1D48]/10 dark:border-white/10 shadow-xs">
+                      <BrandLogo
+                        brandId={activeBrand.id}
+                        variant="showcase"
+                      />
+                    </div>
                   )}
                 </div>
 
@@ -178,7 +184,7 @@ export function HomeHeroSection({ onInspectBrand }) {
                 <div
                   onClick={() => setActiveIndex((activeIndex + 1) % featuredBrands.length)}
                   title="Next Boutique"
-                  className="absolute -bottom-3 -right-3 sm:-bottom-5 sm:-right-5 z-20 w-28 sm:w-36 aspect-[4/3] rounded-2xl overflow-hidden border-2 border-white/90 dark:border-[#1C152B] shadow-2xl bg-black cursor-pointer group hover:scale-105 transition-all"
+                  className="absolute -bottom-2 right-2 sm:-bottom-5 sm:-right-5 z-20 w-28 sm:w-36 aspect-[4/3] rounded-2xl overflow-hidden border-2 border-white/90 dark:border-[#1C152B] shadow-2xl bg-black cursor-pointer group hover:scale-105 transition-all"
                 >
                   <ResilientImage
                     src={featuredBrands[(activeIndex + 1) % featuredBrands.length].image}

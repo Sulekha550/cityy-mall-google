@@ -38,7 +38,7 @@ export function VisitUsPage() {
       {/* Section 1: Arrival Courtyard Hero over Visit Us Entrance Video */}
       <section
         ref={heroRef}
-        className="relative overflow-hidden min-h-[100vh] flex items-center py-16 sm:py-20 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-transparent"
+        className="relative overflow-visible lg:overflow-hidden min-h-0 lg:min-h-screen flex items-center py-10 sm:py-16 lg:py-20 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-transparent"
       >
         <VideoSectionBackground
           videoAsset={VIDEO_ASSETS.mallHero}

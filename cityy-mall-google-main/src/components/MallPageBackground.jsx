@@ -4,14 +4,13 @@ import { AbstractSectionBackground } from './AbstractSectionBackground';
 
 /**
  * Universal CITY MALL Background.
- * Applies the exact homepage background video (mallHero) and visual atmosphere
- * continuously across ALL pages of the website.
+ * Applies the homepage background video (mallHero) and visual atmosphere
+ * across ALL pages of the website.
  *
- * - Covers the entire page background (object-fit: cover)
- * - Hardware-accelerated continuous playback (muted, loop, playsInline)
- * - Zero blank gaps between sections
- * - Soft champagne ivory tint overlay ensuring 100% text and logo readability
- * - Dynamic procedural atrium lighting & starlight micro-particles
+ * Interactive Mouse-Only Video Control:
+ * - Starts completely paused / frozen when idle (zero unwanted autoplay).
+ * - Plays forward smoothly only when the user is actively using the mouse (mousemove, wheel, click, scroll).
+ * - Pauses cleanly and immediately the moment mouse interaction stops (within 800ms).
  */
 export function MallPageBackground() {
   const videoRef = useRef(null);
@@ -29,16 +28,87 @@ export function MallPageBackground() {
       video.playbackRate = 0.25;
     }
 
-    const playPromise = video.play();
-    if (playPromise !== undefined) {
-      playPromise.catch(() => {
-        video.muted = true;
-        video.play().catch(() => {});
-      });
-    }
+    // Strictly start paused - zero unwanted autoplay
+    video.pause();
+
+    let isVideoPlaying = false;
+    let stopTimeout = null;
+    let prevX = 0;
+    let prevY = 0;
+
+    const playVideo = () => {
+      if (!isVideoPlaying) {
+        const p = video.play();
+        if (p !== undefined) {
+          p.then(() => {
+            isVideoPlaying = true;
+          }).catch(() => {
+            video.muted = true;
+            video.play().then(() => {
+              isVideoPlaying = true;
+            }).catch(() => {});
+          });
+        }
+      }
+    };
+
+    const pauseVideo = () => {
+      if (isVideoPlaying || !video.paused) {
+        video.pause();
+        isVideoPlaying = false;
+      }
+    };
+
+    // Wake and play video whenever mouse or touch is active; pause when inactive
+    const handleActivity = (distance = 1) => {
+      if (distance > 0.5) {
+        playVideo();
+        if (stopTimeout) clearTimeout(stopTimeout);
+        // Cleanly pause 800ms after mouse stops moving
+        stopTimeout = setTimeout(() => {
+          pauseVideo();
+        }, 800);
+      }
+    };
+
+    const handleMouseMove = (e) => {
+      const dist = Math.hypot(e.clientX - prevX, e.clientY - prevY);
+      prevX = e.clientX;
+      prevY = e.clientY;
+      handleActivity(dist);
+    };
+
+    const handleWheel = (e) => {
+      const delta = Math.abs(e.deltaY) + Math.abs(e.deltaX);
+      if (delta > 0) handleActivity(5);
+    };
+
+    const handlePointerDown = () => {
+      handleActivity(5);
+    };
+
+    const handleScroll = () => {
+      handleActivity(5);
+    };
+
+    const handleTouchMove = () => {
+      handleActivity(5);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('wheel', handleWheel, { passive: true });
+    window.addEventListener('pointerdown', handlePointerDown, { passive: true });
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
 
     return () => {
-      // Keep running
+      if (stopTimeout) clearTimeout(stopTimeout);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('pointerdown', handlePointerDown);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('touchmove', handleTouchMove);
+      video.pause();
     };
   }, []);
 
@@ -47,12 +117,11 @@ export function MallPageBackground() {
       aria-hidden="true"
       className="fixed inset-0 z-0 overflow-hidden pointer-events-none select-none"
     >
-      {/* 1. Exact Homepage MP4 Background Video (Responsive Full Coverage) */}
+      {/* 1. Exact Homepage MP4 Background Video (Interactive Mouse-Triggered Playback Only) */}
       <video
         ref={videoRef}
         src={VIDEO_ASSETS.mallHero.src}
         poster={VIDEO_ASSETS.mallHero.poster}
-        autoPlay
         muted
         loop
         playsInline

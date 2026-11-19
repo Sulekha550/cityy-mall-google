@@ -41,7 +41,7 @@ export function ShoppingPage({ initialCategory = null, onInspectBrand }) {
       {/* Dedicated Shopping Sub-route Hero Banner with Matched Category Video */}
       <section
         ref={heroRef}
-        className="relative overflow-hidden min-h-[100vh] flex items-center py-16 sm:py-20 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-transparent"
+        className="relative overflow-visible lg:overflow-hidden min-h-0 lg:min-h-screen flex items-center py-10 sm:py-16 lg:py-20 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-transparent"
       >
         <VideoSectionBackground
           videoAsset={VIDEO_ASSETS.mallHero}
@@ -89,10 +89,11 @@ export function ShoppingPage({ initialCategory = null, onInspectBrand }) {
           >
             <Link
               to="/shopping"
-              className={`px-3.5 py-2 text-xs font-semibold uppercase tracking-wider border transition-colors ${!activeCategory
+              className={`px-3.5 py-2 text-xs font-semibold uppercase tracking-wider border transition-colors ${
+                !activeCategory
                   ? 'bg-[#1B1325] dark:bg-[#F48C74] text-[#FBF4EB] dark:text-[#151021] border-transparent'
                   : 'bg-[#FFFBF6]/88 dark:bg-[#191326]/88 text-[#1B1325] dark:text-[#F6EFE7] border-[#2D1D48]/18 dark:border-[#E2D4FF]/18 hover:border-[#C9523C]'
-                }`}
+              }`}
             >
               All Shopping
             </Link>
@@ -102,10 +103,11 @@ export function ShoppingPage({ initialCategory = null, onInspectBrand }) {
                 <Link
                   key={cat.id}
                   to={cat.route}
-                  className={`px-3.5 py-2 text-xs font-semibold uppercase tracking-wider border transition-colors ${isCurrent
+                  className={`px-3.5 py-2 text-xs font-semibold uppercase tracking-wider border transition-colors ${
+                    isCurrent
                       ? 'bg-[#683BA4] dark:bg-[#BFA1FF] text-[#FBF4EB] dark:text-[#151021] border-transparent'
                       : 'bg-[#FFFBF6]/88 dark:bg-[#191326]/88 text-[#1B1325] dark:text-[#F6EFE7] border-[#2D1D48]/18 dark:border-[#E2D4FF]/18 hover:border-[#683BA4]'
-                    }`}
+                  }`}
                 >
                   {cat.title}
                 </Link>

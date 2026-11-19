@@ -16,6 +16,7 @@ import { APPROVED_BRANDS, BRAND_CATEGORIES } from '../utilities/brandsData';
 import { registerSectionMotion } from '../animations/scrollAnimations';
 import { VideoSectionBackground } from '../components/VideoSectionBackground';
 import { ResilientImage } from '../components/ResilientImage';
+import { BrandLogo } from '../components/BrandLogo';
 
 // Rich artistic editorial configuration for each of the Seven Curated Categories
 const CATEGORY_EDITORIAL_DATA = {
@@ -231,7 +232,7 @@ export function HomeRealmsCarouselSection() {
       id="home-realms"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative min-h-screen flex flex-col justify-center overflow-hidden py-16 sm:py-24 border-b border-[#683BA4]/15 dark:border-[#BFA1FF]/15 bg-transparent transition-colors duration-300"
+      className="relative min-h-0 lg:min-h-screen flex flex-col justify-start lg:justify-center overflow-visible lg:overflow-hidden py-10 sm:py-16 lg:py-24 border-b border-[#683BA4]/15 dark:border-[#BFA1FF]/15 bg-transparent transition-colors duration-300"
     >
       {/* Dynamic Animated Ambient Background */}
       <VideoSectionBackground
@@ -242,21 +243,21 @@ export function HomeRealmsCarouselSection() {
         tintClassName="bg-gradient-to-tr from-[#FBF4EB]/82 via-[#EFE6FA]/42 to-[#FDE8DF]/35 dark:from-[#151021]/84 dark:via-[#1D1630]/46 dark:to-[#241724]/38"
       />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full space-y-8 sm:space-y-10">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full space-y-6 sm:space-y-10">
         
         {/* =========================================================================
             EDITORIAL HEADER & STORYTELLING CONTROLS
            ========================================================================= */}
         <div
           data-motion="reveal"
-          className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-4 border-b border-[#701A75]/15 dark:border-[#C084FC]/20"
+          className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 pb-4 border-b border-[#701A75]/15 dark:border-[#C084FC]/20"
         >
           <div className="max-w-2xl space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] rounded-full bg-gradient-to-r from-[#701A75]/10 to-[#BE185D]/10 dark:from-[#F472B6]/20 dark:to-[#C084FC]/20 text-[#86198F] dark:text-[#F472B6] border border-[#86198F]/25 dark:border-[#F472B6]/30">
               <Sparkles className="w-3.5 h-3.5 text-[#EC4899]" />
               <span>Curated Mall Taxonomy · 7 Distinct Chapters</span>
             </div>
-            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-[#241033] via-[#701A75] to-[#9D174D] dark:from-[#FAF0F8] dark:via-[#F0ABFC] dark:to-[#F472B6] bg-clip-text text-transparent">
+            <h2 className="font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-[#241033] via-[#701A75] to-[#9D174D] dark:from-[#FAF0F8] dark:via-[#F0ABFC] dark:to-[#F472B6] bg-clip-text text-transparent">
               Seven Curated Categories
             </h2>
             <p className="text-xs sm:text-sm text-[#4E345D] dark:text-[#D8C7E5] leading-relaxed">
@@ -353,13 +354,12 @@ export function HomeRealmsCarouselSection() {
                 </span>
                 <div className="flex flex-wrap gap-1.5">
                   {activeCategory.featuredBrands.map((brandName) => (
-                    <span
+                    <div
                       key={brandName}
-                      className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-bold rounded-xl bg-black/5 dark:bg-white/10 text-[#701A75] dark:text-[#FAF0F8] border border-[#701A75]/20 dark:border-white/20"
+                      className="inline-flex items-center gap-1.5 p-1 rounded-xl bg-black/5 dark:bg-white/10 border border-[#701A75]/20 dark:border-white/20 shadow-xs"
                     >
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#EC4899]" />
-                      <span>{brandName}</span>
-                    </span>
+                      <BrandLogo brandId={brandName} variant="badge" />
+                    </div>
                   ))}
                 </div>
               </div>
@@ -424,8 +424,66 @@ export function HomeRealmsCarouselSection() {
           </div>
 
           {/* RIGHT COLUMN: Horizontally Overlapping Stadium-Rounded Images */}
-          <div className="lg:col-span-7 relative flex items-center justify-start overflow-visible pt-4 lg:pt-0">
-            <div className="flex items-center -space-x-8 sm:-space-x-12 w-full select-none">
+          <div className="lg:col-span-7 relative w-full overflow-hidden sm:overflow-visible pt-4 lg:pt-0">
+            {/* Mobile View: Clean horizontal snap swipe track */}
+            <div className="flex sm:hidden overflow-x-auto snap-x snap-mandatory gap-3 pb-3 no-scrollbar select-none px-1">
+              <div className="relative shrink-0 w-[82%] aspect-[16/11] rounded-2xl overflow-hidden shadow-xl border-2 border-[#EC4899] ring-2 ring-[#EC4899]/30 snap-center cursor-pointer">
+                <ResilientImage
+                  src={activeCategory.mainImage}
+                  alt={activeCategory.title}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
+                <div className="absolute top-2.5 left-2.5 z-20">
+                  <span className="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold bg-black/70 text-white backdrop-blur-md border border-white/20">
+                    Chapter {activeCategory.number} · {activeCategory.floorBadge}
+                  </span>
+                </div>
+                <div className="absolute bottom-2.5 left-2.5 right-2.5 z-20">
+                  <span className="text-[10px] font-mono text-[#F472B6] block truncate">
+                    {activeCategory.chapter}
+                  </span>
+                  <h4 className="text-xs font-bold text-white drop-shadow-sm truncate">
+                    {activeCategory.title}
+                  </h4>
+                </div>
+              </div>
+
+              {activeCategory.supportingImage && (
+                <div className="relative shrink-0 w-[82%] aspect-[16/11] rounded-2xl overflow-hidden shadow-xl border-2 border-white/40 dark:border-white/20 snap-center cursor-pointer">
+                  <ResilientImage
+                    src={activeCategory.supportingImage}
+                    alt={activeCategory.supportingCaption}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute bottom-2.5 left-2.5 right-2.5 z-20">
+                    <span className="text-xs font-black text-white bg-black/85 px-3 py-1 rounded-full backdrop-blur-md border border-white/20 block truncate shadow-md">
+                      {activeCategory.supportingCaption}
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {activeCategory.accentImage && (
+                <div className="relative shrink-0 w-[82%] aspect-[16/11] rounded-2xl overflow-hidden shadow-xl border-2 border-white/40 dark:border-white/20 snap-center cursor-pointer">
+                  <ResilientImage
+                    src={activeCategory.accentImage}
+                    alt={activeCategory.accentCaption}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute bottom-2.5 left-2.5 right-2.5 z-20">
+                    <span className="text-[10px] font-bold text-white/90 bg-black/75 px-2.5 py-1 rounded-full backdrop-blur-md block truncate">
+                      {activeCategory.accentCaption}
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Desktop View: Classic Overlapping Stadium */}
+            <div className="hidden sm:flex items-center -space-x-8 sm:-space-x-12 w-full select-none">
               {/* Primary Stadium-Rounded Image Panel (Dominant Hero) */}
               <div className="relative w-[54%] aspect-[16/11] rounded-[2.5rem] overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 z-30 ring-2 ring-[#EC4899]/30 transition-all duration-500 hover:scale-[1.03] group cursor-pointer">
                 <ResilientImage

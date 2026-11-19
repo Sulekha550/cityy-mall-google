@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { MAIN_NAV_LINKS } from '../utilities/navigationData';
 import { BRAND_CATEGORIES, MALL_IDENTITY } from '../utilities/brandsData';
+import { CityMallLogo } from './CityMallLogo';
 
 export function DestinationFooter() {
   return (
@@ -8,9 +9,9 @@ export function DestinationFooter() {
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-14">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-[#2D1D48]/12 dark:border-[#E2D4FF]/12">
           <div className="md:col-span-5 space-y-3">
-            <p className="font-display text-2xl font-bold tracking-[0.06em]">
-              {MALL_IDENTITY.name}
-            </p>
+            <Link to="/" className="inline-block transition-opacity hover:opacity-90" aria-label="CITY MALL Homepage">
+              <CityMallLogo size="lg" />
+            </Link>
             <p className="text-sm font-medium text-[#683BA4] dark:text-[#BFA1FF]">
               Gorakhpur, Uttar Pradesh, India
             </p>

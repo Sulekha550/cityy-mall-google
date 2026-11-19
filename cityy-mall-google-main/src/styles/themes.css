@@ -1,59 +1,59 @@
 :root {
-  /* Light Theme — Warm Cream, Lavender, Peach Coral, Mint Turquoise & Sky Blue */
-  --surface-base: #fbf4eb;
-  --surface-lavender: #efe6fa;
-  --surface-peach: #fde8df;
-  --surface-mint: #e4f5f0;
-  --surface-sky: #e6f1fc;
-  --surface-blush: #fae4ec;
-  --surface-elevated: rgba(255, 251, 246, 0.86);
+  /* Light Theme — Sophisticated Purple & Pink Theme (Lavender, Pastel Pink, Dusty Rose, Soft Magenta) */
+  --surface-base: #faf2f8;
+  --surface-lavender: #f2e4f8;
+  --surface-peach: #fceaf3;
+  --surface-mint: #f6e6f8;
+  --surface-sky: #efe2f8;
+  --surface-blush: #fce7f3;
+  --surface-elevated: rgba(255, 250, 254, 0.90);
 
-  --text-primary: #1b1325;
-  --text-secondary: #433754;
-  --text-muted: #5d5070;
+  --text-primary: #1b1028;
+  --text-secondary: #4a3358;
+  --text-muted: #6b527a;
 
-  --accent-coral: #c9523c;
-  --accent-plum: #683ba4;
-  --accent-teal: #0e7c71;
-  --accent-amber: #b36624;
+  --accent-coral: #db2777;
+  --accent-plum: #7c3aed;
+  --accent-teal: #9333ea;
+  --accent-amber: #ec4899;
 
-  --border-subtle: rgba(45, 29, 72, 0.14);
-  --border-strong: rgba(45, 29, 72, 0.28);
+  --border-subtle: rgba(124, 58, 237, 0.12);
+  --border-strong: rgba(124, 58, 237, 0.24);
 
   --scrim-light-soft: linear-gradient(
     180deg,
-    rgba(251, 244, 235, 0.62) 0%,
-    rgba(239, 230, 250, 0.34) 48%,
-    rgba(253, 232, 223, 0.68) 100%
+    rgba(250, 242, 248, 0.72) 0%,
+    rgba(242, 228, 248, 0.45) 48%,
+    rgba(252, 234, 243, 0.76) 100%
   );
 }
 
 html.dark {
-  /* Dark Theme — Twilight Plum, Midnight Teal, Deep Indigo & Warm Obsidian (No pure black) */
-  --surface-base: #151021;
-  --surface-lavender: #1d1630;
-  --surface-peach: #241724;
-  --surface-mint: #112226;
-  --surface-sky: #131c2e;
-  --surface-blush: #231526;
-  --surface-elevated: rgba(29, 22, 46, 0.86);
+  /* Dark Theme — Deep Violet, Midnight Plum, Rich Lavender & Twilight Magenta */
+  --surface-base: #140c1e;
+  --surface-lavender: #1c102a;
+  --surface-peach: #24122e;
+  --surface-mint: #170e22;
+  --surface-sky: #1a0f26;
+  --surface-blush: #26122c;
+  --surface-elevated: rgba(30, 16, 44, 0.88);
 
-  --text-primary: #f6efe7;
-  --text-secondary: #d8cee9;
-  --text-muted: #b5a7d0;
+  --text-primary: #f8f0fa;
+  --text-secondary: #dfcde8;
+  --text-muted: #bfa8cc;
 
-  --accent-coral: #f48c74;
-  --accent-plum: #bfa1ff;
-  --accent-teal: #5eead4;
-  --accent-amber: #f0b97a;
+  --accent-coral: #f472b6;
+  --accent-plum: #c084fc;
+  --accent-teal: #e879f9;
+  --accent-amber: #fda4af;
 
-  --border-subtle: rgba(226, 212, 255, 0.14);
-  --border-strong: rgba(226, 212, 255, 0.28);
+  --border-subtle: rgba(233, 213, 255, 0.14);
+  --border-strong: rgba(233, 213, 255, 0.28);
 
   --scrim-light-soft: linear-gradient(
     180deg,
-    rgba(21, 16, 33, 0.56) 0%,
-    rgba(29, 22, 48, 0.32) 48%,
-    rgba(21, 16, 33, 0.64) 100%
+    rgba(20, 12, 30, 0.65) 0%,
+    rgba(28, 16, 42, 0.40) 48%,
+    rgba(20, 12, 30, 0.70) 100%
   );
 }

@@ -66,7 +66,7 @@ export function HomeHeroSection({ onInspectBrand }) {
               data-motion="reveal"
               className="text-base sm:text-lg leading-relaxed max-w-xl text-[#433754] dark:text-[#D8CEE9]"
             >
-              Eighteen premier fashion boutiques, global sportswear houses, fine jewellery salons, Spencer&apos;s hypermarket, INOX Cinemas, and signature culinary tables gathered under sunlit architecture.
+              Premier fashion, fine jewellery, INOX multiplex &amp; dining promenade.
             </p>
 
             <div data-motion="reveal" className="flex flex-wrap items-center gap-4 pt-2">
@@ -172,6 +172,26 @@ export function HomeHeroSection({ onInspectBrand }) {
                   </button>
                 </div>
               </div>
+
+              {/* Overlapping Secondary Boutique Stadium Thumbnail */}
+              {featuredBrands[(activeIndex + 1) % featuredBrands.length] && (
+                <div
+                  onClick={() => setActiveIndex((activeIndex + 1) % featuredBrands.length)}
+                  title="Next Boutique"
+                  className="absolute -bottom-3 -right-3 sm:-bottom-5 sm:-right-5 z-20 w-28 sm:w-36 aspect-[4/3] rounded-2xl overflow-hidden border-2 border-white/90 dark:border-[#1C152B] shadow-2xl bg-black cursor-pointer group hover:scale-105 transition-all"
+                >
+                  <ResilientImage
+                    src={featuredBrands[(activeIndex + 1) % featuredBrands.length].image}
+                    alt="Next boutique preview"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition-colors flex items-end p-1.5">
+                    <span className="text-[9px] font-mono text-white/95 bg-black/75 px-1.5 py-0.5 rounded backdrop-blur-xs truncate">
+                      {featuredBrands[(activeIndex + 1) % featuredBrands.length].name}
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

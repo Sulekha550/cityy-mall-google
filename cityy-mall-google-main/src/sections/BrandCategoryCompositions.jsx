@@ -1,19 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  ArrowLeft,
   ArrowRight,
   ArrowUpRight,
-  Film,
-  ShoppingBasket,
-  Sparkles,
-  Utensils,
 } from 'lucide-react';
 import { CINEMA_POSTER_ASSETS } from '../assets/mediaManifest';
 import { registerSectionMotion } from '../animations/scrollAnimations';
 import { VideoSectionBackground } from '../components/VideoSectionBackground';
 import { ResilientImage } from '../components/ResilientImage';
-import { BrandInsignia } from '../components/BrandInsignia';
 
 function CategorySectionHeader({ category, count, actionRoute, actionLabel }) {
   return (
@@ -47,7 +41,7 @@ function CategorySectionHeader({ category, count, actionRoute, actionLabel }) {
 }
 
 /**
- * 01. Fashion & Apparel — Asymmetric Lookbook Split (Featured flagship portrait left + interactive stepped wardrobe right)
+ * 01. Fashion & Apparel — Frosted Dossier Card Left + Horizontally Overlapping Stadium-Rounded Images Right
  */
 function FashionLookbookSection({ category, brands, onInspectBrand }) {
   const sectionRef = useRef(null);
@@ -59,6 +53,13 @@ function FashionLookbookSection({ category, brands, onInspectBrand }) {
   }, []);
 
   if (!brands.length) return null;
+
+  const numberColors = [
+    'from-[#E05638] to-[#C9523C]',
+    'from-[#683BA4] to-[#4F2B85]',
+    'from-[#0E7C71] to-[#0A5A52]',
+    'from-[#E87A5D] to-[#D96547]',
+  ];
 
   return (
     <section
@@ -80,90 +81,126 @@ function FashionLookbookSection({ category, brands, onInspectBrand }) {
           actionLabel="Fashion Wing"
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-          {/* Tall Vertical Runway Frame */}
-          <div className="lg:col-span-5 lg:sticky lg:top-28">
-            <div className="relative aspect-[4/5] border border-[#2D1D48]/18 dark:border-[#E2D4FF]/18 overflow-hidden bg-[#1B1325] shadow-2xl">
-              <ResilientImage
-                src={featured.image}
-                alt={featured.name}
-                className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#151021]/88 via-[#151021]/20 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-6 sm:p-7 text-[#F6EFE7] space-y-3">
-                <div className="flex items-center justify-between gap-3">
-                  <h3 className="font-display text-3xl font-semibold">
-                    {featured.name}
-                  </h3>
-                  <BrandInsignia
-                    monogram={featured.monogram}
-                    accentColor={featured.accentColor}
-                  />
-                </div>
-                <p className="text-sm text-[#D8CEE9]">{featured.tagline}</p>
-                <button
-                  type="button"
-                  onClick={() => onInspectBrand(featured)}
-                  className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] bg-[#FBF4EB] text-[#151021] hover:bg-[#F48C74] transition-colors cursor-pointer"
-                >
-                  <span>Inspect Boutique</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          {/* Left Column: Clean Direct Typography (Zero Card Box) */}
+          <div className="lg:col-span-5 space-y-5">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#683BA4] dark:text-[#BFA1FF] px-2.5 py-0.5 rounded-full bg-[#683BA4]/10 dark:bg-[#BFA1FF]/10">
+                  FEATURED ATELIER
+                </span>
+                <span className="text-xs font-mono text-[#5D5070] dark:text-[#D8CEE9]">
+                  Ground Floor Promenade
+                </span>
               </div>
+              <h3 className="font-display text-3xl sm:text-4xl font-black text-[#1B1325] dark:text-[#FAF0F8] tracking-tight">
+                {featured.name}
+              </h3>
+              <p className="text-xs sm:text-sm font-semibold text-[#683BA4] dark:text-[#BFA1FF] leading-snug">
+                {featured.tagline}
+              </p>
+            </div>
+
+            {/* Numbered Brand Selection List */}
+            <div className="space-y-2 pt-1">
+              {brands.map((brand, idx) => {
+                const isSelected = brand.id === featured.id;
+                const colorGradient = numberColors[idx % numberColors.length];
+                return (
+                  <button
+                    key={brand.id}
+                    type="button"
+                    onMouseEnter={() => setFeaturedId(brand.id)}
+                    onClick={() => {
+                      setFeaturedId(brand.id);
+                      onInspectBrand(brand);
+                    }}
+                    className={`w-full flex items-center justify-between gap-3 p-3 sm:p-3.5 rounded-2xl transition-all cursor-pointer text-left border ${isSelected
+                      ? 'bg-[#683BA4]/15 dark:bg-white/15 border-[#683BA4] shadow-xs'
+                      : 'bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10 hover:border-[#683BA4]/50'
+                      }`}
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span
+                        className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-extrabold text-white bg-gradient-to-r ${colorGradient} shrink-0 shadow-xs`}
+                      >
+                        {brand.monogram || String(idx + 1).padStart(2, '0')}
+                      </span>
+                      <div className="min-w-0">
+                        <span className="text-sm font-extrabold text-[#1B1325] dark:text-[#FAF0F8] block truncate">
+                          {brand.name}
+                        </span>
+                        <span className="text-[11px] text-[#5D5070] dark:text-[#D8CEE9] block truncate font-medium">
+                          {brand.tagline}
+                        </span>
+                      </div>
+                    </div>
+                    <ArrowRight
+                      className={`w-4 h-4 text-[#683BA4] dark:text-[#BFA1FF] shrink-0 transition-transform ${isSelected ? 'translate-x-0.5 opacity-100' : 'opacity-40'
+                        }`}
+                    />
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Gradient Pill CTA */}
+            <div className="pt-1">
+              <button
+                type="button"
+                onClick={() => onInspectBrand(featured)}
+                className="inline-flex items-center gap-2 px-6 py-3 text-xs font-bold uppercase tracking-[0.14em] rounded-2xl bg-gradient-to-r from-[#683BA4] to-[#4F2B85] text-white shadow-lg hover:opacity-95 hover:scale-[1.02] transition-all cursor-pointer"
+              >
+                <span>Inspect {featured.name} ↗</span>
+              </button>
             </div>
           </div>
 
-          {/* Alternating Offset Stepped Directory */}
-          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {brands.map((brand, idx) => {
-              const isSelected = brand.id === featured.id;
-              return (
-                <article
-                  key={brand.id}
-                  onMouseEnter={() => setFeaturedId(brand.id)}
-                  className={`border transition-all duration-300 bg-[#FFFBF6]/90 dark:bg-[#191326]/90 ${
-                    idx % 2 === 1 ? 'sm:translate-y-6' : ''
-                  } ${
-                    isSelected
-                      ? 'border-[#683BA4] dark:border-[#BFA1FF] shadow-xl'
-                      : 'border-[#2D1D48]/14 dark:border-[#E2D4FF]/14'
-                  }`}
-                >
-                  <div className="aspect-[16/10] overflow-hidden bg-[#EFE6FA] dark:bg-[#231B38]">
+          {/* Right Column: Horizontally Overlapping Stadium-Rounded Images */}
+          <div className="lg:col-span-7 relative flex items-center justify-start overflow-visible pt-4 lg:pt-0">
+            <div className="flex items-center -space-x-8 sm:-space-x-12 w-full select-none">
+              {brands.map((brand, idx) => {
+                const isMain = brand.id === featured.id;
+                return (
+                  <div
+                    key={brand.id}
+                    onMouseEnter={() => setFeaturedId(brand.id)}
+                    onClick={() => {
+                      setFeaturedId(brand.id);
+                      onInspectBrand(brand);
+                    }}
+                    className={`relative shrink-0 ${isMain
+                      ? 'w-[54%] aspect-[16/11] rounded-[2.5rem] z-30 ring-2 ring-[#683BA4]/30'
+                      : 'w-[38%] aspect-[3/3.8] rounded-[2.2rem] ' + (idx % 2 === 0 ? 'z-20' : 'z-10')
+                      } overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 transition-all duration-500 hover:scale-[1.04] hover:z-40 cursor-pointer group`}
+                  >
                     <ResilientImage
                       src={brand.image}
                       alt={brand.name}
-                      className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
-                  </div>
-                  <div className="p-5 flex items-start justify-between gap-3">
-                    <div className="space-y-1.5 min-w-0">
-                      <h3 className="font-display text-xl font-semibold text-[#1B1325] dark:text-[#F6EFE7] truncate">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+
+                    {/* Prominent Floating Brand Monogram Badge */}
+                    <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 bg-black/80 backdrop-blur-md px-3 py-1 rounded-full border border-white/25 shadow-lg">
+                      <span className="w-2 h-2 rounded-full bg-[#EC4899] animate-pulse" />
+                      <span className="text-xs font-black text-white tracking-wide">
                         {brand.name}
-                      </h3>
-                      <p className="text-xs leading-relaxed text-[#433754] dark:text-[#D8CEE9]">
-                        {brand.tagline}
-                      </p>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setFeaturedId(brand.id);
-                          onInspectBrand(brand);
-                        }}
-                        className="pt-1 text-xs font-semibold text-[#683BA4] dark:text-[#BFA1FF] hover:underline cursor-pointer"
-                      >
-                        View Outlet →
-                      </button>
+                      </span>
                     </div>
-                    <BrandInsignia
-                      monogram={brand.monogram}
-                      accentColor={brand.accentColor}
-                      size="sm"
-                    />
+
+                    <div className="absolute bottom-3 left-3 right-3 z-20 flex items-center justify-between gap-1">
+                      <span className="text-[10px] font-mono font-medium text-white/90 bg-black/75 px-2.5 py-0.5 rounded-full backdrop-blur-md truncate">
+                        {brand.tagline}
+                      </span>
+                      <span className="text-[10px] font-bold text-white bg-gradient-to-r from-[#683BA4] to-[#EC4899] px-2.5 py-0.5 rounded-full shadow-sm shrink-0">
+                        Inspect ↗
+                      </span>
+                    </div>
                   </div>
-                </article>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
@@ -172,11 +209,12 @@ function FashionLookbookSection({ category, brands, onInspectBrand }) {
 }
 
 /**
- * 02. Footwear & Sportswear — Kinetic Horizontal Slider Strip
+ * 02. Footwear & Sportswear — Frosted Dossier Card Left + Horizontally Overlapping Stadium-Rounded Images Right
  */
 function FootwearRunwaySection({ category, brands, onInspectBrand }) {
   const sectionRef = useRef(null);
-  const trackRef = useRef(null);
+  const [featuredId, setFeaturedId] = useState(brands[0]?.id);
+  const featured = brands.find((b) => b.id === featuredId) || brands[0];
 
   useEffect(() => {
     return registerSectionMotion(sectionRef.current, 'cascade');
@@ -184,9 +222,11 @@ function FootwearRunwaySection({ category, brands, onInspectBrand }) {
 
   if (!brands.length) return null;
 
-  const slide = (dir) => {
-    trackRef.current?.scrollBy({ left: dir * 350, behavior: 'smooth' });
-  };
+  const numberColors = [
+    'from-[#0E7C71] to-[#0A5A52]',
+    'from-[#059669] to-[#047857]',
+    'from-[#0D9488] to-[#0F766E]',
+  ];
 
   return (
     <section
@@ -200,7 +240,7 @@ function FootwearRunwaySection({ category, brands, onInspectBrand }) {
         tintClassName={`bg-gradient-to-br ${category.accentLight} dark:${category.accentDark}`}
       />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 space-y-10">
+      <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 space-y-12">
         <CategorySectionHeader
           category={category}
           count={brands.length}
@@ -208,73 +248,127 @@ function FootwearRunwaySection({ category, brands, onInspectBrand }) {
           actionLabel="Footwear Gallery"
         />
 
-        <div className="flex items-center justify-between gap-4">
-          <p className="text-sm text-[#433754] dark:text-[#D8CEE9]">
-            Scroll horizontally through performance trainers, running gear, leather boots, and family footwear houses:
-          </p>
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              type="button"
-              onClick={() => slide(-1)}
-              aria-label="Scroll footwear left"
-              className="w-10 h-10 flex items-center justify-center border border-[#2D1D48]/22 dark:border-[#E2D4FF]/22 bg-[#FFFBF6]/90 dark:bg-[#17272B]/90 text-[#1B1325] dark:text-[#F6EFE7] hover:border-[#0E7C71] cursor-pointer"
-            >
-              <ArrowLeft className="w-4 h-4" />
-            </button>
-            <button
-              type="button"
-              onClick={() => slide(1)}
-              aria-label="Scroll footwear right"
-              className="w-10 h-10 flex items-center justify-center border border-[#2D1D48]/22 dark:border-[#E2D4FF]/22 bg-[#FFFBF6]/90 dark:bg-[#17272B]/90 text-[#1B1325] dark:text-[#F6EFE7] hover:border-[#0E7C71] cursor-pointer"
-            >
-              <ArrowRight className="w-4 h-4" />
-            </button>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          {/* Left Column: Clean Direct Typography (Zero Card Box) */}
+          <div className="lg:col-span-5 space-y-5">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#0E7C71] dark:text-[#5EEAD4] px-2.5 py-0.5 rounded-full bg-[#0E7C71]/10 dark:bg-[#5EEAD4]/10">
+                  FEATURED FLAGSHIP
+                </span>
+                <span className="text-xs font-mono text-[#5D5070] dark:text-[#D8CEE9]">
+                  Ground Concourse
+                </span>
+              </div>
+              <h3 className="font-display text-3xl sm:text-4xl font-black text-[#1B1325] dark:text-[#FAF0F8] tracking-tight">
+                {featured.name}
+              </h3>
+              <p className="text-xs sm:text-sm font-semibold text-[#0E7C71] dark:text-[#5EEAD4] leading-snug">
+                {featured.tagline}
+              </p>
+            </div>
+
+            {/* Numbered Category List */}
+            <div className="space-y-2 pt-1">
+              {brands.map((brand, idx) => {
+                const isSelected = brand.id === featured.id;
+                const colorGradient = numberColors[idx % numberColors.length];
+                return (
+                  <button
+                    key={brand.id}
+                    type="button"
+                    onMouseEnter={() => setFeaturedId(brand.id)}
+                    onClick={() => {
+                      setFeaturedId(brand.id);
+                      onInspectBrand(brand);
+                    }}
+                    className={`w-full flex items-center justify-between gap-3 p-3 sm:p-3.5 rounded-2xl transition-all cursor-pointer text-left border ${isSelected
+                      ? 'bg-[#0E7C71]/15 dark:bg-white/15 border-[#0E7C71] shadow-xs'
+                      : 'bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10 hover:border-[#0E7C71]/50'
+                      }`}
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span
+                        className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-extrabold text-white bg-gradient-to-r ${colorGradient} shrink-0 shadow-xs`}
+                      >
+                        {brand.monogram || String(idx + 1).padStart(2, '0')}
+                      </span>
+                      <div className="min-w-0">
+                        <span className="text-sm font-extrabold text-[#1B1325] dark:text-[#FAF0F8] block truncate">
+                          {brand.name}
+                        </span>
+                        <span className="text-[11px] text-[#5D5070] dark:text-[#D8CEE9] block truncate font-medium">
+                          {brand.tagline}
+                        </span>
+                      </div>
+                    </div>
+                    <ArrowRight
+                      className={`w-4 h-4 text-[#0E7C71] dark:text-[#5EEAD4] shrink-0 transition-transform ${isSelected ? 'translate-x-0.5 opacity-100' : 'opacity-40'
+                        }`}
+                    />
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Gradient Pill CTA */}
+            <div className="pt-1">
+              <button
+                type="button"
+                onClick={() => onInspectBrand(featured)}
+                className="inline-flex items-center gap-2 px-6 py-3 text-xs font-bold uppercase tracking-[0.14em] rounded-2xl bg-gradient-to-r from-[#0E7C71] to-[#059669] text-white shadow-lg hover:opacity-95 hover:scale-[1.02] transition-all cursor-pointer"
+              >
+                <span>Inspect {featured.name} ↗</span>
+              </button>
+            </div>
           </div>
-        </div>
 
-        <div
-          ref={trackRef}
-          className="flex gap-6 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-4"
-        >
-          {brands.map((brand, idx) => (
-            <article
-              key={brand.id}
-              className={`shrink-0 w-[285px] sm:w-[340px] snap-start border border-[#2D1D48]/16 dark:border-[#E2D4FF]/16 bg-[#FFFBF6]/92 dark:bg-[#17272B]/92 overflow-hidden transition-transform duration-300 hover:-translate-y-1.5 ${
-                idx % 2 === 1 ? 'md:mt-6' : ''
-              }`}
-            >
-              <div className="relative h-64 overflow-hidden bg-[#D5ECE6] dark:bg-[#1B3338]">
-                <ResilientImage
-                  src={brand.image}
-                  alt={brand.name}
-                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                />
-                <div className="absolute top-3 left-3">
-                  <BrandInsignia
-                    monogram={brand.monogram}
-                    accentColor={brand.accentColor}
-                    size="sm"
-                  />
-                </div>
-              </div>
+          {/* Right Column: Horizontally Overlapping Stadium-Rounded Images */}
+          <div className="lg:col-span-7 relative flex items-center justify-start overflow-visible pt-4 lg:pt-0">
+            <div className="flex items-center -space-x-8 sm:-space-x-12 w-full select-none">
+              {brands.map((brand, idx) => {
+                const isMain = brand.id === featured.id;
+                return (
+                  <div
+                    key={brand.id}
+                    onMouseEnter={() => setFeaturedId(brand.id)}
+                    onClick={() => {
+                      setFeaturedId(brand.id);
+                      onInspectBrand(brand);
+                    }}
+                    className={`relative shrink-0 ${isMain
+                      ? 'w-[54%] aspect-[16/11] rounded-[2.5rem] z-30 ring-2 ring-[#0E7C71]/30'
+                      : 'w-[38%] aspect-[3/3.8] rounded-[2.2rem] ' + (idx % 2 === 0 ? 'z-20' : 'z-10')
+                      } overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 transition-all duration-500 hover:scale-[1.04] hover:z-40 cursor-pointer group`}
+                  >
+                    <ResilientImage
+                      src={brand.image}
+                      alt={brand.name}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
 
-              <div className="p-6 space-y-3">
-                <h3 className="font-display text-2xl font-semibold text-[#1B1325] dark:text-[#F6EFE7]">
-                  {brand.name}
-                </h3>
-                <p className="text-sm leading-relaxed text-[#433754] dark:text-[#D8CEE9]">
-                  {brand.tagline}
-                </p>
-                <button
-                  type="button"
-                  onClick={() => onInspectBrand(brand)}
-                  className="text-xs font-semibold uppercase tracking-[0.12em] text-[#0E7C71] dark:text-[#5EEAD4] hover:underline cursor-pointer"
-                >
-                  Open Outlet Brief →
-                </button>
-              </div>
-            </article>
-          ))}
+                    {/* Prominent Floating Brand Monogram Badge */}
+                    <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 bg-black/80 backdrop-blur-md px-3 py-1 rounded-full border border-white/25 shadow-lg">
+                      <span className="w-2 h-2 rounded-full bg-[#5EEAD4] animate-pulse" />
+                      <span className="text-xs font-black text-white tracking-wide">
+                        {brand.name}
+                      </span>
+                    </div>
+
+                    <div className="absolute bottom-3 left-3 right-3 z-20 flex items-center justify-between gap-1">
+                      <span className="text-[10px] font-mono font-medium text-white/90 bg-black/75 px-2.5 py-0.5 rounded-full backdrop-blur-md truncate">
+                        {brand.tagline}
+                      </span>
+                      <span className="text-[10px] font-bold text-white bg-gradient-to-r from-[#0E7C71] to-[#059669] px-2.5 py-0.5 rounded-full shadow-sm shrink-0">
+                        Inspect ↗
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -313,48 +407,91 @@ function JewelleryVitrinesSection({ category, brands, onInspectBrand }) {
           actionLabel="Jewellery Salons"
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center">
-          {brands.map((brand, idx) => (
-            <div
-              key={brand.id}
-              data-parallax={idx % 2 === 0 ? 'down' : 'up'}
-              className="group border border-[#2D1D48]/18 dark:border-[#E2D4FF]/18 bg-[#FFFBF6]/92 dark:bg-[#1E1420]/92 overflow-hidden shadow-xl"
-            >
-              <div className="aspect-[16/11] overflow-hidden bg-[#F4DFD5] dark:bg-[#2A1D29]">
-                <ResilientImage
-                  src={brand.image}
-                  alt={brand.name}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          {/* Left Column: Clean Direct Typography (Zero Card Box) */}
+          <div className="lg:col-span-5 space-y-5">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#B36624] dark:text-[#FBBF24] px-2.5 py-0.5 rounded-full bg-[#B36624]/10 dark:bg-[#FBBF24]/10">
+                  IMPERIAL SALONS
+                </span>
+                <span className="text-xs font-mono text-[#5D5070] dark:text-[#D8CEE9]">
+                  Ground Floor Frontage
+                </span>
               </div>
-              <div className="p-7 sm:p-8 flex items-start justify-between gap-4">
-                <div className="space-y-2">
-                  <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[#B36624] dark:text-[#F0B97A]">
-                    Heritage &amp; Precision
-                  </span>
-                  <h3 className="font-display text-3xl font-semibold text-[#1B1325] dark:text-[#F6EFE7]">
-                    {brand.name}
-                  </h3>
-                  <p className="text-sm text-[#433754] dark:text-[#D8CEE9]">
-                    {brand.tagline}
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => onInspectBrand(brand)}
-                    className="pt-2 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-[#1B1325] dark:text-[#F6EFE7] hover:text-[#B36624] dark:hover:text-[#F0B97A] cursor-pointer"
-                  >
-                    <span>Explore Salon</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-                <BrandInsignia
-                  monogram={brand.monogram}
-                  accentColor={brand.accentColor}
-                  size="lg"
-                />
-              </div>
+              <h3 className="font-display text-3xl sm:text-4xl font-black text-[#1B1325] dark:text-[#FAF0F8] tracking-tight">
+                Tanishq &amp; Titan World
+              </h3>
+              <p className="text-xs sm:text-sm font-semibold text-[#B36624] dark:text-[#FBBF24] leading-snug">
+                Certified 22K/18K Gold, Bridal Solitaires &amp; Precision Swiss Chronometers.
+              </p>
             </div>
-          ))}
+
+            <div className="space-y-2 pt-1">
+              {brands.map((brand) => (
+                <button
+                  key={brand.id}
+                  type="button"
+                  onClick={() => onInspectBrand(brand)}
+                  className="w-full flex items-center justify-between gap-3 p-3.5 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 hover:border-[#B36624] text-xs font-semibold text-[#1B1325] dark:text-[#FAF0F8] transition-all cursor-pointer shadow-xs group"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span className="w-8 h-8 rounded-xl flex items-center justify-center text-xs font-black text-white bg-gradient-to-r from-[#D97706] to-[#B45309] shadow-sm shrink-0">
+                      {brand.monogram}
+                    </span>
+                    <div className="text-left min-w-0">
+                      <span className="text-sm font-extrabold block truncate">{brand.name}</span>
+                      <span className="text-[11px] text-[#5D5070] dark:text-[#D8CEE9] block truncate font-medium">{brand.tagline}</span>
+                    </div>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-[#B36624] opacity-70 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Column: Horizontally Overlapping Stadium-Rounded Images */}
+          <div className="lg:col-span-7 relative flex items-center justify-start overflow-visible pt-4 lg:pt-0">
+            <div className="flex items-center -space-x-8 sm:-space-x-12 w-full select-none">
+              {brands.map((brand, idx) => {
+                const isMain = idx === 0;
+                return (
+                  <div
+                    key={brand.id}
+                    onClick={() => onInspectBrand(brand)}
+                    className={`relative shrink-0 ${isMain
+                      ? 'w-[56%] aspect-[16/11] rounded-[2.5rem] z-30'
+                      : 'w-[44%] aspect-[3/3.8] rounded-[2.2rem] z-20'
+                      } overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 transition-all duration-500 hover:scale-[1.04] hover:z-40 cursor-pointer group`}
+                  >
+                    <ResilientImage
+                      src={brand.image}
+                      alt={brand.name}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+
+                    {/* Top Floating Brand Badge */}
+                    <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 bg-black/80 backdrop-blur-md px-3 py-1 rounded-full border border-white/25 shadow-lg">
+                      <span className="w-2 h-2 rounded-full bg-[#FBBF24] animate-pulse" />
+                      <span className="text-xs font-black text-white tracking-wide">
+                        {brand.name}
+                      </span>
+                    </div>
+
+                    <div className="absolute bottom-3 left-3 right-3 z-20 flex items-center justify-between gap-1">
+                      <span className="text-[10px] font-mono font-medium text-white/90 bg-black/75 px-2.5 py-0.5 rounded-full backdrop-blur-md truncate">
+                        {brand.tagline}
+                      </span>
+                      <span className="text-[10px] font-bold text-white bg-gradient-to-r from-[#D97706] to-[#B45309] px-2.5 py-0.5 rounded-full shadow-sm shrink-0">
+                        Inspect ↗
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -368,7 +505,7 @@ function BeautyDualStageSection({ category, brands, onInspectBrand }) {
   const sectionRef = useRef(null);
 
   useEffect(() => {
-    return registerSectionMotion(sectionRef.current, 'cascade');
+    return registerSectionMotion(sectionRef.current, 'editorial');
   }, []);
 
   if (!brands.length) return null;
@@ -393,58 +530,91 @@ function BeautyDualStageSection({ category, brands, onInspectBrand }) {
           actionLabel="Beauty & Mehendi"
         />
 
-        <div className="space-y-12">
-          {brands.map((brand, idx) => {
-            const flipped = idx % 2 === 1;
-            return (
-              <div
-                key={brand.id}
-                className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center border border-[#2D1D48]/16 dark:border-[#E2D4FF]/16 bg-[#FFFBF6]/90 dark:bg-[#1B1222]/90 overflow-hidden"
-              >
-                <div
-                  className={`lg:col-span-6 aspect-[16/10] overflow-hidden bg-[#F5D6E3] dark:bg-[#2C1A31] ${
-                    flipped ? 'lg:order-2' : ''
-                  }`}
-                >
-                  <ResilientImage
-                    src={brand.image}
-                    alt={brand.name}
-                    className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                  />
-                </div>
-                <div
-                  className={`lg:col-span-6 p-7 sm:p-10 space-y-4 ${
-                    flipped ? 'lg:order-1' : ''
-                  }`}
-                >
-                  <div className="flex items-center justify-between gap-4">
-                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#C9523C] dark:text-[#F48C74]">
-                      <Sparkles className="w-3.5 h-3.5" />
-                      <span>Grooming &amp; Artistry</span>
-                    </span>
-                    <BrandInsignia
-                      monogram={brand.monogram}
-                      accentColor={brand.accentColor}
-                    />
-                  </div>
-                  <h3 className="font-display text-3xl sm:text-4xl font-semibold text-[#1B1325] dark:text-[#F6EFE7]">
-                    {brand.name}
-                  </h3>
-                  <p className="text-base text-[#433754] dark:text-[#D8CEE9]">
-                    {brand.tagline}
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => onInspectBrand(brand)}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] bg-[#1B1325] dark:bg-[#F48C74] text-[#FBF4EB] dark:text-[#151021] hover:opacity-90 cursor-pointer"
-                  >
-                    <span>View Studio Details</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          {/* Left Column: Clean Direct Typography (Zero Card Box) */}
+          <div className="lg:col-span-5 space-y-5">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#C9523C] dark:text-[#F48C74] px-2.5 py-0.5 rounded-full bg-[#EC4899]/10 dark:bg-[#F48C74]/15">
+                  SALON &amp; WELLNESS
+                </span>
+                <span className="text-xs font-mono text-[#5D5070] dark:text-[#D8CEE9]">
+                  Third Floor Suites
+                </span>
               </div>
-            );
-          })}
+              <h3 className="font-display text-3xl sm:text-4xl font-black text-[#1B1325] dark:text-[#FAF0F8] tracking-tight">
+                Looks Salon &amp; Mehendi Art
+              </h3>
+              <p className="text-xs sm:text-sm font-semibold text-[#EC4899] dark:text-[#F472B6] leading-snug">
+                Hair Sanctuaries, Skin Therapies &amp; Traditional Bridal Artistry.
+              </p>
+            </div>
+
+            <div className="space-y-2 pt-1">
+              {brands.map((brand) => (
+                <button
+                  key={brand.id}
+                  type="button"
+                  onClick={() => onInspectBrand(brand)}
+                  className="w-full flex items-center justify-between gap-3 p-3.5 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 hover:border-[#EC4899] text-xs font-semibold text-[#1B1325] dark:text-[#FAF0F8] transition-all cursor-pointer shadow-xs group"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span className="w-8 h-8 rounded-xl flex items-center justify-center text-xs font-black text-white bg-gradient-to-r from-[#EC4899] to-[#C026D3] shadow-sm shrink-0">
+                      {brand.monogram}
+                    </span>
+                    <div className="text-left min-w-0">
+                      <span className="text-sm font-extrabold block truncate">{brand.name}</span>
+                      <span className="text-[11px] text-[#5D5070] dark:text-[#D8CEE9] block truncate font-medium">{brand.tagline}</span>
+                    </div>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-[#EC4899] opacity-70 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Column: Horizontally Overlapping Stadium-Rounded Images */}
+          <div className="lg:col-span-7 relative flex items-center justify-start overflow-visible pt-4 lg:pt-0">
+            <div className="flex items-center -space-x-8 sm:-space-x-12 w-full select-none">
+              {brands.map((brand, idx) => {
+                const isMain = idx === 0;
+                return (
+                  <div
+                    key={brand.id}
+                    onClick={() => onInspectBrand(brand)}
+                    className={`relative shrink-0 ${isMain
+                      ? 'w-[56%] aspect-[16/11] rounded-[2.5rem] z-30'
+                      : 'w-[44%] aspect-[3/3.8] rounded-[2.2rem] z-20'
+                      } overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 transition-all duration-500 hover:scale-[1.04] hover:z-40 cursor-pointer group`}
+                  >
+                    <ResilientImage
+                      src={brand.image}
+                      alt={brand.name}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+
+                    {/* Top Floating Brand Badge */}
+                    <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 bg-black/80 backdrop-blur-md px-3 py-1 rounded-full border border-white/25 shadow-lg">
+                      <span className="w-2 h-2 rounded-full bg-[#EC4899] animate-pulse" />
+                      <span className="text-xs font-black text-white tracking-wide">
+                        {brand.name}
+                      </span>
+                    </div>
+
+                    <div className="absolute bottom-3 left-3 right-3 z-20 flex items-center justify-between gap-1">
+                      <span className="text-[10px] font-mono font-medium text-white/90 bg-black/75 px-2.5 py-0.5 rounded-full backdrop-blur-md truncate">
+                        {brand.tagline}
+                      </span>
+                      <span className="text-[10px] font-bold text-white bg-gradient-to-r from-[#EC4899] to-[#BE185D] px-2.5 py-0.5 rounded-full shadow-sm shrink-0">
+                        View Studio →
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -459,7 +629,7 @@ function SupermarketPanoramicSection({ category, brands, onInspectBrand }) {
   const spencers = brands[0];
 
   useEffect(() => {
-    return registerSectionMotion(sectionRef.current, 'editorial');
+    return registerSectionMotion(sectionRef.current, 'cascade');
   }, []);
 
   if (!spencers) return null;
@@ -484,40 +654,73 @@ function SupermarketPanoramicSection({ category, brands, onInspectBrand }) {
           actionLabel="Supermarket Anchor"
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center border border-[#2D1D48]/16 dark:border-[#E2D4FF]/16 bg-[#FFFBF6]/92 dark:bg-[#142525]/92 overflow-hidden">
-          <div className="lg:col-span-7 aspect-[16/10] overflow-hidden bg-[#D5ECE6] dark:bg-[#1A3332]">
-            <ResilientImage
-              src={spencers.image}
-              alt={spencers.name}
-              className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-            />
-          </div>
-          <div className="lg:col-span-5 p-7 sm:p-10 space-y-5">
-            <div className="flex items-center justify-between gap-4">
-              <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#0E7C71] dark:text-[#5EEAD4]">
-                <ShoppingBasket className="w-4 h-4" />
-                <span>Everyday Anchor Retail</span>
-              </span>
-              <BrandInsignia
-                monogram={spencers.monogram}
-                accentColor={spencers.accentColor}
-                size="lg"
-              />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          {/* Left Column: Clean Direct Typography (Zero Card Box) */}
+          <div className="lg:col-span-5 space-y-5">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#0E7C71] dark:text-[#5EEAD4] px-2.5 py-0.5 rounded-full bg-[#0E7C71]/10 dark:bg-[#5EEAD4]/10">
+                  HYPERMARKET ANCHOR
+                </span>
+                <span className="text-xs font-mono text-[#5D5070] dark:text-[#D8CEE9]">
+                  Lower Ground Concourse
+                </span>
+              </div>
+              <h3 className="font-display text-3xl sm:text-4xl font-black text-[#1B1325] dark:text-[#FAF0F8] tracking-tight">
+                {spencers.name}
+              </h3>
+              <p className="text-xs sm:text-sm font-semibold text-[#0E7C71] dark:text-[#5EEAD4] leading-snug">
+                {spencers.tagline}
+              </p>
             </div>
-            <h3 className="font-display text-4xl font-semibold text-[#1B1325] dark:text-[#F6EFE7]">
-              {spencers.name}
-            </h3>
-            <p className="text-base leading-relaxed text-[#433754] dark:text-[#D8CEE9]">
-              {spencers.tagline}
+
+            <p className="text-sm text-[#3D2E50] dark:text-[#D8CEE9] font-medium leading-relaxed">
+              Daily provisions, organic farm produce, and artisanal pantry on Lower Ground.
             </p>
-            <button
-              type="button"
-              onClick={() => onInspectBrand(spencers)}
-              className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] bg-[#0E7C71] dark:bg-[#5EEAD4] text-[#FBF4EB] dark:text-[#151021] hover:opacity-90 cursor-pointer"
-            >
-              <span>Inspect Hypermarket</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+
+            <div className="flex items-center gap-4 text-xs font-mono text-[#0E7C71] dark:text-[#5EEAD4]">
+              <span>✦ 8:00 AM – 10:00 PM Daily</span>
+              <span>✦ Direct Travelator Access</span>
+            </div>
+
+            <div className="pt-1">
+              <button
+                type="button"
+                onClick={() => onInspectBrand(spencers)}
+                className="inline-flex items-center gap-2 px-6 py-3 text-xs font-bold uppercase tracking-[0.14em] rounded-2xl bg-gradient-to-r from-[#0E7C71] to-[#059669] text-white shadow-lg hover:opacity-95 hover:scale-[1.02] transition-all cursor-pointer"
+              >
+                <span>Inspect {spencers.name} Aisles ↗</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Right Column: Stadium-Rounded Panoramic Visual Frame */}
+          <div className="lg:col-span-7 relative flex items-center justify-start overflow-visible pt-4 lg:pt-0">
+            <div className="relative w-full aspect-[16/10] rounded-[2.5rem] overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 group">
+              <ResilientImage
+                src={spencers.image}
+                alt={spencers.name}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent pointer-events-none" />
+
+              {/* Floating Top Brand Badge */}
+              <div className="absolute top-4 left-4 z-20 flex items-center gap-2 bg-black/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/25 shadow-lg">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#5EEAD4] animate-pulse" />
+                <span className="text-xs font-black text-white tracking-wide">
+                  {spencers.name} · Lower Ground
+                </span>
+              </div>
+
+              <div className="absolute bottom-4 left-5 right-5 z-20 flex items-center justify-between gap-2">
+                <span className="text-xs font-mono font-medium text-white/90 bg-black/70 px-3 py-1 rounded-full backdrop-blur-md">
+                  Direct Parking Concourse
+                </span>
+                <span className="text-[10px] font-mono text-[#5EEAD4] bg-black/70 px-2.5 py-1 rounded-full backdrop-blur-md">
+                  8:00 AM – 10:00 PM
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -526,7 +729,7 @@ function SupermarketPanoramicSection({ category, brands, onInspectBrand }) {
 }
 
 /**
- * 06. Cinema & Multiplex — Widescreen Theatrical Stage (INOX Cinemas)
+ * 06. Cinema & Multiplex — Frosted Dossier Card Left + Stadium-Rounded Showcase Right
  */
 function CinemaTheatricalSection({ category, brands, onInspectBrand }) {
   const sectionRef = useRef(null);
@@ -558,60 +761,114 @@ function CinemaTheatricalSection({ category, brands, onInspectBrand }) {
           actionLabel="Entertainment Lounge"
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          <div className="lg:col-span-6 relative aspect-[16/10] border border-[#2D1D48]/18 dark:border-[#E2D4FF]/18 overflow-hidden shadow-2xl">
-            <ResilientImage
-              src={inox.image}
-              alt={inox.name}
-              className="w-full h-full object-cover"
-            />
-          </div>
-
-          <div className="lg:col-span-6 space-y-6 bg-[#FFFBF6]/88 dark:bg-[#151B31]/88 border border-[#2D1D48]/16 dark:border-[#E2D4FF]/16 p-7 sm:p-9">
-            <div className="flex items-center justify-between gap-4">
-              <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#683BA4] dark:text-[#BFA1FF]">
-                <Film className="w-4 h-4" />
-                <span>Multiplex Auditorium</span>
-              </span>
-              <BrandInsignia
-                monogram={inox.monogram}
-                accentColor={inox.accentColor}
-                size="lg"
-              />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          {/* Left Column: Clean Direct Typography (Zero Card Box) */}
+          <div className="lg:col-span-5 space-y-5">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#2563EB] dark:text-[#60A5FA] px-2.5 py-0.5 rounded-full bg-[#2563EB]/10 dark:bg-[#60A5FA]/15">
+                  THEATRICAL MULTIPLEX
+                </span>
+                <span className="text-xs font-mono text-[#5D5070] dark:text-[#D8CEE9]">
+                  Fourth Level Entertainment
+                </span>
+              </div>
+              <h3 className="font-display text-3xl sm:text-4xl font-black text-[#1B1325] dark:text-[#FAF0F8] tracking-tight">
+                {inox.name}
+              </h3>
+              <p className="text-xs sm:text-sm font-semibold text-[#2563EB] dark:text-[#60A5FA] leading-snug">
+                {inox.tagline}
+              </p>
             </div>
 
-            <h3 className="font-display text-4xl font-semibold text-[#1B1325] dark:text-[#F6EFE7]">
-              {inox.name}
-            </h3>
-            <p className="text-base text-[#433754] dark:text-[#D8CEE9]">
-              {inox.tagline}
-            </p>
+            {/* Numbered Feature Items */}
+            <div className="space-y-2 pt-1">
+              {[
+                { num: '01', title: 'Laser 4K Christie Projection', sub: 'Ultra high-definition clarity' },
+                { num: '02', title: 'Dolby Atmos 7.1 Immersive Sound', sub: '360° architectural sound engineering' },
+                { num: '03', title: 'Royale Plush Recliner Seating', sub: 'Gourmet in-seat dining service' },
+              ].map((item) => (
+                <div
+                  key={item.num}
+                  className="flex items-center gap-3 p-3 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10"
+                >
+                  <span className="w-8 h-8 rounded-xl flex items-center justify-center text-xs font-black text-white bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] shrink-0 shadow-xs">
+                    {item.num}
+                  </span>
+                  <div className="min-w-0">
+                    <span className="text-sm font-extrabold text-[#1B1325] dark:text-[#FAF0F8] block truncate">
+                      {item.title}
+                    </span>
+                    <span className="text-[11px] text-[#5D5070] dark:text-[#D8CEE9] block truncate font-medium">
+                      {item.sub}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
 
-            <div className="flex items-center gap-4 pt-2">
-              <img
-                src={CINEMA_POSTER_ASSETS.odyssey}
-                alt="Sample Feature Poster"
-                className="w-16 h-20 object-cover border border-[#2D1D48]/20 dark:border-[#E2D4FF]/20"
-              />
-              <img
-                src={CINEMA_POSTER_ASSETS.heritage}
-                alt="Sample Heritage Poster"
-                className="w-16 h-20 object-cover border border-[#2D1D48]/20 dark:border-[#E2D4FF]/20"
-              />
-              <div className="flex flex-wrap gap-3 ml-auto">
-                <Link
-                  to="/entertainment"
-                  className="px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] bg-[#1B1325] dark:bg-[#BFA1FF] text-[#FBF4EB] dark:text-[#151021] hover:opacity-90"
-                >
-                  Cinema Page
-                </Link>
-                <button
-                  type="button"
-                  onClick={() => onInspectBrand(inox)}
-                  className="px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] border border-[#2D1D48]/24 dark:border-[#E2D4FF]/24 text-[#1B1325] dark:text-[#F6EFE7] cursor-pointer"
-                >
-                  Inspect
-                </button>
+            {/* CTA Buttons */}
+            <div className="flex flex-wrap items-center gap-3 pt-1">
+              <Link
+                to="/entertainment"
+                className="inline-flex items-center gap-2 px-6 py-3 text-xs font-bold uppercase tracking-[0.14em] rounded-2xl bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] text-white shadow-lg hover:opacity-95 hover:scale-[1.02] transition-all cursor-pointer"
+              >
+                <span>Explore Cinema Lounge ↗</span>
+              </Link>
+              <button
+                type="button"
+                onClick={() => onInspectBrand(inox)}
+                className="px-5 py-3 text-xs font-bold uppercase tracking-[0.14em] rounded-2xl border border-black/15 dark:border-white/20 text-[#1B1325] dark:text-[#FAF0F8] hover:bg-black/5 transition-all cursor-pointer"
+              >
+                Inspect
+              </button>
+            </div>
+          </div>
+
+          {/* Right Column: Stadium-Rounded Overlapping Visual Panels */}
+          <div className="lg:col-span-7 relative flex items-center justify-start overflow-visible pt-4 lg:pt-0">
+            <div className="flex items-center -space-x-8 sm:-space-x-12 w-full select-none">
+              <div className="relative w-[58%] aspect-[16/11] rounded-[2.5rem] overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 z-20 group">
+                <ResilientImage
+                  src={inox.image}
+                  alt={inox.name}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+
+                {/* Floating Top Brand Badge */}
+                <div className="absolute top-4 left-4 z-20 flex items-center gap-2 bg-black/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/25 shadow-lg">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#60A5FA] animate-pulse" />
+                  <span className="text-xs font-black text-white tracking-wide">
+                    {inox.name} · Multiplex
+                  </span>
+                </div>
+
+                <div className="absolute bottom-4 left-4 right-4 z-20 flex items-center justify-between gap-1">
+                  <span className="text-[11px] font-mono text-white/90 bg-black/70 px-3 py-1 rounded-full backdrop-blur-md">
+                    Auditorium 1-4 · 4K Laser
+                  </span>
+                  <span className="text-[10px] font-bold text-white bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] px-2.5 py-1 rounded-full shadow-sm">
+                    Book Tickets ↗
+                  </span>
+                </div>
+              </div>
+
+              <div className="relative w-[42%] aspect-[3/3.8] rounded-[2.2rem] overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 z-10 group">
+                <img
+                  src={CINEMA_POSTER_ASSETS.odyssey}
+                  alt="Feature Cinema Presentation"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute bottom-3 left-3 right-3 z-20 flex items-center justify-between gap-1">
+                  <span className="text-[10px] font-bold text-white bg-black/70 px-2.5 py-0.5 rounded-full backdrop-blur-md truncate">
+                    Now Playing
+                  </span>
+                  <span className="text-[9px] font-mono text-[#FBBF24] bg-black/70 px-2 py-0.5 rounded-full backdrop-blur-md">
+                    Book ↗
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -622,7 +879,7 @@ function CinemaTheatricalSection({ category, brands, onInspectBrand }) {
 }
 
 /**
- * 07. Food & Restaurants — Staggered Culinary Filmstrip & Selector (9 outlets)
+ * 07. Food & Restaurants — Frosted Dossier Card Left + Horizontally Overlapping Stadium-Rounded Images Right
  */
 function DiningFilmstripSection({ category, brands, onInspectBrand }) {
   const sectionRef = useRef(null);
@@ -630,10 +887,17 @@ function DiningFilmstripSection({ category, brands, onInspectBrand }) {
   const active = brands.find((b) => b.id === selectedId) || brands[0];
 
   useEffect(() => {
-    return registerSectionMotion(sectionRef.current, 'cascade');
+    return registerSectionMotion(sectionRef.current, 'editorial');
   }, []);
 
   if (!brands.length) return null;
+
+  const numberColors = [
+    'from-[#E05638] to-[#C9523C]',
+    'from-[#D97706] to-[#B45309]',
+    'from-[#DC2626] to-[#991B1B]',
+    'from-[#EA580C] to-[#C2410C]',
+  ];
 
   return (
     <section
@@ -655,80 +919,127 @@ function DiningFilmstripSection({ category, brands, onInspectBrand }) {
           actionLabel="Full Dining Guide"
         />
 
-        {/* Selected Highlight Chamber */}
-        {active && (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center border border-[#2D1D48]/18 dark:border-[#E2D4FF]/18 bg-[#FFFBF6]/92 dark:bg-[#1E1420]/92 overflow-hidden">
-            <div className="lg:col-span-6 w-full aspect-[16/10] overflow-hidden bg-[#EFE6FA] dark:bg-[#231B38]">
-              <ResilientImage
-                key={active.id}
-                src={active.image}
-                alt={active.name}
-                className="w-full h-full object-cover block"
-              />
-            </div>
-            <div className="lg:col-span-6 p-7 sm:p-9 space-y-4">
-              <div className="flex items-center justify-between gap-4">
-                <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#C9523C] dark:text-[#F48C74]">
-                  <Utensils className="w-3.5 h-3.5" />
-                  <span>Featured Culinary House</span>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          {/* Left Column: Clean Direct Typography (Zero Card Box) */}
+          <div className="lg:col-span-5 space-y-5">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#C9523C] dark:text-[#F48C74] px-2.5 py-0.5 rounded-full bg-[#C9523C]/10 dark:bg-[#F48C74]/15">
+                  FEATURED KITCHEN
                 </span>
-                <BrandInsignia
-                  monogram={active.monogram}
-                  accentColor={active.accentColor}
-                />
+                <span className="text-xs font-mono text-[#5D5070] dark:text-[#D8CEE9]">
+                  Third Floor Terrace
+                </span>
               </div>
-              <h3 className="font-display text-3xl sm:text-4xl font-semibold text-[#1B1325] dark:text-[#F6EFE7]">
+              <h3 className="font-display text-3xl sm:text-4xl font-black text-[#1B1325] dark:text-[#FAF0F8] tracking-tight">
                 {active.name}
               </h3>
-              <p className="text-base text-[#433754] dark:text-[#D8CEE9]">
+              <p className="text-xs sm:text-sm font-semibold text-[#C9523C] dark:text-[#F48C74] leading-snug">
                 {active.tagline}
               </p>
+            </div>
+
+            {/* Numbered Category List */}
+            <div className="space-y-2 pt-1">
+              {brands.slice(0, 4).map((venue, idx) => {
+                const isSelected = venue.id === active.id;
+                const colorGradient = numberColors[idx % numberColors.length];
+                return (
+                  <button
+                    key={venue.id}
+                    type="button"
+                    onMouseEnter={() => setSelectedId(venue.id)}
+                    onClick={() => {
+                      setSelectedId(venue.id);
+                      onInspectBrand(venue);
+                    }}
+                    className={`w-full flex items-center justify-between gap-3 p-3 sm:p-3.5 rounded-2xl transition-all cursor-pointer text-left border ${isSelected
+                      ? 'bg-[#C9523C]/15 dark:bg-white/15 border-[#C9523C] shadow-xs'
+                      : 'bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10 hover:border-[#C9523C]/50'
+                      }`}
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span
+                        className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-black text-white bg-gradient-to-r ${colorGradient} shrink-0 shadow-xs`}
+                      >
+                        {venue.monogram || String(idx + 1).padStart(2, '0')}
+                      </span>
+                      <div className="min-w-0">
+                        <span className="text-sm font-extrabold text-[#1B1325] dark:text-[#FAF0F8] block truncate">
+                          {venue.name}
+                        </span>
+                        <span className="text-[11px] text-[#5D5070] dark:text-[#D8CEE9] block truncate font-medium">
+                          {venue.tagline}
+                        </span>
+                      </div>
+                    </div>
+                    <ArrowRight
+                      className={`w-4 h-4 text-[#C9523C] dark:text-[#F48C74] shrink-0 transition-transform ${isSelected ? 'translate-x-0.5 opacity-100' : 'opacity-40'
+                        }`}
+                    />
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Gradient Pill CTA */}
+            <div className="pt-1">
               <button
                 type="button"
                 onClick={() => onInspectBrand(active)}
-                className="px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.12em] bg-[#1B1325] dark:bg-[#F48C74] text-[#FBF4EB] dark:text-[#151021] hover:opacity-90 cursor-pointer"
+                className="inline-flex items-center gap-2 px-6 py-3 text-xs font-bold uppercase tracking-[0.14em] rounded-2xl bg-gradient-to-r from-[#C9523C] to-[#E05638] text-white shadow-lg hover:opacity-95 hover:scale-[1.02] transition-all cursor-pointer"
               >
-                Inspect Venue
+                <span>Inspect {active.name} Menu ↗</span>
               </button>
             </div>
           </div>
-        )}
 
-        {/* Horizontal Culinary Filmstrip Strip */}
-        <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2">
-          {brands.map((venue, idx) => {
-            const isSelected = venue.id === active?.id;
-            return (
-              <button
-                key={venue.id}
-                type="button"
-                onClick={() => setSelectedId(venue.id)}
-                className={`shrink-0 w-60 text-left border transition-all cursor-pointer overflow-hidden ${
-                  idx % 2 === 1 ? 'mt-4' : ''
-                } ${
-                  isSelected
-                    ? 'border-[#C9523C] dark:border-[#F48C74] bg-[#1B1325] dark:bg-[#F48C74] text-[#FBF4EB] dark:text-[#151021]'
-                    : 'border-[#2D1D48]/16 dark:border-[#E2D4FF]/16 bg-[#FFFBF6]/88 dark:bg-[#191326]/88 text-[#1B1325] dark:text-[#F6EFE7]'
-                }`}
-              >
-                <div className="h-32 overflow-hidden">
-                  <ResilientImage
-                    src={venue.image}
-                    alt={venue.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="p-4 flex items-center justify-between gap-2">
-                  <span className="font-display text-base font-semibold truncate">
-                    {venue.name}
-                  </span>
-                  <span className="text-[11px] font-medium opacity-70 tabular-nums shrink-0">
-                    {venue.monogram}
-                  </span>
-                </div>
-              </button>
-            );
-          })}
+          {/* Right Column: Horizontally Overlapping Stadium-Rounded Images */}
+          <div className="lg:col-span-7 relative flex items-center justify-start overflow-visible pt-4 lg:pt-0">
+            <div className="flex items-center -space-x-8 sm:-space-x-12 w-full select-none">
+              {brands.slice(0, 4).map((venue, idx) => {
+                const isMain = venue.id === active.id;
+                return (
+                  <div
+                    key={venue.id}
+                    onMouseEnter={() => setSelectedId(venue.id)}
+                    onClick={() => {
+                      setSelectedId(venue.id);
+                      onInspectBrand(venue);
+                    }}
+                    className={`relative shrink-0 ${isMain
+                      ? 'w-[54%] aspect-[16/11] rounded-[2.5rem] z-30 ring-2 ring-[#C9523C]/30'
+                      : 'w-[38%] aspect-[3/3.8] rounded-[2.2rem] ' + (idx % 2 === 0 ? 'z-20' : 'z-10')
+                      } overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 transition-all duration-500 hover:scale-[1.04] hover:z-40 cursor-pointer group`}
+                  >
+                    <ResilientImage
+                      src={venue.image}
+                      alt={venue.name}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+
+                    {/* Floating Brand Badge */}
+                    <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 bg-black/80 backdrop-blur-md px-3 py-1 rounded-full border border-white/25 shadow-lg">
+                      <span className="w-2 h-2 rounded-full bg-[#F97316] animate-pulse" />
+                      <span className="text-xs font-black text-white tracking-wide">
+                        {venue.name}
+                      </span>
+                    </div>
+
+                    <div className="absolute bottom-3 left-3 right-3 z-20 flex items-center justify-between gap-1">
+                      <span className="text-[10px] font-mono font-medium text-white/90 bg-black/75 px-2.5 py-0.5 rounded-full backdrop-blur-md truncate">
+                        {venue.tagline}
+                      </span>
+                      <span className="text-[10px] font-bold text-white bg-gradient-to-r from-[#C9523C] to-[#E05638] px-2.5 py-0.5 rounded-full shadow-sm shrink-0">
+                        Inspect ↗
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
     </section>

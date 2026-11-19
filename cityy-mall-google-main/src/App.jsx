@@ -41,6 +41,10 @@ function MallRoutesShell() {
               element={<DiscoverPage onInspectBrand={setSelectedBrand} />}
             />
             <Route
+              path="/explore"
+              element={<DiscoverPage onInspectBrand={setSelectedBrand} />}
+            />
+            <Route
               path="/brands"
               element={<BrandsPage onInspectBrand={setSelectedBrand} />}
             />

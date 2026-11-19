@@ -1,231 +1,492 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react';
-import { VIDEO_ASSETS } from '../assets/mediaManifest';
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  Sparkles,
+  Compass,
+  Layers,
+  ChevronRight,
+  ChevronLeft,
+} from 'lucide-react';
+import { VIDEO_ASSETS, CINEMA_POSTER_ASSETS } from '../assets/mediaManifest';
+import { BRAND_IMAGES, SCENE_IMAGES } from '../assets/imageRegistry';
 import { APPROVED_BRANDS, BRAND_CATEGORIES } from '../utilities/brandsData';
 import { registerSectionMotion } from '../animations/scrollAnimations';
 import { VideoSectionBackground } from '../components/VideoSectionBackground';
 import { ResilientImage } from '../components/ResilientImage';
 
+// Rich artistic editorial configuration for each of the Seven Curated Categories
+const CATEGORY_EDITORIAL_DATA = {
+  fashion: {
+    id: 'fashion',
+    number: '01',
+    title: 'Fashion & Apparel',
+    shortLabel: 'Fashion',
+    chapter: 'Haute Couture & Tailored Ateliers',
+    route: '/shopping/fashion',
+    mainImage: VIDEO_ASSETS.fashionRetail.fallbackImage,
+    supportingImage: BRAND_IMAGES.louisPhilippe,
+    accentImage: BRAND_IMAGES.wForWoman,
+    supportingCaption: 'Louis Philippe · Suite G-04',
+    accentCaption: 'W for Woman',
+    accentHue: '#C084FC',
+    gradient: 'from-[#A855F7] via-[#EC4899] to-[#8B5CF6]',
+    badgeBg: 'bg-gradient-to-r from-[#A855F7]/15 to-[#EC4899]/15 text-[#86198F] dark:text-[#F472B6] border-[#A855F7]/30',
+    glowColor: 'rgba(192, 132, 252, 0.25)',
+    paletteName: 'Lavender Violet & Rose',
+    icon: '👗',
+    quote:
+      'Tailored bespoke menswear, heritage denim craftsmanship, contemporary Indian fusion ensembles, and fine everyday silhouettes.',
+    featuredBrands: ['Louis Philippe', "Levi's Store", 'W for Woman', 'Allen Solly'],
+    floorBadge: 'Ground & Level 1',
+  },
+  footwear: {
+    id: 'footwear',
+    number: '02',
+    title: 'Footwear & Sportswear',
+    shortLabel: 'Footwear',
+    chapter: 'Athletic Promenade & Artisan Leather',
+    route: '/shopping/footwear',
+    mainImage: VIDEO_ASSETS.footwearSportswear.fallbackImage,
+    supportingImage: BRAND_IMAGES.adidas,
+    accentImage: BRAND_IMAGES.puma,
+    supportingCaption: 'Adidas · Suite 2-02',
+    accentCaption: 'Puma Speed',
+    accentHue: '#2DD4BF',
+    gradient: 'from-[#14B8A6] via-[#06B6D4] to-[#3B82F6]',
+    badgeBg: 'bg-gradient-to-r from-[#14B8A6]/15 to-[#06B6D4]/15 text-[#0E7C71] dark:text-[#2DD4BF] border-[#14B8A6]/30',
+    glowColor: 'rgba(45, 212, 191, 0.25)',
+    paletteName: 'Turquoise & Electric Cyan',
+    icon: '👟',
+    quote:
+      'Global athletic performance champions, precision marathon runners, rugged outdoor expedition boots, and bespoke leather dress shoes.',
+    featuredBrands: ['Adidas', 'Puma', 'Woodland', 'Skechers'],
+    floorBadge: 'Second Floor Concourse',
+  },
+  jewellery: {
+    id: 'jewellery',
+    number: '03',
+    title: 'Jewellery & Watches',
+    shortLabel: 'Jewellery',
+    chapter: 'Imperial 24K Gold & Haute Horlogerie',
+    route: '/shopping/jewellery',
+    mainImage: VIDEO_ASSETS.jewelleryWatches.fallbackImage,
+    supportingImage: BRAND_IMAGES.tanishq,
+    accentImage: BRAND_IMAGES.titanWorld,
+    supportingCaption: 'Tanishq · Suite G-01',
+    accentCaption: 'Titan World',
+    accentHue: '#FBBF24',
+    gradient: 'from-[#F59E0B] via-[#D97706] to-[#F43F5E]',
+    badgeBg: 'bg-gradient-to-r from-[#F59E0B]/15 to-[#D97706]/15 text-[#B45309] dark:text-[#FBBF24] border-[#F59E0B]/30',
+    glowColor: 'rgba(251, 191, 36, 0.25)',
+    paletteName: 'Champagne Gold & Amber',
+    icon: '💍',
+    quote:
+      'Ceremonial heirloom gold artistry, certified solitaire diamonds, and handcrafted chronometers celebrating life’s grandest milestones.',
+    featuredBrands: ['Tanishq Jewellery', 'Titan World Watches'],
+    floorBadge: 'Grand Entrance Frontage',
+  },
+  beauty: {
+    id: 'beauty',
+    number: '04',
+    title: 'Beauty & Lifestyle',
+    shortLabel: 'Beauty',
+    chapter: 'Wellness Lounges & Bridal Artistry',
+    route: '/shopping/beauty',
+    mainImage: VIDEO_ASSETS.beautyLifestyle.fallbackImage,
+    supportingImage: BRAND_IMAGES.looksSalon,
+    accentImage: BRAND_IMAGES.arjunMehendiArt,
+    supportingCaption: 'Looks Salon · Suite 3-06',
+    accentCaption: 'Bridal Art',
+    accentHue: '#F472B6',
+    gradient: 'from-[#EC4899] via-[#F43F5E] to-[#A855F7]',
+    badgeBg: 'bg-gradient-to-r from-[#EC4899]/15 to-[#F43F5E]/15 text-[#BE185D] dark:text-[#F472B6] border-[#EC4899]/30',
+    glowColor: 'rgba(244, 114, 182, 0.25)',
+    paletteName: 'Blush Pink & Orchid',
+    icon: '✨',
+    quote:
+      'Premier styling sanctuaries, restorative hair rituals, organic aesthetic treatments, and authentic ceremonial mehendi art.',
+    featuredBrands: ['Looks Salon', 'Arjun Mehendi Art'],
+    floorBadge: 'Third Floor Pavilion',
+  },
+  supermarket: {
+    id: 'supermarket',
+    number: '05',
+    title: 'Supermarket & Retail',
+    shortLabel: 'Supermarket',
+    chapter: 'Gourmet Hypermarket & Daily Living',
+    route: '/shopping/supermarket',
+    mainImage: VIDEO_ASSETS.supermarket.fallbackImage,
+    supportingImage: SCENE_IMAGES.shoppingScene4,
+    accentImage: SCENE_IMAGES.homeScene4,
+    supportingCaption: "Spencer's Gourmet Aisle",
+    accentCaption: 'Fresh Harvest',
+    accentHue: '#34D399',
+    gradient: 'from-[#10B981] via-[#059669] to-[#0D9488]',
+    badgeBg: 'bg-gradient-to-r from-[#10B981]/15 to-[#059669]/15 text-[#065F46] dark:text-[#34D399] border-[#10B981]/30',
+    glowColor: 'rgba(52, 211, 153, 0.25)',
+    paletteName: 'Emerald & Fresh Mint',
+    icon: '🛒',
+    quote:
+      'Expansive international pantry selections, farm-fresh provisions, artisanal bakery essentials, and comprehensive family retail.',
+    featuredBrands: ["Spencer's Hypermarket & Retail"],
+    floorBadge: 'Lower Ground Concourse',
+  },
+  cinema: {
+    id: 'cinema',
+    number: '06',
+    title: 'Cinema & Multiplex',
+    shortLabel: 'Cinema',
+    chapter: 'Cinematic Grandeur & INSIGNIA Screens',
+    route: '/entertainment',
+    mainImage: VIDEO_ASSETS.cinema.fallbackImage,
+    supportingImage: BRAND_IMAGES.inoxCinemas,
+    accentImage: CINEMA_POSTER_ASSETS.heritage,
+    supportingCaption: 'INOX Multiplex Level',
+    accentCaption: 'INSIGNIA VIP',
+    accentHue: '#FB7185',
+    gradient: 'from-[#E11D48] via-[#BE185D] to-[#7C3AED]',
+    badgeBg: 'bg-gradient-to-r from-[#E11D48]/15 to-[#BE185D]/15 text-[#9F1239] dark:text-[#FB7185] border-[#E11D48]/30',
+    glowColor: 'rgba(251, 113, 133, 0.25)',
+    paletteName: 'Cinema Ruby & Velvet Rose',
+    icon: '🎬',
+    quote:
+      'Immersive laser projection, multi-dimensional Dolby Atmos soundscapes, luxury plush recliners, and gourmet in-seat concession service.',
+    featuredBrands: ['INOX Cinemas Multiplex'],
+    floorBadge: 'Fourth Floor Multiplex Level',
+  },
+  dining: {
+    id: 'dining',
+    number: '07',
+    title: 'Food & Restaurants',
+    shortLabel: 'Dining',
+    chapter: 'Gastronomic Promenade & Banquets',
+    route: '/dining',
+    mainImage: VIDEO_ASSETS.dining.fallbackImage,
+    supportingImage: BRAND_IMAGES.barbequeNation,
+    accentImage: BRAND_IMAGES.rangrezzaBanquet,
+    supportingCaption: 'Barbeque Nation Terrace',
+    accentCaption: 'Royal Rangrezza',
+    accentHue: '#FB923C',
+    gradient: 'from-[#EA580C] via-[#F97316] to-[#EAB308]',
+    badgeBg: 'bg-gradient-to-r from-[#EA580C]/15 to-[#F97316]/15 text-[#C2410C] dark:text-[#FB923C] border-[#EA580C]/30',
+    glowColor: 'rgba(251, 146, 60, 0.25)',
+    paletteName: 'Coral Orange & Peach Gold',
+    icon: '🍷',
+    quote:
+      'Nine signature gastronomic venues: sizzle grills, fragrant Mughlai curries, authentic South Indian dosas, artisan pizzas, and festive banquet salons.',
+    featuredBrands: ['Barbeque Nation', 'Pizza Hut', 'KFC', 'Pind Balluchi', 'Dosa Plaza'],
+    floorBadge: 'Third Floor Dining Terrace',
+  },
+};
+
+const CATEGORY_KEYS = [
+  'fashion',
+  'footwear',
+  'jewellery',
+  'beauty',
+  'supermarket',
+  'cinema',
+  'dining',
+];
+
 export function HomeRealmsCarouselSection() {
   const sectionRef = useRef(null);
-  const trackRef = useRef(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [maxIndex, setMaxIndex] = useState(4);
+  const [activeCategoryKey, setActiveCategoryKey] = useState('fashion');
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     return registerSectionMotion(sectionRef.current, 'editorial');
   }, []);
 
-  const updateVisibleCount = () => {
-    if (typeof window === 'undefined') return;
-    if (window.innerWidth >= 1024) {
-      // Desktop: 3 cards fit edge-to-edge
-      setMaxIndex(Math.max(0, BRAND_CATEGORIES.length - 3));
-    } else if (window.innerWidth >= 640) {
-      // Tablet: 2 cards fit edge-to-edge
-      setMaxIndex(Math.max(0, BRAND_CATEGORIES.length - 2));
-    } else {
-      // Mobile: 1 card fits edge-to-edge
-      setMaxIndex(Math.max(0, BRAND_CATEGORIES.length - 1));
-    }
+  const activeCategory = CATEGORY_EDITORIAL_DATA[activeCategoryKey] || CATEGORY_EDITORIAL_DATA.fashion;
+  const currentIndex = CATEGORY_KEYS.indexOf(activeCategoryKey);
+
+  const handleNext = () => {
+    const nextIdx = (currentIndex + 1) % CATEGORY_KEYS.length;
+    setActiveCategoryKey(CATEGORY_KEYS[nextIdx]);
   };
 
-  useEffect(() => {
-    updateVisibleCount();
-    window.addEventListener('resize', updateVisibleCount);
-    return () => window.removeEventListener('resize', updateVisibleCount);
-  }, []);
-
-  const scrollToIndex = (index) => {
-    const el = trackRef.current;
-    if (!el) return;
-    const clamped = Math.max(0, Math.min(index, maxIndex));
-    setCurrentIndex(clamped);
-    const card = el.children[clamped];
-    if (card) {
-      el.scrollTo({
-        left: card.offsetLeft - el.offsetLeft,
-        behavior: 'smooth',
-      });
-    }
+  const handlePrev = () => {
+    const prevIdx = (currentIndex - 1 + CATEGORY_KEYS.length) % CATEGORY_KEYS.length;
+    setActiveCategoryKey(CATEGORY_KEYS[prevIdx]);
   };
 
-  const handleNext = () => scrollToIndex(currentIndex + 1);
-  const handlePrev = () => scrollToIndex(currentIndex - 1);
-
-  // Sync index if user scrolls/swipes natively
+  // Keyboard navigation when user is exploring
   useEffect(() => {
-    const el = trackRef.current;
-    if (!el) return;
-
-    let timeoutId;
-    const handleScroll = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        const scrollLeft = el.scrollLeft;
-        let closestIndex = 0;
-        let minDiff = Infinity;
-        Array.from(el.children).forEach((child, idx) => {
-          const diff = Math.abs(child.offsetLeft - el.offsetLeft - scrollLeft);
-          if (diff < minDiff) {
-            minDiff = diff;
-            closestIndex = idx;
-          }
-        });
-        setCurrentIndex(Math.min(closestIndex, maxIndex));
-      }, 80);
+    const handleKeyDown = (e) => {
+      if (!isHovered) return;
+      if (e.key === 'ArrowRight') handleNext();
+      if (e.key === 'ArrowLeft') handlePrev();
     };
-
-    el.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      clearTimeout(timeoutId);
-      el.removeEventListener('scroll', handleScroll);
-    };
-  }, [maxIndex]);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentIndex, isHovered]);
 
   return (
     <section
       ref={sectionRef}
       id="home-realms"
-      className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-16 sm:py-24 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#E4F5F0] dark:bg-[#112226]"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="relative min-h-screen flex flex-col justify-center overflow-hidden py-16 sm:py-24 border-b border-[#683BA4]/15 dark:border-[#BFA1FF]/15 bg-[#FAF4ED] dark:bg-[#120B1C] transition-colors duration-300"
     >
+      {/* Dynamic Animated Ambient Background */}
       <VideoSectionBackground
         videoAsset={VIDEO_ASSETS.brandsStorefronts}
         variant="shopping"
-        playbackRate={0.78}
-        videoOpacityClassName="opacity-72 dark:opacity-65"
-        tintClassName="bg-gradient-to-b from-[#E4F5F0]/86 via-[#E6F1FC]/45 to-[#E4F5F0]/88 dark:from-[#112226]/86 dark:via-[#131C2E]/48 dark:to-[#112226]/88"
+        playbackRate={0.7}
+        videoOpacityClassName="opacity-60 dark:opacity-45"
+        tintClassName="bg-gradient-to-b from-[#FAF4ED]/92 via-[#F4E6F7]/65 to-[#FDE8DF]/88 dark:from-[#120B1C]/95 dark:via-[#1B1028]/75 dark:to-[#120B1C]/96"
       />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 w-full">
-        {/* Editorial Section Header with Navigation Controls */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full space-y-8 sm:space-y-10">
+        
+        {/* =========================================================================
+            EDITORIAL HEADER & STORYTELLING CONTROLS
+           ========================================================================= */}
         <div
           data-motion="reveal"
-          className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10"
+          className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-4 border-b border-[#701A75]/15 dark:border-[#C084FC]/20"
         >
           <div className="max-w-2xl space-y-2">
-            <p className="text-xs font-semibold tracking-[0.18em] uppercase text-[#0E7C71] dark:text-[#5EEAD4]">
-              Horizontal Storytelling Track
-            </p>
-            <h2 className="font-display text-4xl sm:text-5xl font-semibold text-[#1B1325] dark:text-[#F6EFE7]">
+            <div className="inline-flex items-center gap-2 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] rounded-full bg-gradient-to-r from-[#701A75]/10 to-[#BE185D]/10 dark:from-[#F472B6]/20 dark:to-[#C084FC]/20 text-[#86198F] dark:text-[#F472B6] border border-[#86198F]/25 dark:border-[#F472B6]/30">
+              <Sparkles className="w-3.5 h-3.5 text-[#EC4899]" />
+              <span>Curated Mall Taxonomy · 7 Distinct Chapters</span>
+            </div>
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-[#241033] via-[#701A75] to-[#9D174D] dark:from-[#FAF0F8] dark:via-[#F0ABFC] dark:to-[#F472B6] bg-clip-text text-transparent">
               Seven Curated Categories
             </h2>
+            <p className="text-xs sm:text-sm text-[#4E345D] dark:text-[#D8C7E5] leading-relaxed">
+              Seven curated lifestyle destinations across CITY MALL.
+            </p>
           </div>
 
-          <div className="flex items-center gap-3 shrink-0">
-            <span className="text-xs font-mono tracking-wider text-[#433754] dark:text-[#D8CEE9]">
-              {String(currentIndex + 1).padStart(2, '0')} / {String(maxIndex + 1).padStart(2, '0')}
-            </span>
-            <div className="flex items-center gap-1.5">
+          {/* Editorial Prev / Next & Progress Counter */}
+          <div className="flex items-center gap-4 shrink-0">
+            <div className="text-right">
+              <span className="text-xs font-mono font-bold tracking-wider text-[#86198F] dark:text-[#F472B6] block">
+                {String(currentIndex + 1).padStart(2, '0')} / 07
+              </span>
+              <span className="text-[10px] uppercase font-mono text-[#5C426E] dark:text-[#BFA1FF]">
+                {activeCategory.shortLabel}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-1.5 p-1 rounded-full bg-white/80 dark:bg-[#1E112E]/80 border border-[#701A75]/15 dark:border-[#C084FC]/20 shadow-xs">
               <button
                 type="button"
                 onClick={handlePrev}
-                disabled={currentIndex === 0}
-                aria-label="Scroll categories left"
-                className={`w-10 h-10 flex items-center justify-center border transition-all ${
-                  currentIndex === 0
-                    ? 'border-[#2D1D48]/12 dark:border-[#E2D4FF]/12 text-[#1B1325]/30 dark:text-[#F6EFE7]/30 cursor-not-allowed bg-transparent'
-                    : 'border-[#2D1D48]/25 dark:border-[#E2D4FF]/25 bg-[#FFFBF6]/90 dark:bg-[#19282C]/90 text-[#1B1325] dark:text-[#F6EFE7] hover:border-[#0E7C71] dark:hover:border-[#5EEAD4] cursor-pointer'
-                }`}
+                aria-label="Previous Category"
+                className="w-9 h-9 rounded-full flex items-center justify-center text-[#5C426E] dark:text-[#FAF0F8] hover:bg-[#701A75] hover:text-white transition-all cursor-pointer"
               >
-                <ArrowLeft className="w-4 h-4" />
+                <ChevronLeft className="w-4 h-4" />
               </button>
               <button
                 type="button"
                 onClick={handleNext}
-                disabled={currentIndex >= maxIndex}
-                aria-label="Scroll categories right"
-                className={`w-10 h-10 flex items-center justify-center border transition-all ${
-                  currentIndex >= maxIndex
-                    ? 'border-[#2D1D48]/12 dark:border-[#E2D4FF]/12 text-[#1B1325]/30 dark:text-[#F6EFE7]/30 cursor-not-allowed bg-transparent'
-                    : 'border-[#2D1D48]/25 dark:border-[#E2D4FF]/25 bg-[#FFFBF6]/90 dark:bg-[#19282C]/90 text-[#1B1325] dark:text-[#F6EFE7] hover:border-[#0E7C71] dark:hover:border-[#5EEAD4] cursor-pointer'
-                }`}
+                aria-label="Next Category"
+                className="w-9 h-9 rounded-full flex items-center justify-center text-[#5C426E] dark:text-[#FAF0F8] hover:bg-[#701A75] hover:text-white transition-all cursor-pointer"
               >
-                <ArrowRight className="w-4 h-4" />
+                <ChevronRight className="w-4 h-4" />
               </button>
             </div>
           </div>
         </div>
 
-        {/* Horizontal Runway Strip — Exactly 3 Cards on Desktop, 2 on Tablet, 1 on Mobile. ZERO Cut-Off Cards! */}
-        <div className="relative overflow-hidden">
-          <div
-            ref={trackRef}
-            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar pb-3"
-          >
-            {BRAND_CATEGORIES.map((cat, idx) => {
-              const categoryCount = APPROVED_BRANDS.filter(
-                (b) => b.categoryId === cat.id
-              ).length;
+        {/* =========================================================================
+            INTERACTIVE CATEGORY RUNWAY (Horizontal Glass Ribbon)
+           ========================================================================= */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none px-1">
+          {CATEGORY_KEYS.map((key) => {
+            const cat = CATEGORY_EDITORIAL_DATA[key];
+            const isActive = activeCategoryKey === key;
 
-              return (
-                <Link
-                  key={cat.id}
-                  to={cat.route}
-                  data-motion="seq-img"
-                  data-seq-index={idx % 4}
-                  data-seq-from="up"
-                  className="group shrink-0 w-full sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)] snap-start flex flex-col"
-                >
-                  <div className="border border-[#2D1D48]/18 dark:border-[#E2D4FF]/18 bg-[#FFFBF6]/92 dark:bg-[#17242A]/92 overflow-hidden transition-all duration-300 group-hover:-translate-y-1.5 group-hover:shadow-xl h-full flex flex-col justify-between">
-                    <div>
-                      <div className="relative h-56 overflow-hidden bg-[#D5ECE6] dark:bg-[#1D3136]">
-                        <ResilientImage
-                          src={cat.video.fallbackImage}
-                          alt={cat.title}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        />
-                        <span className="font-display text-5xl font-bold absolute bottom-3 left-4 text-white drop-shadow-md tabular-nums">
-                          {cat.number}
+            return (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setActiveCategoryKey(key)}
+                className={`group flex items-center gap-2 px-4 py-2 rounded-2xl text-xs font-semibold whitespace-nowrap transition-all duration-300 cursor-pointer ${
+                  isActive
+                    ? 'bg-gradient-to-r from-[#701A75] to-[#9D174D] dark:from-[#A855F7] dark:to-[#EC4899] text-white shadow-lg shadow-pink-500/25 scale-[1.02]'
+                    : 'bg-white/80 dark:bg-[#1C102A]/80 text-[#4E345D] dark:text-[#D8C7E5] border border-[#701A75]/15 dark:border-[#C084FC]/20 hover:border-[#EC4899] hover:bg-white'
+                }`}
+              >
+                <span className={`text-[10px] font-mono ${isActive ? 'text-white/80' : 'text-[#86198F] dark:text-[#F472B6]'}`}>
+                  {cat.number}
+                </span>
+                <span>{cat.title}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* =========================================================================
+            CENTERPIECE: ARTISTIC OVERLAPPING VISUAL COMPOSITION
+            Left Column: Frosted Dossier Card (rounded-[2.5rem])
+            Right Column: Horizontally Overlapping Stadium-Rounded Images (rounded-[2.5rem], rounded-[2.2rem])
+           ========================================================================= */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center pt-2">
+          
+          {/* LEFT COLUMN: Clean Direct Typography (Zero Card Box) */}
+          <div className="lg:col-span-5 space-y-5">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#86198F] dark:text-[#F472B6] px-2.5 py-0.5 rounded-full bg-[#701A75]/10 dark:bg-[#F472B6]/15">
+                  {activeCategory.floorBadge}
+                </span>
+                <span className="text-xs font-mono text-[#5D5070] dark:text-[#D8CEE9]">
+                  Chapter {activeCategory.number}
+                </span>
+              </div>
+              <h3 className="font-display text-3xl sm:text-4xl font-black text-[#1B1325] dark:text-[#FAF0F8] tracking-tight">
+                {activeCategory.title}
+              </h3>
+              
+              {/* PROMINENTLY HIGHLIGHTED BRANDS */}
+              <div className="pt-1 space-y-1.5">
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#86198F] dark:text-[#F472B6] block">
+                  Featured Brands
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {activeCategory.featuredBrands.map((brandName) => (
+                    <span
+                      key={brandName}
+                      className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-bold rounded-xl bg-black/5 dark:bg-white/10 text-[#701A75] dark:text-[#FAF0F8] border border-[#701A75]/20 dark:border-white/20"
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#EC4899]" />
+                      <span>{brandName}</span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Needful Single Sentence */}
+              <p className="text-xs text-[#3D2E50] dark:text-[#D8CEE9] font-medium leading-relaxed pt-1">
+                {activeCategory.quote.split('.')[0]}.
+              </p>
+            </div>
+
+            {/* Numbered Category List */}
+            <div className="space-y-1.5 max-h-[300px] overflow-y-auto pr-1 no-scrollbar">
+              {CATEGORY_KEYS.map((key) => {
+                const cat = CATEGORY_EDITORIAL_DATA[key];
+                const isSelected = activeCategoryKey === key;
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    onMouseEnter={() => setActiveCategoryKey(key)}
+                    onClick={() => setActiveCategoryKey(key)}
+                    className={`w-full flex items-center justify-between gap-3 p-2.5 rounded-2xl transition-all cursor-pointer text-left border ${
+                      isSelected
+                        ? 'bg-black/5 dark:bg-white/15 border-[#EC4899]'
+                        : 'bg-transparent border-transparent hover:bg-black/5 dark:hover:bg-white/5'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span
+                        className={`w-7 h-7 rounded-xl flex items-center justify-center text-[10px] font-bold text-white bg-gradient-to-r ${cat.gradient} shrink-0 shadow-xs`}
+                      >
+                        {cat.number}
+                      </span>
+                      <div className="min-w-0">
+                        <span className="text-xs font-bold text-[#1B1325] dark:text-[#FAF0F8] block truncate">
+                          {cat.title}
+                        </span>
+                        <span className="text-[10px] text-[#5D5070] dark:text-[#D8CEE9] block truncate">
+                          {cat.chapter}
                         </span>
                       </div>
-
-                      <div className="p-6 space-y-3">
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="text-xs font-medium text-[#0E7C71] dark:text-[#5EEAD4] tabular-nums">
-                            {categoryCount} {categoryCount === 1 ? 'Outlet' : 'Houses'}
-                          </span>
-                          <ArrowUpRight className="w-4 h-4 text-[#C9523C] dark:text-[#F48C74] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                        </div>
-                        <h3 className="font-display text-2xl font-semibold text-[#1B1325] dark:text-[#F6EFE7]">
-                          {cat.title}
-                        </h3>
-                        <p className="text-sm leading-relaxed text-[#433754] dark:text-[#D8CEE9]">
-                          {cat.subtitle}
-                        </p>
-                      </div>
                     </div>
+                    <ArrowRight
+                      className={`w-4 h-4 text-[#EC4899] dark:text-[#F472B6] shrink-0 transition-transform ${
+                        isSelected ? 'translate-x-0.5 opacity-100' : 'opacity-40'
+                      }`}
+                    />
+                  </button>
+                );
+              })}
+            </div>
 
-                    <div className="px-6 pb-5 pt-1">
-                      <span className="text-xs font-semibold uppercase tracking-wider text-[#0E7C71] dark:text-[#5EEAD4] group-hover:underline inline-flex items-center gap-1">
-                        <span>Explore Category</span>
-                        <span>→</span>
-                      </span>
-                    </div>
+            {/* Gradient Pill CTA Button */}
+            <div className="pt-1">
+              <Link
+                to={activeCategory.route}
+                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 text-xs font-bold uppercase tracking-[0.14em] rounded-2xl bg-gradient-to-r from-[#701A75] via-[#86198F] to-[#9D174D] dark:from-[#A855F7] dark:via-[#EC4899] dark:to-[#F43F5E] text-white shadow-lg hover:opacity-95 transition-all cursor-pointer"
+              >
+                <span>Explore {activeCategory.title} ↗</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* RIGHT COLUMN: Horizontally Overlapping Stadium-Rounded Images */}
+          <div className="lg:col-span-7 relative flex items-center justify-start overflow-visible pt-4 lg:pt-0">
+            <div className="flex items-center -space-x-8 sm:-space-x-12 w-full select-none">
+              {/* Primary Stadium-Rounded Image Panel (Dominant Hero) */}
+              <div className="relative w-[54%] aspect-[16/11] rounded-[2.5rem] overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 z-30 ring-2 ring-[#EC4899]/30 transition-all duration-500 hover:scale-[1.03] group cursor-pointer">
+                <ResilientImage
+                  src={activeCategory.mainImage}
+                  alt={activeCategory.title}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
+                <div className="absolute top-4 left-4 z-20">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-black/60 text-white/95 backdrop-blur-md border border-white/20">
+                    Chapter {activeCategory.number} · {activeCategory.floorBadge}
+                  </span>
+                </div>
+                <div className="absolute bottom-4 left-4 right-4 z-20 flex items-center justify-between gap-1">
+                  <div>
+                    <span className="text-[10px] font-mono text-[#F472B6] block truncate">
+                      {activeCategory.chapter}
+                    </span>
+                    <h4 className="text-xs sm:text-sm font-bold text-white drop-shadow-sm truncate">
+                      {activeCategory.title}
+                    </h4>
                   </div>
-                </Link>
-              );
-            })}
+                  <span className="text-[9px] font-mono text-[#F472B6] bg-black/70 px-2 py-0.5 rounded-full backdrop-blur-md shrink-0">
+                    View →
+                  </span>
+                </div>
+              </div>
+
+              {/* Supporting Stadium-Rounded Image 1 */}
+              <div className="relative w-[38%] aspect-[3/3.8] rounded-[2.2rem] overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 z-20 transition-all duration-500 hover:scale-[1.04] hover:z-40 group cursor-pointer">
+                <ResilientImage
+                  src={activeCategory.supportingImage}
+                  alt={activeCategory.supportingCaption}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute bottom-3 left-3 right-3 z-20">
+                  <span className="text-xs font-black text-white bg-black/85 px-3 py-1 rounded-full backdrop-blur-md border border-white/20 block truncate shadow-md">
+                    {activeCategory.supportingCaption}
+                  </span>
+                </div>
+              </div>
+
+              {/* Supporting Stadium-Rounded Image 2 */}
+              <div className="relative w-[36%] aspect-[3/3.8] rounded-[2.2rem] overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 z-10 transition-all duration-500 hover:scale-[1.04] hover:z-40 group cursor-pointer">
+                <ResilientImage
+                  src={activeCategory.accentImage}
+                  alt={activeCategory.accentCaption}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute bottom-3 left-3 right-3 z-20">
+                  <span className="text-[9px] font-bold text-white/90 bg-black/75 px-2.5 py-1 rounded-full backdrop-blur-md block truncate">
+                    {activeCategory.accentCaption}
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Dynamic Dot Pagination Indicator */}
-        <div className="flex items-center justify-center gap-2 mt-8">
-          {Array.from({ length: maxIndex + 1 }).map((_, idx) => (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => scrollToIndex(idx)}
-              aria-label={`Go to slide ${idx + 1}`}
-              className={`h-1.5 transition-all duration-300 rounded-full cursor-pointer ${
-                currentIndex === idx
-                  ? 'w-8 bg-[#0E7C71] dark:bg-[#5EEAD4]'
-                  : 'w-2 bg-[#2D1D48]/20 dark:bg-[#E2D4FF]/25 hover:bg-[#0E7C71]/50'
-              }`}
-            />
-          ))}
-        </div>
       </div>
     </section>
   );

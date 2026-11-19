@@ -15,7 +15,7 @@ const SEASONAL_THEMES = [
     tag: 'Festive Atrium · Season Highlights',
     title: 'Festive Wardrobe & Jewellery Gatherings',
     summary:
-      'Celebrate festive elegance with ceremonial gold and diamond masterpieces at Tanishq, contemporary fusion fashion at W for Woman, and bespoke styling at Looks Salon.',
+      'Festive gold at Tanishq, fusion wear at W & Looks Salon styling.',
     relatedBrandIds: ['tanishq', 'w-for-woman', 'looks-salon'],
     image: ARCHITECTURAL_GALLERY[4],
     timing: 'Daily · 10:00 AM – 10:00 PM',
@@ -26,7 +26,7 @@ const SEASONAL_THEMES = [
     tag: 'Weekend Special · Movies & Dining',
     title: 'Cinema & Family Buffet Evenings',
     summary:
-      'Catch the latest blockbusters on crystal-clear laser screens at INOX Cinemas, paired with live tabletop charcoal grills at Barbeque Nation and slow-simmered Punjabi dining at Pind Balluchi.',
+      'Laser blockbusters at INOX & live grills at Barbeque Nation.',
     relatedBrandIds: ['inox-cinemas', 'barbeque-nation', 'pind-balluchi'],
     image: ARCHITECTURAL_GALLERY[11],
     timing: 'Every Weekend · 11:00 AM – 11:00 PM',
@@ -37,7 +37,7 @@ const SEASONAL_THEMES = [
     tag: 'Sport & Lifestyle · Activewear',
     title: 'Athletic Footwear & Weekend Style Walk',
     summary:
-      'Step out in global athletic performance trainers at Adidas, Puma, and Skechers, complemented by heritage denim styles and smart casuals at Levi’s Store and Allen Solly.',
+      'Athletic trainers at Adidas, Puma & casuals at Levi’s Store.',
     relatedBrandIds: ['adidas', 'puma', 'levis-store'],
     image: ARCHITECTURAL_GALLERY[9],
     timing: 'Daily · Mall Hours',
@@ -95,7 +95,7 @@ export function WhatsOnPage({ onInspectBrand }) {
             </h1>
 
             <p className="text-sm sm:text-base text-[#433754] dark:text-[#D8CEE9] leading-relaxed">
-              Explore seasonal showcases, festive collections, weekend movie screenings, and dining happenings across Gorakhpur&apos;s premier destination.
+              Seasonal showcases, festive collections &amp; weekend screenings.
             </p>
           </div>
 

@@ -6,6 +6,7 @@ import {
   Flame,
   Sparkles,
   Utensils,
+  ChevronLeft,
   ChevronRight,
   ArrowRight,
   CheckCircle2,
@@ -406,6 +407,77 @@ const PIZZA_TABS = [
   },
 ];
 
+const DINING_ATMOSPHERES = [
+  {
+    id: 'grills',
+    title: 'Live Table Grills',
+    venue: 'Barbeque Nation',
+    kicker: 'Interactive Feast',
+    tag: 'Smoked Skewers & Limitless Courses',
+    description: 'Charcoal-embedded table skewers, custom spice glazes, and limitless multi-course feasts at Barbeque Nation.',
+    sceneImage: SCENE_IMAGES.diningScene3,
+    foodImage: BRAND_IMAGES.barbequeNation,
+    palette: {
+      accent: '#D63F28',
+      badge: 'bg-[#D63F28]/15 text-[#FFA07A] border-[#D63F28]/30',
+      glow: 'rgba(214, 63, 40, 0.35)',
+    },
+    icon: Flame,
+    outletIndex: 0,
+  },
+  {
+    id: 'north-indian',
+    title: 'North Indian & Awadhi',
+    venue: 'Pind Balluchi & The Mirch Masala',
+    kicker: 'Royal Clay-Oven Heritage',
+    tag: 'Dum Handi & Clay Tandoor',
+    description: 'Slow-dum handi biryanis, 18-hour simmered dal makhani, and clay-tandoor kebabs basted with aromatic desi ghee.',
+    sceneImage: SCENE_IMAGES.diningScene4,
+    foodImage: BRAND_IMAGES.pindBalluchi,
+    palette: {
+      accent: '#B36624',
+      badge: 'bg-[#B36624]/15 text-[#FDE68A] border-[#B36624]/30',
+      glow: 'rgba(179, 102, 36, 0.35)',
+    },
+    icon: Utensils,
+    outletIndex: 3,
+  },
+  {
+    id: 'southern',
+    title: 'Southern & Pure Veg',
+    venue: 'Dosa Plaza & Subrasa',
+    kicker: 'Coastal & Pure Vegetarian',
+    tag: 'Crispy Fusion Dosas & Filter Kaapi',
+    description: 'Crispy golden fusion dosas, stone-ground coconut chutneys, degree filter kaapi, and wholesome heritage thalis.',
+    sceneImage: SCENE_IMAGES.diningScene2,
+    foodImage: BRAND_IMAGES.dosaPlaza,
+    palette: {
+      accent: '#0E7C71',
+      badge: 'bg-[#0E7C71]/15 text-[#5EEAD4] border-[#0E7C71]/30',
+      glow: 'rgba(14, 124, 113, 0.35)',
+    },
+    icon: Heart,
+    outletIndex: 5,
+  },
+  {
+    id: 'banquets',
+    title: 'Banquets & Global Bites',
+    venue: 'Rangrezza, Pizza Hut & KFC',
+    kicker: 'Celebrations & Comfort Dining',
+    tag: '300-Guest Suites & Fast Casual',
+    description: 'Grand 300-guest celebratory banquet suites alongside hot pan pizzas, crispy chicken buckets, and artisanal bakery delights.',
+    sceneImage: SCENE_IMAGES.dining3dTerrace,
+    foodImage: BRAND_IMAGES.rangrezza,
+    palette: {
+      accent: '#7C3AED',
+      badge: 'bg-[#7C3AED]/15 text-[#C084FC] border-[#7C3AED]/30',
+      glow: 'rgba(124, 58, 237, 0.35)',
+    },
+    icon: Users,
+    outletIndex: 7,
+  },
+];
+
 export function DiningPage({ onInspectBrand }) {
   const heroRef = useRef(null);
   const flameRef = useRef(null);
@@ -421,6 +493,9 @@ export function DiningPage({ onInspectBrand }) {
   // Active tab & swapped state for Section 3 (Warm Champagne Stone-Baked Showcase)
   const [activePizzaTab, setActivePizzaTab] = useState(0);
   const [swappedPizzaImage, setSwappedPizzaImage] = useState(false);
+
+  // Active atmosphere selection for Section 4 (One-by-One Sequential Showcase)
+  const [activeAtmosphereIndex, setActiveAtmosphereIndex] = useState(0);
 
   const activeOutlet = APPROVED_DINING_OUTLETS[selectedOutletIndex];
   const activePanel = activeOutlet.panels[selectedPanelIndex];
@@ -509,14 +584,9 @@ export function DiningPage({ onInspectBrand }) {
                   Third Floor Flavours
                 </h1>
 
-                {/* Subtitle */}
-                <p className="text-sm sm:text-lg text-[#5D5070] dark:text-[#D8CEE9] leading-relaxed max-w-xl">
-                  Live table grills, crispy golden chicken &amp; oven-baked pizzas served across CITY MALL&apos;s sunlit culinary deck.
-                </p>
-
-                {/* Supporting Narrative Text */}
-                <p className="text-xs sm:text-sm text-[#736388] dark:text-[#B5A7D0] leading-relaxed max-w-xl">
-                  A sun-drenched culinary promenade bringing together 9 verified dining destinations — from interactive charcoal skewers and 450° stone-baked ovens to royal Awadhi gravies and degree filter kaapi.
+                {/* Subtitle - Crisp & Needful */}
+                <p className="text-sm sm:text-lg text-[#3D2E50] dark:text-[#D8CEE9] font-medium leading-relaxed max-w-xl">
+                  Level 3 Dining Promenade · 9 Approved Outlets.
                 </p>
               </div>
 
@@ -631,13 +701,13 @@ export function DiningPage({ onInspectBrand }) {
       <section
         ref={flameRef}
         id="dining-flame"
-        className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-16 sm:py-24 border-b border-[#D63F28]/25 bg-[#170605] text-[#F6EFE7]"
+        className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-16 sm:py-24 border-b border-[#2D1D48]/14 dark:border-[#D63F28]/25 bg-[#FAF4ED] dark:bg-[#170605] text-[#1B1325] dark:text-[#F6EFE7]"
       >
         <VideoSectionBackground
           variant="dining"
           eager
-          videoOpacityClassName="opacity-85"
-          tintClassName="bg-gradient-to-tr from-[#160504]/96 via-[#250A07]/88 to-[#130504]/96"
+          videoOpacityClassName="opacity-80 dark:opacity-75"
+          tintClassName="bg-gradient-to-tr from-[#FAF4ED]/88 via-[#FCEAD2]/40 to-[#F3E5F5]/65 dark:from-[#160504]/96 dark:via-[#250A07]/88 dark:to-[#130504]/96"
         />
 
         <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
@@ -653,7 +723,7 @@ export function DiningPage({ onInspectBrand }) {
                   className={`group flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-300 cursor-pointer ${
                     isActive
                       ? 'bg-[#D63F28] text-white shadow-lg ring-2 ring-[#FFA07A]/40 -translate-y-0.5'
-                      : 'bg-white/10 hover:bg-white/18 text-white/80 hover:text-white border border-white/15 backdrop-blur-md'
+                      : 'bg-white/85 dark:bg-white/10 hover:bg-white text-[#1B1325] dark:text-white/80 border border-[#2D1D48]/15 dark:border-white/15 backdrop-blur-md'
                   }`}
                 >
                   <span
@@ -668,86 +738,75 @@ export function DiningPage({ onInspectBrand }) {
 
           {/* Main Cinematic Split Showcase */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
-            {/* LEFT COLUMN: Brand Header, Headline, Narrative & 3 Information Panels (6 cols) */}
+            {/* LEFT COLUMN: Clean Direct Typography (Zero Card Box) */}
             <div className="lg:col-span-6 space-y-5">
-              <div className="space-y-1.5">
-                <div className="flex items-center gap-3">
-                  <div
-                    className="px-3 py-1.5 rounded-lg text-white font-black text-xs tracking-wider shadow-md uppercase"
+              <div className="space-y-2">
+                <div className="flex items-center gap-2.5">
+                  <span
+                    className="w-10 h-10 rounded-2xl flex items-center justify-center text-white font-black text-sm shadow-md tracking-wider"
                     style={{ backgroundColor: activeOutlet.accentColor || '#D63F28' }}
                   >
-                    {activeOutlet.name}
-                  </div>
-                  <span className="text-[11px] font-bold tracking-[0.16em] uppercase text-[#FFA07A]">
-                    {activeOutlet.kicker}
+                    {activeOutlet.monogram || activeOutlet.name.slice(0, 2).toUpperCase()}
                   </span>
+                  <div>
+                    <span className="text-[10px] font-extrabold tracking-[0.2em] uppercase text-[#C9523C] dark:text-[#FFA07A] block">
+                      {activeOutlet.kicker}
+                    </span>
+                    <span className="text-xs text-[#5D5070] dark:text-white/70 font-mono">
+                      {activeOutlet.floor}
+                    </span>
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#FFA07A]/90 pt-1">
-                  <Flame className="w-3.5 h-3.5 text-[#D63F28]" />
-                  <span>{activeOutlet.floor}</span>
-                </div>
+                {/* PROMINENT HERO BRAND NAME */}
+                <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-[#1B1325] dark:text-[#FFF6EA] tracking-tight leading-[1.05]">
+                  {activeOutlet.name}
+                </h2>
+
+                <p className="text-base sm:text-lg font-bold text-[#C9523C] dark:text-[#FFA07A] leading-snug">
+                  {activeOutlet.headline}
+                </p>
               </div>
 
-              <h2 className="font-display text-3xl sm:text-4xl lg:text-[2.85rem] font-bold leading-[1.08] text-[#FFF6EA] tracking-tight">
-                {activeOutlet.headline}
-              </h2>
-
-              <p className="text-sm sm:text-base text-white/80 leading-relaxed max-w-xl">
-                {activeOutlet.description}
+              {/* Needful single-sentence description */}
+              <p className="text-sm sm:text-base text-[#3D2E50] dark:text-[#D8CEE9] font-medium leading-relaxed max-w-xl">
+                {activeOutlet.description.split('.')[0]}.
               </p>
 
-              {/* Three Interactive Information Panels */}
-              <div className="space-y-2.5 pt-1">
+              {/* Three Interactive Information Panels — Minimal Pills */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
                 {activeOutlet.panels.map((panel, idx) => {
                   const isActive = idx === selectedPanelIndex;
                   return (
-                    <div
+                    <button
                       key={panel.id}
+                      type="button"
                       onClick={() => {
                         setSelectedPanelIndex(idx);
                         setSwappedImage(false);
                       }}
-                      className={`p-3.5 sm:p-4 rounded-2xl transition-all duration-300 cursor-pointer ${
+                      className={`px-3.5 py-2.5 rounded-xl transition-all cursor-pointer text-left border ${
                         isActive
-                          ? 'bg-gradient-to-r from-[#D63F28] to-[#BA2E1B] text-white shadow-xl ring-1 ring-[#FFA07A]/40 -translate-y-0.5'
-                          : 'bg-white/8 hover:bg-white/14 border border-white/10 text-white/80 hover:text-white backdrop-blur-md'
+                          ? 'bg-[#D63F28] text-white shadow-md ring-1 ring-[#FFA07A]/50'
+                          : 'bg-black/5 dark:bg-white/10 hover:bg-black/10 border-black/10 dark:border-white/10 text-[#1B1325] dark:text-white/90'
                       }`}
                     >
-                      <div className="flex items-center justify-between gap-4 mb-1">
-                        <h3 className="font-display text-sm sm:text-base font-bold tracking-tight">
-                          {panel.title}
-                        </h3>
-                        <span
-                          className={`text-[9px] font-mono uppercase tracking-widest px-2 py-0.5 rounded-full font-bold ${
-                            isActive
-                              ? 'bg-black/35 text-white'
-                              : 'bg-white/12 text-white/70'
-                          }`}
-                        >
-                          {isActive ? 'VIEWING' : 'EXPLORE'}
-                        </span>
-                      </div>
-                      <p
-                        className={`text-xs leading-relaxed ${
-                          isActive ? 'text-white/95' : 'text-white/65'
-                        }`}
-                      >
-                        {panel.description}
-                      </p>
-                    </div>
+                      <h3 className="font-display text-xs font-bold truncate">
+                        {panel.title}
+                      </h3>
+                    </button>
                   );
                 })}
               </div>
 
-              {/* Bottom Info Strip: Operating Hours & Floor Location */}
-              <div className="pt-2 flex flex-wrap items-center gap-6 text-xs text-[#FFA07A]/85 font-mono">
-                <div className="flex items-center gap-2">
-                  <Clock className="w-3.5 h-3.5 text-[#D63F28]" />
+              {/* Needful Quick Specs Strip */}
+              <div className="pt-2 flex flex-wrap items-center gap-3 text-xs font-mono">
+                <div className="flex items-center gap-1.5 bg-black/5 dark:bg-black/40 text-[#433754] dark:text-[#FFA07A] px-3 py-1.5 rounded-full border border-[#2D1D48]/10 dark:border-white/10">
+                  <Clock className="w-3.5 h-3.5 text-[#C9523C] dark:text-[#FFA07A]" />
                   <span>{activeOutlet.hours}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-3.5 h-3.5 text-[#D63F28]" />
+                <div className="flex items-center gap-1.5 bg-black/5 dark:bg-black/40 text-[#433754] dark:text-[#FFA07A] px-3 py-1.5 rounded-full border border-[#2D1D48]/10 dark:border-white/10">
+                  <MapPin className="w-3.5 h-3.5 text-[#C9523C] dark:text-[#FFA07A]" />
                   <span>{activeOutlet.location}</span>
                 </div>
               </div>
@@ -755,7 +814,7 @@ export function DiningPage({ onInspectBrand }) {
 
             {/* RIGHT COLUMN: Large Food Image + Overlapping Interior Thumbnail (6 cols) */}
             <div className="lg:col-span-6 relative">
-              <div className="relative aspect-[16/11] sm:aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border border-white/20 bg-[#240A07]">
+              <div className="relative aspect-[16/11] sm:aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 bg-[#240A07]">
                 <ResilientImage
                   key={primaryVisual}
                   src={primaryVisual}
@@ -763,6 +822,17 @@ export function DiningPage({ onInspectBrand }) {
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/15 pointer-events-none" />
+
+                {/* Floating Brand Watermark Badge on Image */}
+                <div className="absolute top-4 left-4 z-20 flex items-center gap-2 bg-black/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/20 shadow-lg">
+                  <span
+                    className="w-2.5 h-2.5 rounded-full"
+                    style={{ backgroundColor: activeOutlet.accentColor || '#FFA07A' }}
+                  />
+                  <span className="text-xs font-extrabold text-white tracking-wider">
+                    {activeOutlet.name}
+                  </span>
+                </div>
 
                 <div className="absolute bottom-4 left-4 z-20 bg-black/75 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/20">
                   <span className="text-xs font-bold uppercase tracking-wider text-[#FFA07A]">
@@ -810,82 +880,75 @@ export function DiningPage({ onInspectBrand }) {
 
         <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            {/* LEFT COLUMN: Floating Rounded Card with Stone-Baked Freshness (6 cols) */}
-            <div className="lg:col-span-6">
-              <div className="bg-[#FFFDF9]/95 dark:bg-[#20141D]/95 backdrop-blur-md p-7 sm:p-9 rounded-3xl border border-white/80 dark:border-white/10 shadow-2xl space-y-5">
-                <div className="space-y-1.5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-[#D63F28] text-white flex items-center justify-center font-black text-xs shadow-md">
-                      PH
-                    </div>
-                    <div>
-                      <h3 className="font-display text-xl font-bold text-[#1B1325] dark:text-[#F6EFE7] tracking-tight">
-                        Pizza Hut
-                      </h3>
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#D63F28]">
-                        OVEN-BAKED FRESHNESS
-                      </span>
-                    </div>
+            {/* LEFT COLUMN: Clean Direct Typography (Zero Card Box) */}
+            <div className="lg:col-span-6 space-y-5">
+              <div className="space-y-1.5">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-[#D63F28] text-white flex items-center justify-center font-black text-xs shadow-md">
+                    PH
                   </div>
-
-                  <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#D63F28] pt-1">
-                    <Pizza className="w-3.5 h-3.5" />
-                    <span>THIRD FLOOR · STONE-BAKED FRESHNESS</span>
+                  <div>
+                    <h3 className="font-display text-xl font-bold text-[#1B1325] dark:text-[#F6EFE7] tracking-tight">
+                      Pizza Hut
+                    </h3>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#D63F28]">
+                      OVEN-BAKED FRESHNESS
+                    </span>
                   </div>
                 </div>
 
-                <h3 className="font-display text-3xl sm:text-4xl font-bold leading-[1.08] text-[#1B1325] dark:text-[#F6EFE7] tracking-tight">
-                  Fresh Dough. 450° Oven Heat.
-                </h3>
-
-                <p className="text-sm leading-relaxed text-[#5D5070] dark:text-[#D8CEE9]">
-                  Hand-stretched dough with bubbling mozzarella, stuffed garlic breadsticks, and warm choco lava cakes baked fresh to order.
-                </p>
-
-                {/* Interactive Pill Tabs */}
-                <div className="flex flex-wrap items-center gap-2.5 pt-1">
-                  {PIZZA_TABS.map((tab, idx) => {
-                    const isActive = idx === activePizzaTab;
-                    return (
-                      <button
-                        key={tab.id}
-                        type="button"
-                        onClick={() => {
-                          setActivePizzaTab(idx);
-                          setSwappedPizzaImage(false);
-                        }}
-                        className={`px-4 py-2 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer ${
-                          isActive
-                            ? 'bg-[#0E5A7A] text-white shadow-md ring-1 ring-[#0E5A7A]/30 -translate-y-0.5'
-                            : 'bg-white/80 dark:bg-white/8 text-[#433754] dark:text-[#D8CEE9] border border-[#2D1D48]/14 dark:border-white/12 hover:border-[#0E5A7A]'
-                        }`}
-                      >
-                        {tab.label}
-                      </button>
-                    );
-                  })}
+                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#D63F28] pt-1">
+                  <Pizza className="w-3.5 h-3.5" />
+                  <span>THIRD FLOOR · STONE-BAKED FRESHNESS</span>
                 </div>
+              </div>
 
-                {/* Dynamic Detail Text */}
-                <div className="p-4 rounded-2xl bg-[#0E5A7A]/6 dark:bg-[#0E5A7A]/15 border border-[#0E5A7A]/15 space-y-1">
-                  <h4 className="font-display text-sm sm:text-base font-bold text-[#0E5A7A] dark:text-[#5EEAD4]">
-                    {currentPizza.title}
-                  </h4>
-                  <p className="text-xs text-[#433754] dark:text-[#D8CEE9] leading-relaxed">
-                    {currentPizza.description}
-                  </p>
+              <h3 className="font-display text-3xl sm:text-4xl font-bold leading-[1.08] text-[#1B1325] dark:text-[#F6EFE7] tracking-tight">
+                Fresh Dough. 450° Oven Heat.
+              </h3>
+
+              <p className="text-sm sm:text-base text-[#3D2E50] dark:text-[#D8CEE9] font-medium leading-relaxed max-w-xl">
+                Stone-baked crusts, sides &amp; warm desserts.
+              </p>
+
+              {/* Interactive Pill Tabs */}
+              <div className="flex flex-wrap items-center gap-2 pt-1">
+                {PIZZA_TABS.map((tab, idx) => {
+                  const isActive = idx === activePizzaTab;
+                  return (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      onClick={() => {
+                        setActivePizzaTab(idx);
+                        setSwappedPizzaImage(false);
+                      }}
+                      className={`px-4 py-2 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer ${
+                        isActive
+                          ? 'bg-[#0E5A7A] text-white shadow-md -translate-y-0.5'
+                          : 'bg-black/5 dark:bg-white/10 text-[#433754] dark:text-[#D8CEE9] border border-black/10 dark:border-white/10 hover:border-[#0E5A7A]'
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Dynamic Detail Text — Clean Single Line */}
+              <p className="text-xs sm:text-sm text-[#0E5A7A] dark:text-[#5EEAD4] font-semibold">
+                ✦ {currentPizza.title}: <span className="font-normal text-[#3D2E50] dark:text-[#D8CEE9]">{currentPizza.description}</span>
+              </p>
+
+              {/* Bottom Operating Info */}
+              <div className="pt-2 flex flex-wrap items-center gap-6 text-xs text-[#5D5070] dark:text-[#B5A7D0] font-mono border-t border-[#2D1D48]/10 dark:border-white/10">
+                <div className="flex items-center gap-2">
+                  <Clock className="w-3.5 h-3.5 text-[#D63F28]" />
+                  <span>11:00 AM – 11:00 PM</span>
                 </div>
-
-                {/* Bottom Operating Info */}
-                <div className="pt-2 flex flex-wrap items-center gap-6 text-xs text-[#5D5070] dark:text-[#B5A7D0] font-mono border-t border-[#2D1D48]/10 dark:border-white/10">
-                  <div className="flex items-center gap-2">
-                    <Clock className="w-3.5 h-3.5 text-[#D63F28]" />
-                    <span>11:00 AM – 11:00 PM</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-3.5 h-3.5 text-[#D63F28]" />
-                    <span>Third Floor Counter</span>
-                  </div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-3.5 h-3.5 text-[#D63F28]" />
+                  <span>Third Floor Counter</span>
                 </div>
               </div>
             </div>
@@ -935,77 +998,132 @@ export function DiningPage({ onInspectBrand }) {
       <section
         ref={mosaicRef}
         id="dining-styles"
-        className="relative overflow-hidden py-16 sm:py-24 bg-[#1B0A08] border-b border-white/10 text-[#F6EFE7]"
+        className="relative overflow-hidden py-16 sm:py-24 bg-[#FAF4ED] dark:bg-[#1B0A08] border-b border-[#2D1D48]/14 dark:border-white/10 text-[#1B1325] dark:text-[#F6EFE7]"
       >
         <VideoSectionBackground
           variant="events"
-          videoOpacityClassName="opacity-70"
-          tintClassName="bg-gradient-to-tr from-[#1B0A08]/92 via-[#230C0A]/85 to-[#1B0A08]/92"
+          videoOpacityClassName="opacity-70 dark:opacity-60"
+          tintClassName="bg-gradient-to-tr from-[#FAF4ED]/88 via-[#FCEAD2]/40 to-[#F3E5F5]/65 dark:from-[#1B0A08]/92 dark:via-[#230C0A]/85 dark:to-[#1B0A08]/92"
         />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 space-y-10">
-          <div data-motion="reveal" className="max-w-3xl space-y-3">
-            <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.18em] uppercase text-[#FFA07A]">
-              <Flame className="w-4 h-4 text-[#D63F28]" />
-              <span>Culinary Expressions</span>
-            </span>
-            <h2 className="font-display text-3xl sm:text-4xl font-semibold text-[#FFF6EA]">
-              Four Signature Dining Atmospheres
-            </h2>
-            <p className="text-sm sm:text-base text-white/70">
-              Every dining destination at CITY MALL, Gorakhpur is created around a distinctive mood—from live table grills to authentic regional thalis and festive celebrations.
-            </p>
-          </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+          {(() => {
+            const currentAtm = DINING_ATMOSPHERES[activeAtmosphereIndex];
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white/6 backdrop-blur-md p-6 rounded-2xl border border-white/12 shadow-xl space-y-3">
-              <div className="w-10 h-10 rounded-full bg-[#D63F28]/25 flex items-center justify-center text-[#FFA07A]">
-                <Flame className="w-5 h-5" />
-              </div>
-              <h3 className="font-display text-lg font-bold text-white">
-                Live Table Grills
-              </h3>
-              <p className="text-xs text-white/70 leading-relaxed">
-                Charcoal-embedded table skewers, custom spice glazes, and limitless feast courses at Barbeque Nation.
-              </p>
-            </div>
+            return (
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                {/* Left Column: Clean Direct Typography & 4 Interactive Atmosphere Rows (5 cols) */}
+                <div className="lg:col-span-5 space-y-6" data-motion="reveal">
+                  <div className="space-y-2">
+                    <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.2em] uppercase text-[#C9523C] dark:text-[#FFA07A]">
+                      <Flame className="w-4 h-4 text-[#D63F28]" />
+                      <span>Culinary Expressions</span>
+                    </span>
+                    <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-[#1B1325] dark:text-[#FAF0F8] tracking-tight leading-[1.08]">
+                      Four Dining Atmospheres
+                    </h2>
+                    <p className="text-sm sm:text-base text-[#3D2E50] dark:text-[#D8CEE9] font-medium leading-relaxed">
+                      Distinctive culinary moods across Level 3.
+                    </p>
+                  </div>
 
-            <div className="bg-white/6 backdrop-blur-md p-6 rounded-2xl border border-white/12 shadow-xl space-y-3">
-              <div className="w-10 h-10 rounded-full bg-[#FFA07A]/25 flex items-center justify-center text-[#FFA07A]">
-                <Utensils className="w-5 h-5" />
-              </div>
-              <h3 className="font-display text-lg font-bold text-white">
-                North Indian &amp; Awadhi
-              </h3>
-              <p className="text-xs text-white/70 leading-relaxed">
-                Slow-dum handi biryanis, royal dal makhani, and clay-tandoor kebabs at Pind Balluchi &amp; The Mirch Masala.
-              </p>
-            </div>
+                  {/* 4 Interactive Row Buttons (Zero Bulky Cards) */}
+                  <div className="space-y-2 pt-1">
+                    {DINING_ATMOSPHERES.map((atm, idx) => {
+                      const isSelected = idx === activeAtmosphereIndex;
 
-            <div className="bg-white/6 backdrop-blur-md p-6 rounded-2xl border border-white/12 shadow-xl space-y-3">
-              <div className="w-10 h-10 rounded-full bg-[#5EEAD4]/25 flex items-center justify-center text-[#5EEAD4]">
-                <Heart className="w-5 h-5" />
-              </div>
-              <h3 className="font-display text-lg font-bold text-white">
-                Southern &amp; Pure Veg
-              </h3>
-              <p className="text-xs text-white/70 leading-relaxed">
-                Crispy golden fusion dosas, aromatic filter kaapi, and heritage thalis at Dosa Plaza &amp; Subrasa.
-              </p>
-            </div>
+                      return (
+                        <button
+                          key={atm.id}
+                          type="button"
+                          onMouseEnter={() => setActiveAtmosphereIndex(idx)}
+                          onClick={() => setActiveAtmosphereIndex(idx)}
+                          className={`w-full flex items-center justify-between gap-3 p-3 rounded-2xl transition-all cursor-pointer text-left border ${
+                            isSelected
+                              ? 'bg-black/5 dark:bg-white/15 border-[#D63F28] shadow-xs'
+                              : 'bg-transparent border-transparent hover:bg-black/5 dark:hover:bg-white/5'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3 min-w-0">
+                            <span
+                              className="w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold text-white shrink-0 shadow-xs"
+                              style={{ backgroundColor: atm.palette.accent }}
+                            >
+                              0{idx + 1}
+                            </span>
+                            <div className="min-w-0">
+                              <span className="text-sm font-extrabold text-[#1B1325] dark:text-[#FAF0F8] block truncate">
+                                {atm.title}
+                              </span>
+                              <span className="text-[11px] text-[#5D5070] dark:text-[#D8CEE9] block truncate font-medium">
+                                {atm.venue}
+                              </span>
+                            </div>
+                          </div>
+                          <ArrowRight
+                            className={`w-4 h-4 text-[#D63F28] dark:text-[#FFA07A] shrink-0 transition-transform ${
+                              isSelected ? 'translate-x-0.5 opacity-100' : 'opacity-40'
+                            }`}
+                          />
+                        </button>
+                      );
+                    })}
+                  </div>
 
-            <div className="bg-white/6 backdrop-blur-md p-6 rounded-2xl border border-white/12 shadow-xl space-y-3">
-              <div className="w-10 h-10 rounded-full bg-[#BFA1FF]/25 flex items-center justify-center text-[#BFA1FF]">
-                <Users className="w-5 h-5" />
+                  {/* Explore Button */}
+                  <div className="pt-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedOutletIndex(currentAtm.outletIndex);
+                        scrollToSection('dining-flame');
+                      }}
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-xs font-bold uppercase tracking-[0.14em] bg-gradient-to-r from-[#D63F28] to-[#B36624] text-white shadow-lg hover:opacity-95 hover:scale-[1.02] transition-all cursor-pointer"
+                    >
+                      <span>Explore {currentAtm.venue.split('&')[0].trim()}</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Right Column: Monumental Architectural Vitrine (Zero Humans, 7 cols) */}
+                <div className="lg:col-span-7 relative aspect-[16/10] rounded-[2.5rem] overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 bg-[#250B08] group">
+                  <ResilientImage
+                    src={currentAtm.sceneImage}
+                    alt={currentAtm.title}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
+
+                  {/* Top Floating Badge */}
+                  <div className="absolute top-4 left-4 z-20 flex items-center gap-2 bg-black/75 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/25 shadow-lg">
+                    <span
+                      className="w-2.5 h-2.5 rounded-full animate-pulse"
+                      style={{ backgroundColor: currentAtm.palette.accent }}
+                    />
+                    <span className="text-xs font-black text-white tracking-wide">
+                      Level 3 · {currentAtm.venue}
+                    </span>
+                  </div>
+
+                  {/* Bottom Captions */}
+                  <div className="absolute bottom-4 left-5 right-5 z-20 flex items-center justify-between gap-2">
+                    <div className="max-w-md">
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-[#FFA07A] block">
+                        {currentAtm.tag}
+                      </span>
+                      <h3 className="font-display text-xl sm:text-2xl font-black text-white leading-tight drop-shadow-md">
+                        {currentAtm.title}
+                      </h3>
+                    </div>
+                    <span className="text-xs font-mono font-bold text-white/90 bg-black/70 px-3 py-1 rounded-full backdrop-blur-md border border-white/15 shrink-0">
+                      Atmosphere 0{activeAtmosphereIndex + 1}
+                    </span>
+                  </div>
+                </div>
               </div>
-              <h3 className="font-display text-lg font-bold text-white">
-                Banquets &amp; Global Bites
-              </h3>
-              <p className="text-xs text-white/70 leading-relaxed">
-                300-guest celebratory banquet suites at Rangrezza alongside hot pan pizzas &amp; crispy chicken at Pizza Hut &amp; KFC.
-              </p>
-            </div>
-          </div>
+            );
+          })()}
         </div>
       </section>
 
@@ -1015,60 +1133,57 @@ export function DiningPage({ onInspectBrand }) {
       <section
         ref={terraceRef}
         id="dining-terrace"
-        className="relative overflow-hidden py-16 sm:py-24 bg-[#140605] border-b border-white/10 text-[#F6EFE7]"
+        className="relative overflow-hidden py-16 sm:py-24 border-b border-[#2D1D48]/14 dark:border-white/10 bg-[#FAF4ED] dark:bg-[#140605] text-[#1B1325] dark:text-[#F6EFE7]"
       >
         <VideoSectionBackground
           variant="explore"
-          videoOpacityClassName="opacity-75"
-          tintClassName="bg-gradient-to-tr from-[#140605]/94 via-[#1C0907]/88 to-[#140605]/94"
+          videoOpacityClassName="opacity-75 dark:opacity-60"
+          tintClassName="bg-gradient-to-tr from-[#FAF4ED]/88 via-[#FCEAD2]/45 to-[#F3E5F5]/70 dark:from-[#140605]/94 dark:via-[#1C0907]/88 dark:to-[#140605]/94"
         />
 
         <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          {/* Clean Direct Typography (Zero Card Box) */}
           <div className="lg:col-span-6 space-y-5">
-            <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.18em] uppercase text-[#FFA07A]">
-              <Sparkles className="w-4 h-4 text-[#D63F28]" />
+            <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.2em] uppercase text-[#C9523C] dark:text-[#FFA07A]">
+              <Sparkles className="w-4 h-4 text-[#C9523C] dark:text-[#FFA07A]" />
               <span>Spatial Atmosphere</span>
             </span>
 
-            <h2 className="font-display text-3xl sm:text-5xl font-semibold text-[#FFF6EA] leading-[1.08]">
-              The Sunlit Dining Terrace &amp; Food Promenade
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-[#1B1325] dark:text-[#FAF0F8] tracking-tight leading-[1.08]">
+              The Sunlit Dining Terrace
             </h2>
 
-            <p className="text-sm sm:text-base text-white/75 leading-relaxed">
-              Designed with expansive open skylights and double-height architectural glass canopies, the Dining Promenade on Level 3 pairs natural daylight dining with vibrant evening hospitality.
+            <p className="text-base sm:text-lg text-[#3D2E50] dark:text-[#D8CEE9] font-medium leading-relaxed max-w-xl">
+              Open architectural skylights &amp; glass canopies across Level 3.
             </p>
 
-            <div className="space-y-3 pt-2">
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-4 h-4 text-[#5EEAD4] mt-1 shrink-0" />
-                <span className="text-xs sm:text-sm text-white/80">
-                  Sunlit daytime terrace seating with ambient starlight evening chandeliers.
-                </span>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-4 h-4 text-[#5EEAD4] mt-1 shrink-0" />
-                <span className="text-xs sm:text-sm text-white/80">
-                  FSSAI-certified live kitchen viewing and rigorous hygiene protocols.
-                </span>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-4 h-4 text-[#5EEAD4] mt-1 shrink-0" />
-                <span className="text-xs sm:text-sm text-white/80">
-                  Dedicated family cabanas, kids high chairs, and stroller-accessible walkways.
-                </span>
-              </div>
+            <div className="flex flex-wrap items-center gap-2 pt-2 text-xs font-bold text-[#1B1325] dark:text-[#FAF0F8]">
+              <span className="px-3.5 py-1.5 rounded-full bg-black/5 dark:bg-white/10 border border-[#2D1D48]/15 dark:border-white/15">
+                ✦ Skylight Atrium
+              </span>
+              <span className="px-3.5 py-1.5 rounded-full bg-black/5 dark:bg-white/10 border border-[#2D1D48]/15 dark:border-white/15">
+                ✦ FSSAI Certified
+              </span>
+              <span className="px-3.5 py-1.5 rounded-full bg-black/5 dark:bg-white/10 border border-[#2D1D48]/15 dark:border-white/15">
+                ✦ Family Cabanas
+              </span>
             </div>
           </div>
 
-          <div className="lg:col-span-6 aspect-[16/10] rounded-3xl overflow-hidden border border-white/18 shadow-2xl bg-[#220B08]">
+          {/* Right Column: Stadium-Rounded Architectural Vitrine */}
+          <div className="lg:col-span-6 relative aspect-[16/10] rounded-[2.5rem] overflow-hidden border-3 border-white/95 dark:border-white/20 shadow-2xl bg-[#220B08] group">
             <ResilientImage
               src={ARCHITECTURAL_GALLERY[10]}
               alt="Culinary terrace ambience inside CITY MALL"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent pointer-events-none" />
+            <span className="absolute bottom-4 left-4 text-xs font-mono font-bold text-white bg-black/75 px-3 py-1 rounded-full backdrop-blur-md border border-white/20">
+              Level 3 · Central Terrace Concourse
+            </span>
           </div>
         </div>
       </section>
     </div>
   );
-}
+} 

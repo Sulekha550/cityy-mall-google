@@ -51,7 +51,7 @@ export function HomeDiningCinemaDualSection({ onInspectBrand }) {
 
             {/* Subtitle */}
             <p className="text-sm sm:text-base leading-relaxed text-[#D8CEE9]/85 max-w-lg">
-              Live table grills, golden wood-fired pizzas, authentic regional specialties &amp; quick crispy buckets in a vibrant social court.
+              Live table grills, wood-fired pizzas &amp; social dining promenade.
             </p>
 
             {/* Brand Pills Chips */}
@@ -158,7 +158,7 @@ export function HomeDiningCinemaDualSection({ onInspectBrand }) {
 
             {/* Subtitle */}
             <p className="text-sm sm:text-base leading-relaxed text-[#D8CEE9]/85 max-w-lg">
-              Laser projection, Dolby surround sound &amp; plush recliner auditoriums crowning CITY MALL, Gorakhpur.
+              Laser projection, Dolby Atmos &amp; plush recliner auditoriums.
             </p>
 
             {/* Dual Cinema Action Buttons */}

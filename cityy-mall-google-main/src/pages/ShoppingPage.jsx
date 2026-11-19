@@ -63,7 +63,7 @@ export function ShoppingPage({ initialCategory = null, onInspectBrand }) {
             <p className="text-base sm:text-lg text-[#433754] dark:text-[#D8CEE9]">
               {activeCategory
                 ? activeCategory.subtitle
-                : 'Browse apparel, athletic footwear, fine gold and watches, hair and beauty salons, bridal mehendi artistry, and everyday household shopping at Spencer’s.'}
+                : 'Apparel, athletic footwear, fine gold, salons & everyday essentials.'}
             </p>
           </div>
 

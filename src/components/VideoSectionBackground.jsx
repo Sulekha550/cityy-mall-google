@@ -1,86 +1,161 @@
 import { useEffect, useRef, useState } from 'react';
-import { attachMouseOnlyVideoController } from '../utilities/mouseVideoController';
+import { AbstractSectionBackground } from './AbstractSectionBackground';
 
 /**
- * Mouse-Controlled HTML5 Section Video Backdrop.
- * - Never auto-plays or drifts when idle.
- * - Plays smoothly at 0.25x speed when moving the mouse or scrolling inside the hovered section.
- * - Freezes cleanly on its current frame the moment mouse movement stops or leaves the section.
+ * Premium Video & Animated Section Backdrop.
+ * Mobile View: Runs continuously on GPU hardware decoding (autoPlay, muted, loop, playsInline)
+ * for buttery-smooth 60fps performance without CPU/decoder thread stalls.
+ * Desktop View: Interactive mouse-guided video and ambient motion.
  */
 export function VideoSectionBackground({
   videoAsset,
-  tintClassName = 'bg-gradient-to-b from-[#FBF4EB]/55 via-[#EFE6FA]/25 to-[#FDE8DF]/58 dark:from-[#151021]/55 dark:via-[#1D1630]/30 dark:to-[#151021]/65',
-  videoOpacityClassName = 'opacity-85 dark:opacity-75',
+  variant,
+  tintClassName,
+  className = '',
+  videoOpacityClassName = 'opacity-88 dark:opacity-78',
+  videoFilterClassName = '',
   eager = false,
+  playbackRate = 1,
+  renderVideo = false,
 }) {
-  const containerRef = useRef(null);
-  const visualLayerRef = useRef(null);
   const videoRef = useRef(null);
-  const [videoFailed, setVideoFailed] = useState(false);
-  const [videoReady, setVideoReady] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  // Unified homepage background video asset
+  const videoSrc = videoAsset?.src || '/videos/mall-hero.mp4';
+  const videoPoster = videoAsset?.poster || '/posters/mall-hero.webp';
 
   useEffect(() => {
-    setVideoFailed(false);
-    setVideoReady(false);
-  }, [videoAsset?.src]);
+    const video = videoRef.current;
+    if (!video || !videoSrc) return undefined;
 
-  useEffect(() => {
-    const containerEl = containerRef.current;
-    const videoEl = videoRef.current;
-    const visualLayerEl = visualLayerRef.current;
-    if (!containerEl || !videoEl || videoFailed) return undefined;
+    video.defaultMuted = true;
+    video.muted = true;
+    video.playsInline = true;
+    if (playbackRate && isFinite(playbackRate)) {
+      video.playbackRate = playbackRate;
+    }
 
-    const hostSection = containerEl.closest('section') || containerEl.parentElement;
-    return attachMouseOnlyVideoController(
-      hostSection,
-      videoEl,
-      visualLayerEl,
-      setVideoReady
-    );
-  }, [videoAsset?.src, videoFailed]);
+    // Strictly start paused - zero unwanted autoplay
+    video.pause();
+
+    // =========================================================================
+    // Activity-based controller: Video plays ONLY when mouse / touch is actively moving
+    // The moment mouse stops, cleanly pauses the video.
+    // =========================================================================
+    let isVideoPlaying = false;
+    let stopTimeout = null;
+    let prevX = 0;
+    let prevY = 0;
+
+    const playVideo = () => {
+      if (!isVideoPlaying) {
+        const p = video.play();
+        if (p !== undefined) {
+          p.then(() => {
+            isVideoPlaying = true;
+            setIsPlaying(true);
+          }).catch(() => {
+            video.muted = true;
+            video.play().then(() => {
+              isVideoPlaying = true;
+              setIsPlaying(true);
+            }).catch(() => {});
+          });
+        }
+      }
+    };
+
+    const pauseVideo = () => {
+      if (isVideoPlaying || !video.paused) {
+        video.pause();
+        isVideoPlaying = false;
+        setIsPlaying(false);
+      }
+    };
+
+    const handleActivity = (distance = 1) => {
+      if (distance > 0.5) {
+        playVideo();
+        if (stopTimeout) clearTimeout(stopTimeout);
+        // Cleanly pause 800ms after interaction stops
+        stopTimeout = setTimeout(() => {
+          pauseVideo();
+        }, 800);
+      }
+    };
+
+    const handleMouseMove = (e) => {
+      const dist = Math.hypot(e.clientX - prevX, e.clientY - prevY);
+      prevX = e.clientX;
+      prevY = e.clientY;
+      handleActivity(dist);
+    };
+
+    const handleWheel = (e) => {
+      const delta = Math.abs(e.deltaY) + Math.abs(e.deltaX);
+      if (delta > 0) handleActivity(5);
+    };
+
+    const handlePointerDown = () => {
+      handleActivity(5);
+    };
+
+    const handleScroll = () => {
+      handleActivity(5);
+    };
+
+    const handleTouchMove = () => {
+      handleActivity(5);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('wheel', handleWheel, { passive: true });
+    window.addEventListener('pointerdown', handlePointerDown, { passive: true });
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+
+    return () => {
+      if (stopTimeout) clearTimeout(stopTimeout);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('pointerdown', handlePointerDown);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('touchmove', handleTouchMove);
+      video.pause();
+    };
+  }, [videoSrc, playbackRate]);
 
   return (
     <div
-      ref={containerRef}
       aria-hidden="true"
-      className="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none"
+      className={`absolute inset-0 z-0 overflow-hidden pointer-events-none select-none ${className}`}
     >
-      <div
-        ref={visualLayerRef}
-        className="absolute inset-0 scale-105 will-change-transform"
-      >
-        {/* Static Architectural Poster Frame Underneath Until Video Decodes */}
-        {videoAsset?.fallbackImage && (!videoReady || videoFailed) && (
-          <img
-            src={videoAsset.fallbackImage}
-            alt=""
-            referrerPolicy="no-referrer"
-            loading={eager ? 'eager' : 'lazy'}
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-        )}
+      {/* 1. Actual Background MP4 Video (only when explicitly requested as standalone) */}
+      {renderVideo && videoSrc && (
+        <video
+          ref={videoRef}
+          src={videoSrc}
+          poster={videoPoster}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload={eager ? 'auto' : 'metadata'}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${videoOpacityClassName} ${videoFilterClassName}`}
+        />
+      )}
 
-        {/* Mouse-Only Controlled HTML5 Video (No autoPlay, 0.25x Mouse Playback) */}
-        {videoAsset?.src && !videoFailed && (
-          <video
-            key={videoAsset.src}
-            ref={videoRef}
-            src={videoAsset.src}
-            poster={videoAsset.poster}
-            muted
-            loop
-            playsInline
-            preload="auto"
-            onError={() => setVideoFailed(true)}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
-              videoReady ? videoOpacityClassName : 'opacity-0'
-            }`}
-          />
-        )}
-      </div>
-
-      {/* Light-transmitting Theme Tint Overlay (no heavy black blackout) */}
-      <div className={`absolute inset-0 transition-colors duration-500 ${tintClassName}`} />
+      {/* 2. Abstract Animated Canvas & Atmospheric Lighting Overlay */}
+      <AbstractSectionBackground
+        videoAsset={videoAsset || (videoSrc ? { src: videoSrc, poster: videoPoster } : undefined)}
+        variant={variant}
+        tintClassName={tintClassName}
+        hasVideo={Boolean(videoSrc)}
+        className="absolute inset-0 z-10"
+      />
     </div>
   );
 }
+
+export default VideoSectionBackground;

@@ -3,74 +3,131 @@ import gsap from 'gsap';
 let activeHostElement = null;
 
 /**
- * Pure JavaScript + GSAP Mouse-Only 1x Video Controller.
- * - Zero autoplay: every section video starts paused and stays frozen when idle.
- * - While the user moves the mouse or scrolls down inside the hovered section,
- *   plays the video smoothly at 1x native hardware playback (`playbackRate = 1`).
- * - Scrolling up rewinds smoothly along currentTime.
- * - The moment mouse movement / scrolling stops or leaves the section, immediately pauses
- *   on the exact current frame (zero drift when not touched).
+ * Pure JavaScript + GSAP Mouse and Scroll Video Controller.
+ * - Zero unwanted autoplay: every section video starts paused and stays frozen when idle.
+ * - While the user moves the mouse or scrolls with the mouse wheel / page scroll,
+ *   plays the video smoothly forward at native hardware playback rate.
+ * - Both scrolling down and scrolling up smoothly trigger forward playback while visible.
+ * - The moment mouse movement or scrolling stops, cleanly freezes on the current frame.
+ * - Immediately pauses when the section leaves the viewport.
  */
 export function attachMouseOnlyVideoController(
   hostEl,
   videoEl,
   visualLayerEl,
-  onReadyChange
+  onReadyChange,
+  targetPlaybackRate = 1
 ) {
   if (!hostEl || !videoEl) {
     return () => {};
   }
+
+  const effectivePlaybackRate =
+    typeof targetPlaybackRate === 'number' && targetPlaybackRate > 0
+      ? targetPlaybackRate
+      : 1;
 
   let isDestroyed = false;
   let stopTimerId = null;
   let duration = 0;
   let lastPointer = null;
   let userTriggeredPlay = false;
+  let isScrollingActive = false;
+  let scrollReleaseTimer = null;
+  let isVisibleInViewport = false;
+
+  const enforcePlaybackRate = () => {
+    try {
+      if (videoEl && videoEl.playbackRate !== effectivePlaybackRate) {
+        videoEl.playbackRate = effectivePlaybackRate;
+      }
+      if (videoEl && videoEl.defaultPlaybackRate !== effectivePlaybackRate) {
+        videoEl.defaultPlaybackRate = effectivePlaybackRate;
+      }
+    } catch {
+      // Ignore if video element is detached
+    }
+  };
 
   videoEl.autoplay = false;
   videoEl.removeAttribute('autoplay');
-  videoEl.playbackRate = 1;
-  videoEl.defaultPlaybackRate = 1;
+  enforcePlaybackRate();
   videoEl.pause();
 
   const freezeNow = () => {
     userTriggeredPlay = false;
+    isScrollingActive = false;
     if (!videoEl.paused) {
       videoEl.pause();
     }
   };
 
-  const scheduleFreeze = () => {
+  const scheduleFreeze = (delayMs = 250) => {
     if (stopTimerId) window.clearTimeout(stopTimerId);
     stopTimerId = window.setTimeout(() => {
       freezeNow();
-    }, 150);
+    }, delayMs);
   };
 
-  const triggerForwardPlayback = () => {
+  const triggerForwardPlayback = (sustainDurationMs = 250) => {
     if (isDestroyed) return;
-    videoEl.playbackRate = 1;
-    videoEl.defaultPlaybackRate = 1;
+    enforcePlaybackRate();
     userTriggeredPlay = true;
 
     if (videoEl.paused) {
       const p = videoEl.play();
-      if (p && typeof p.catch === 'function') {
-        p.catch(() => {
+      if (p && typeof p.then === 'function') {
+        p.then(() => {
+          enforcePlaybackRate();
+        }).catch(() => {
           // If browser blocks play without direct gesture, fall back to smooth frame advance
           if (duration > 0.2) {
-            videoEl.currentTime = (videoEl.currentTime + 0.08) % duration;
+            videoEl.currentTime =
+              (videoEl.currentTime + effectivePlaybackRate * 0.02) % duration;
           }
         });
       }
+    } else {
+      enforcePlaybackRate();
     }
-    scheduleFreeze();
+    scheduleFreeze(sustainDurationMs);
   };
+
+  const checkViewportVisibility = () => {
+    if (!hostEl) return false;
+    const rect = hostEl.getBoundingClientRect();
+    const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+    return rect.top < windowHeight && rect.bottom > 0;
+  };
+
+  // IntersectionObserver for tracking viewport presence
+  let observer = null;
+  if (typeof IntersectionObserver !== 'undefined') {
+    observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.target === hostEl) {
+            isVisibleInViewport = entry.isIntersecting;
+            if (!entry.isIntersecting) {
+              freezeNow();
+            }
+          }
+        }
+      },
+      {
+        root: null,
+        threshold: [0, 0.1, 0.25],
+      }
+    );
+    observer.observe(hostEl);
+  } else {
+    isVisibleInViewport = checkViewportVisibility();
+  }
 
   const handleLoadedMetadata = () => {
     duration = Number.isFinite(videoEl.duration) ? videoEl.duration : 0;
-    videoEl.playbackRate = 1;
-    videoEl.defaultPlaybackRate = 1;
+    videoEl.playbackRate = effectivePlaybackRate;
+    videoEl.defaultPlaybackRate = effectivePlaybackRate;
     freezeNow();
   };
 
@@ -84,20 +141,18 @@ export function attachMouseOnlyVideoController(
   };
 
   const handlePlayGuard = () => {
-    // Prevent unwanted autoplay triggered externally if mouse is not actively moving
+    // Prevent unwanted autoplay triggered externally if user didn't trigger
     if (!userTriggeredPlay) {
       videoEl.pause();
     } else {
-      videoEl.playbackRate = 1;
+      videoEl.playbackRate = effectivePlaybackRate;
     }
   };
 
   const handleMouseEnter = () => {
     activeHostElement = hostEl;
     lastPointer = null;
-    videoEl.playbackRate = 1;
-    // Never auto-run just on hover entry; wait for real mouse motion or scroll
-    freezeNow();
+    videoEl.playbackRate = effectivePlaybackRate;
   };
 
   const handleMouseLeave = () => {
@@ -105,8 +160,6 @@ export function attachMouseOnlyVideoController(
       activeHostElement = null;
     }
     lastPointer = null;
-    if (stopTimerId) window.clearTimeout(stopTimerId);
-    freezeNow();
 
     if (visualLayerEl) {
       gsap.to(visualLayerEl, {
@@ -116,6 +169,12 @@ export function attachMouseOnlyVideoController(
         ease: 'power2.out',
         overwrite: 'auto',
       });
+    }
+
+    // Only immediately freeze on leave if not actively scrolling through the section
+    if (!isScrollingActive) {
+      if (stopTimerId) window.clearTimeout(stopTimerId);
+      freezeNow();
     }
   };
 
@@ -143,43 +202,51 @@ export function attachMouseOnlyVideoController(
     if (lastPointer) {
       const dist = Math.hypot(e.clientX - lastPointer.x, e.clientY - lastPointer.y);
       if (dist > 1.2) {
-        triggerForwardPlayback();
+        triggerForwardPlayback(220);
       }
     }
 
     lastPointer = { x: e.clientX, y: e.clientY };
   };
 
-  const handleWheel = (e) => {
-    if (activeHostElement !== hostEl) {
-      activeHostElement = hostEl;
-    }
-    const rawDelta = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-    if (!rawDelta) return;
+  // Smooth scroll handler: activates when mouse scrolling or page scrolling
+  const handleScrollActivity = (sustainMs = 500) => {
+    const inView = observer ? isVisibleInViewport : checkViewportVisibility();
+    if (!inView) return;
 
-    if (rawDelta > 0) {
-      // Scrolling down plays smoothly forward at 1x while scrolling
-      triggerForwardPlayback();
-    } else if (duration > 0.2) {
-      // Scrolling up pauses play and rewinds smoothly proportionally to 1x speed
-      freezeNow();
-      const rewindSec = Math.min(0.45, Math.abs(rawDelta) * 0.0045);
-      const nextTime = videoEl.currentTime - rewindSec;
-      try {
-        videoEl.currentTime = nextTime < 0 ? duration + nextTime : nextTime;
-      } catch {
-        // Ignore seek error before buffer
-      }
+    isScrollingActive = true;
+    if (scrollReleaseTimer) window.clearTimeout(scrollReleaseTimer);
+    scrollReleaseTimer = window.setTimeout(() => {
+      isScrollingActive = false;
+    }, sustainMs);
+
+    triggerForwardPlayback(sustainMs);
+  };
+
+  const handleWheel = (e) => {
+    const rawDelta = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+    if (Math.abs(rawDelta) > 0.5) {
+      handleScrollActivity(500);
     }
+  };
+
+  const handleWindowScroll = () => {
+    handleScrollActivity(450);
   };
 
   videoEl.addEventListener('loadedmetadata', handleLoadedMetadata);
   videoEl.addEventListener('loadeddata', handleLoadedData);
   videoEl.addEventListener('play', handlePlayGuard);
+  videoEl.addEventListener('playing', enforcePlaybackRate);
+  videoEl.addEventListener('ratechange', enforcePlaybackRate);
+  videoEl.addEventListener('timeupdate', enforcePlaybackRate);
   hostEl.addEventListener('mouseenter', handleMouseEnter, { passive: true });
   hostEl.addEventListener('mouseleave', handleMouseLeave, { passive: true });
   hostEl.addEventListener('mousemove', handleMouseMove, { passive: true });
   hostEl.addEventListener('wheel', handleWheel, { passive: true });
+
+  window.addEventListener('wheel', handleWheel, { passive: true });
+  window.addEventListener('scroll', handleWindowScroll, { passive: true });
 
   if (videoEl.readyState >= 2) {
     handleLoadedMetadata();
@@ -194,14 +261,26 @@ export function attachMouseOnlyVideoController(
       activeHostElement = null;
     }
     if (stopTimerId) window.clearTimeout(stopTimerId);
+    if (scrollReleaseTimer) window.clearTimeout(scrollReleaseTimer);
+
+    if (observer) {
+      observer.disconnect();
+    }
 
     videoEl.removeEventListener('loadedmetadata', handleLoadedMetadata);
     videoEl.removeEventListener('loadeddata', handleLoadedData);
     videoEl.removeEventListener('play', handlePlayGuard);
+    videoEl.removeEventListener('playing', enforcePlaybackRate);
+    videoEl.removeEventListener('ratechange', enforcePlaybackRate);
+    videoEl.removeEventListener('timeupdate', enforcePlaybackRate);
     hostEl.removeEventListener('mouseenter', handleMouseEnter);
     hostEl.removeEventListener('mouseleave', handleMouseLeave);
     hostEl.removeEventListener('mousemove', handleMouseMove);
     hostEl.removeEventListener('wheel', handleWheel);
+
+    window.removeEventListener('wheel', handleWheel);
+    window.removeEventListener('scroll', handleWindowScroll);
+
     freezeNow();
   };
 }

@@ -7,8 +7,10 @@ import { registerSectionMotion } from '../animations/scrollAnimations';
 import { VideoSectionBackground } from '../components/VideoSectionBackground';
 import { ResilientImage } from '../components/ResilientImage';
 import { BrandInsignia } from '../components/BrandInsignia';
+import { BrandLogo } from '../components/BrandLogo';
+import { CityMallLogo } from '../components/CityMallLogo';
 
-const HERO_FEATURE_IDS = ['louis-philippe', 'tanishq', 'inox-cinemas', 'barbeque-nation'];
+const HERO_FEATURE_IDS = ['louis-philippe', 'tanishq', 'titan-world', 'inox-cinemas'];
 
 export function HomeHeroSection({ onInspectBrand }) {
   const sectionRef = useRef(null);
@@ -34,27 +36,32 @@ export function HomeHeroSection({ onInspectBrand }) {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-[82vh] flex items-end overflow-hidden border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#FBF4EB] dark:bg-[#151021]"
+      id="home-hero"
+      className="relative min-h-0 lg:min-h-screen flex flex-col justify-start lg:justify-center overflow-visible lg:overflow-hidden border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-transparent"
     >
       <VideoSectionBackground
         videoAsset={VIDEO_ASSETS.mallHero}
+        variant="hero"
         eager
-        playbackRate={0.8}
+        playbackRate={0.25}
         videoOpacityClassName="opacity-88 dark:opacity-78"
         tintClassName="bg-gradient-to-tr from-[#FBF4EB]/82 via-[#EFE6FA]/42 to-[#FDE8DF]/35 dark:from-[#151021]/84 dark:via-[#1D1630]/46 dark:to-[#241724]/38"
       />
 
-      <div className="relative z-10 max-w-7xl w-full mx-auto px-5 sm:px-8 lg:px-12 pt-16 pb-12 sm:pb-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-end">
+      <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-8 lg:px-12 pt-8 pb-12 sm:pt-14 sm:pb-16 lg:py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
           {/* Asymmetric Display Typography Left */}
-          <div className="lg:col-span-7 space-y-6">
-            <div data-motion="reveal" className="space-y-3">
-              <p className="text-xs sm:text-sm font-semibold tracking-[0.18em] uppercase text-[#683BA4] dark:text-[#BFA1FF]">
-                {MALL_IDENTITY.city}, {MALL_IDENTITY.state} · {MALL_IDENTITY.country}
-              </p>
-              <h1 className="font-display text-5xl sm:text-6xl lg:text-[4.5rem] font-bold tracking-tight leading-[1.03] text-[#1B1325] dark:text-[#F6EFE7]">
+          <div className="lg:col-span-7 space-y-5 sm:space-y-6">
+            <div data-motion="reveal" className="space-y-2 sm:space-y-3">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/70 dark:bg-white/10 border border-[#2D1D48]/10 dark:border-white/10 backdrop-blur-md">
+                <CityMallLogo size="xs" showText={false} />
+                <span className="text-xs font-semibold tracking-[0.18em] uppercase text-[#683BA4] dark:text-[#BFA1FF]">
+                  {MALL_IDENTITY.city}, {MALL_IDENTITY.state} · {MALL_IDENTITY.country}
+                </span>
+              </div>
+              <h1 className="font-display text-3xl sm:text-5xl lg:text-[4.5rem] font-bold tracking-tight leading-[1.08] sm:leading-[1.03] text-[#1B1325] dark:text-[#F6EFE7]">
                 CITY MALL
-                <span className="block font-normal italic text-3xl sm:text-4xl lg:text-5xl mt-1 text-[#C9523C] dark:text-[#F48C74]">
+                <span className="block font-normal italic text-2xl sm:text-3xl lg:text-5xl mt-1 sm:mt-1.5 text-[#C9523C] dark:text-[#F48C74]">
                   Gorakhpur&apos;s Living Promenade
                 </span>
               </h1>
@@ -62,22 +69,22 @@ export function HomeHeroSection({ onInspectBrand }) {
 
             <p
               data-motion="reveal"
-              className="text-base sm:text-lg leading-relaxed max-w-xl text-[#433754] dark:text-[#D8CEE9]"
+              className="text-sm sm:text-base lg:text-lg leading-relaxed max-w-xl text-[#433754] dark:text-[#D8CEE9]"
             >
-              Twenty-seven distinctive fashion boutiques, sportswear houses, fine jewellery salons, Spencer&apos;s hypermarket, INOX Cinemas, and nine culinary venues gathered under sunlit architecture.
+              Premier fashion, fine jewellery, INOX multiplex &amp; dining promenade.
             </p>
 
-            <div data-motion="reveal" className="flex flex-wrap items-center gap-4 pt-2">
+            <div data-motion="reveal" className="flex flex-wrap items-center gap-3 sm:gap-4 pt-1 sm:pt-2">
               <Link
                 to="/brands"
-                className="inline-flex items-center gap-2.5 px-6 py-3 text-xs tracking-[0.12em] uppercase font-semibold bg-[#1B1325] dark:bg-[#F48C74] text-[#FBF4EB] dark:text-[#151021] hover:opacity-90 transition-opacity whitespace-nowrap shrink-0"
+                className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 text-xs tracking-[0.12em] uppercase font-semibold bg-[#1B1325] dark:bg-[#F48C74] text-[#FBF4EB] dark:text-[#151021] hover:opacity-90 transition-opacity whitespace-nowrap"
               >
                 <span>Explore Brand Showcase</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 to="/discover"
-                className="inline-flex items-center gap-2 px-5 py-3 text-xs tracking-[0.12em] uppercase font-semibold border border-[#2D1D48]/30 dark:border-[#E2D4FF]/30 bg-[#FFFBF6]/80 dark:bg-[#1D1630]/80 text-[#1B1325] dark:text-[#F6EFE7] hover:border-[#683BA4] dark:hover:border-[#BFA1FF] transition-colors whitespace-nowrap shrink-0"
+                className="inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 text-xs tracking-[0.12em] uppercase font-semibold border border-[#2D1D48]/30 dark:border-[#E2D4FF]/30 bg-[#FFFBF6]/80 dark:bg-[#1D1630]/80 text-[#1B1325] dark:text-[#F6EFE7] hover:border-[#683BA4] dark:hover:border-[#BFA1FF] transition-colors whitespace-nowrap"
               >
                 <PlayCircle className="w-4 h-4 text-[#0E7C71] dark:text-[#5EEAD4]" />
                 <span>Interactive Discovery</span>
@@ -85,68 +92,112 @@ export function HomeHeroSection({ onInspectBrand }) {
             </div>
           </div>
 
-          {/* Overlapping Layered Featured Composition Right */}
-          <div className="lg:col-span-5 relative">
+          {/* Featured Brand Architectural Showcase Right */}
+          <div className="lg:col-span-5 relative flex items-center justify-center lg:justify-end pt-4 lg:pt-0">
+            {/* Main Luxury Vitrine Card */}
             <div
-              data-parallax="up"
-              className="relative ml-auto max-w-md border border-[#2D1D48]/18 dark:border-[#E2D4FF]/20 bg-[#FFFBF6]/90 dark:bg-[#1D1630]/90 shadow-2xl overflow-hidden"
+              data-motion="reveal"
+              className="relative z-10 w-full max-w-sm sm:max-w-md rounded-3xl border border-white/80 dark:border-white/12 bg-white/95 dark:bg-[#1C152B]/95 shadow-2xl overflow-hidden backdrop-blur-md transition-all duration-300"
             >
-              <div className="relative aspect-[4/3] overflow-hidden bg-[#EFE6FA] dark:bg-[#231B38]">
+              <div className="relative aspect-[16/11] overflow-hidden bg-[#EFE6FA] dark:bg-[#231B38]">
                 <ResilientImage
+                  key={activeBrand?.id}
                   src={activeBrand?.image || ARCHITECTURAL_GALLERY[0]}
                   alt={activeBrand?.name || 'CITY MALL Gorakhpur'}
                   priority
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/10 pointer-events-none" />
+
+                {/* Floating Top-Left Glass Badge */}
+                <div className="absolute top-3.5 left-3.5 z-20 flex items-center gap-2 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full text-white border border-white/20">
+                  <span
+                    className="w-2 h-2 rounded-full"
+                    style={{ backgroundColor: activeBrand?.accentColor || '#C9523C' }}
+                  />
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-white/90">
+                    Premier Collection
+                  </span>
+                </div>
               </div>
 
-              <div className="p-5 sm:p-6 flex items-center justify-between gap-4">
-                <div className="min-w-0">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#0E7C71] dark:text-[#5EEAD4]">
-                    {activeBrand?.categoryName}
-                  </p>
+              {/* Card Information Body */}
+              <div className="p-5 sm:p-6 space-y-3">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="min-w-0">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#0E7C71] dark:text-[#5EEAD4]">
+                      {activeBrand?.categoryName}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => activeBrand && onInspectBrand(activeBrand)}
+                      className="font-display text-2xl font-bold text-left text-[#1B1325] dark:text-[#F6EFE7] hover:text-[#C9523C] dark:hover:text-[#F48C74] transition-colors cursor-pointer truncate block mt-0.5"
+                    >
+                      {activeBrand?.name}
+                    </button>
+                    <p className="text-xs text-[#5D5070] dark:text-[#B5A7D0] truncate mt-0.5">
+                      {activeBrand?.tagline}
+                    </p>
+                  </div>
+
+                  {activeBrand && (
+                    <div className="shrink-0 bg-[#2D1D48]/5 dark:bg-white/5 p-2 rounded-xl border border-[#2D1D48]/10 dark:border-white/10 shadow-xs">
+                      <BrandLogo
+                        brandId={activeBrand.id}
+                        variant="showcase"
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {/* Interactive switcher dots & inspect link */}
+                <div className="pt-3 flex items-center justify-between border-t border-[#2D1D48]/10 dark:border-white/10">
+                  <div className="flex items-center gap-1.5">
+                    {featuredBrands.map((b, idx) => (
+                      <button
+                        key={b.id}
+                        type="button"
+                        onClick={() => setActiveIndex(idx)}
+                        aria-label={`Preview ${b.name}`}
+                        className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                          idx === activeIndex
+                            ? 'w-7 bg-[#C9523C] dark:bg-[#F48C74]'
+                            : 'w-2 bg-[#2D1D48]/20 dark:bg-white/25 hover:bg-[#683BA4]'
+                        }`}
+                      />
+                    ))}
+                  </div>
+
                   <button
                     type="button"
                     onClick={() => activeBrand && onInspectBrand(activeBrand)}
-                    className="font-display text-2xl font-semibold text-left hover:text-[#C9523C] dark:hover:text-[#F48C74] transition-colors cursor-pointer truncate block"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#683BA4] dark:text-[#BFA1FF] hover:underline cursor-pointer"
                   >
-                    {activeBrand?.name}
+                    <span>Inspect House</span>
+                    <span>→</span>
                   </button>
                 </div>
-
-                {activeBrand && (
-                  <BrandInsignia
-                    monogram={activeBrand.monogram}
-                    accentColor={activeBrand.accentColor}
-                  />
-                )}
               </div>
 
-              {/* Interactive switcher dots */}
-              <div className="px-5 sm:px-6 pb-4 flex items-center justify-between border-t border-[#2D1D48]/10 dark:border-[#E2D4FF]/10 pt-3">
-                <div className="flex items-center gap-2">
-                  {featuredBrands.map((b, idx) => (
-                    <button
-                      key={b.id}
-                      type="button"
-                      onClick={() => setActiveIndex(idx)}
-                      aria-label={`Preview ${b.name}`}
-                      className={`h-2 transition-all cursor-pointer ${
-                        idx === activeIndex
-                          ? 'w-7 bg-[#C9523C] dark:bg-[#F48C74]'
-                          : 'w-2.5 bg-[#2D1D48]/25 dark:bg-[#E2D4FF]/25 hover:bg-[#683BA4]'
-                      }`}
-                    />
-                  ))}
-                </div>
-                <button
-                  type="button"
-                  onClick={() => activeBrand && onInspectBrand(activeBrand)}
-                  className="text-xs font-semibold text-[#683BA4] dark:text-[#BFA1FF] hover:underline cursor-pointer"
+              {/* Overlapping Secondary Boutique Stadium Thumbnail */}
+              {featuredBrands[(activeIndex + 1) % featuredBrands.length] && (
+                <div
+                  onClick={() => setActiveIndex((activeIndex + 1) % featuredBrands.length)}
+                  title="Next Boutique"
+                  className="absolute -bottom-2 right-2 sm:-bottom-5 sm:-right-5 z-20 w-28 sm:w-36 aspect-[4/3] rounded-2xl overflow-hidden border-2 border-white/90 dark:border-[#1C152B] shadow-2xl bg-black cursor-pointer group hover:scale-105 transition-all"
                 >
-                  Inspect House
-                </button>
-              </div>
+                  <ResilientImage
+                    src={featuredBrands[(activeIndex + 1) % featuredBrands.length].image}
+                    alt="Next boutique preview"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition-colors flex items-end p-1.5">
+                    <span className="text-[9px] font-mono text-white/95 bg-black/75 px-1.5 py-0.5 rounded backdrop-blur-xs truncate">
+                      {featuredBrands[(activeIndex + 1) % featuredBrands.length].name}
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

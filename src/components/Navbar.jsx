@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronDown, Menu, Moon, Sun, X } from 'lucide-react';
 import { MAIN_NAV_LINKS } from '../utilities/navigationData';
 import { useTheme } from '../utilities/themeContext';
+import { CityMallLogo } from './CityMallLogo';
 
 export function Navbar() {
   const { pathname } = useLocation();
@@ -17,6 +19,21 @@ export function Navbar() {
     setOpenDropdown(null);
     setMobileOpen(false);
   }, [pathname]);
+
+  // Lock body scroll when mobile menu is open for smooth mobile experience
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+    };
+  }, [mobileOpen]);
 
   useEffect(() => {
     const handleOutside = (e) => {
@@ -50,12 +67,13 @@ export function Navbar() {
       className="sticky top-0 z-40 h-14 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#FBF4EB]/92 dark:bg-[#151021]/92 backdrop-blur-md transition-colors duration-300"
     >
       <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-10 flex items-center justify-between gap-4">
-        {/* Zone 1: Clean Single Wordmark */}
+        {/* Zone 1: Original Signature Logo & Wordmark */}
         <Link
           to="/"
-          className="font-display text-xl font-bold tracking-[0.08em] text-[#1B1325] dark:text-[#F6EFE7] whitespace-nowrap shrink-0"
+          className="group inline-flex items-center whitespace-nowrap shrink-0 transition-opacity hover:opacity-90"
+          aria-label="CITY MALL Homepage"
         >
-          CITY MALL
+          <CityMallLogo size="md" />
         </Link>
 
         {/* Zone 2: Desktop Single-Line Navigation Links */}
@@ -162,69 +180,109 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Drawer */}
-      {mobileOpen && (
-        <div className="lg:hidden fixed inset-x-0 top-14 bottom-0 z-50 bg-[#FBF4EB] dark:bg-[#151021] border-t border-[#2D1D48]/15 dark:border-[#E2D4FF]/15 overflow-y-auto px-5 py-6">
-          <nav aria-label="Mobile Navigation" className="space-y-1">
-            {MAIN_NAV_LINKS.map((item) => {
-              const hasChildren = Boolean(item.children && item.children.length > 0);
-              const active = isActiveLink(item);
-              return (
-                <div
-                  key={item.id}
-                  className="border-b border-[#2D1D48]/10 dark:border-[#E2D4FF]/10 py-2"
+      {/* Mobile Drawer (rendered via Portal to avoid any containing-block clipping) */}
+      {mobileOpen &&
+        typeof document !== 'undefined' &&
+        createPortal(
+          <div
+            className="lg:hidden fixed inset-0 z-[100] flex flex-col bg-[#FBF4EB] dark:bg-[#151021] text-[#1B1325] dark:text-[#FAF0F8] transition-colors duration-300"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile Navigation Drawer"
+          >
+            {/* Top Bar inside Drawer */}
+            <div className="h-14 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 px-4 sm:px-6 flex items-center justify-between shrink-0 bg-[#FBF4EB]/95 dark:bg-[#151021]/95">
+              <Link
+                to="/"
+                onClick={() => setMobileOpen(false)}
+                className="group inline-flex items-center whitespace-nowrap"
+                aria-label="CITY MALL Homepage"
+              >
+                <CityMallLogo size="md" />
+              </Link>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={toggleTheme}
+                  aria-label={theme === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold border border-[#2D1D48]/20 dark:border-[#E2D4FF]/25 bg-[#EFE6FA]/90 dark:bg-[#241B3B] text-[#1B1325] dark:text-[#F6EFE7] rounded-lg"
                 >
-                  <div className="flex items-center justify-between gap-2">
-                    <Link
-                      to={item.to}
-                      onClick={() => setMobileOpen(false)}
-                      className={`flex-1 py-2 text-sm font-medium ${
-                        active
-                          ? 'text-[#C9523C] dark:text-[#F48C74]'
-                          : 'text-[#1B1325] dark:text-[#F6EFE7]'
-                      }`}
-                    >
-                      {item.label}
-                    </Link>
-                    {hasChildren && (
-                      <button
-                        type="button"
-                        aria-label="Toggle Shopping Categories"
-                        onClick={() => setMobileShoppingOpen((prev) => !prev)}
-                        className="p-2 text-[#433754] dark:text-[#D8CEE9] cursor-pointer"
+                  {theme === 'dark' ? <Sun className="w-3.5 h-3.5 text-[#F0B97A]" /> : <Moon className="w-3.5 h-3.5 text-[#683BA4]" />}
+                  <span>{theme === 'dark' ? 'Light' : 'Dark'}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMobileOpen(false)}
+                  aria-label="Close navigation menu"
+                  className="w-9 h-9 flex items-center justify-center border border-[#2D1D48]/20 dark:border-[#E2D4FF]/25 text-[#1B1325] dark:text-[#F6EFE7] rounded-lg cursor-pointer hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+                >
+                  <X className="w-5 h-5 text-[#9333EA] dark:text-[#F472B6]" />
+                </button>
+              </div>
+            </div>
+
+            {/* Nav Links Body */}
+            <nav aria-label="Mobile Navigation" className="flex-1 overflow-y-auto px-5 py-6 space-y-1">
+              {MAIN_NAV_LINKS.map((item) => {
+                const hasChildren = Boolean(item.children && item.children.length > 0);
+                const active = isActiveLink(item);
+                return (
+                  <div
+                    key={item.id}
+                    className="border-b border-[#2D1D48]/10 dark:border-[#E2D4FF]/10 py-2.5"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <Link
+                        to={item.to}
+                        onClick={() => setMobileOpen(false)}
+                        className={`flex-1 py-1.5 text-base font-bold tracking-tight ${
+                          active
+                            ? 'text-[#C9523C] dark:text-[#F48C74]'
+                            : 'text-[#1B1325] dark:text-[#FAF0F8]'
+                        }`}
                       >
-                        <ChevronDown
-                          className={`w-4 h-4 transition-transform ${
-                            mobileShoppingOpen ? 'rotate-180' : ''
-                          }`}
-                        />
-                      </button>
+                        {item.label}
+                      </Link>
+                      {hasChildren && (
+                        <button
+                          type="button"
+                          aria-label="Toggle Shopping Categories"
+                          onClick={() => setMobileShoppingOpen((prev) => !prev)}
+                          className="p-2 text-[#433754] dark:text-[#D8CEE9] cursor-pointer"
+                        >
+                          <ChevronDown
+                            className={`w-4 h-4 transition-transform ${
+                              mobileShoppingOpen ? 'rotate-180 text-[#9333EA]' : ''
+                            }`}
+                          />
+                        </button>
+                      )}
+                    </div>
+                    {hasChildren && mobileShoppingOpen && (
+                      <div className="pl-3 pt-1 pb-2 space-y-1 bg-black/5 dark:bg-white/5 rounded-xl my-1">
+                        {item.children.map((sub) => (
+                          <Link
+                            key={sub.to}
+                            to={sub.to}
+                            onClick={() => setMobileOpen(false)}
+                            className={`block py-2 px-3 text-xs font-semibold rounded-lg ${
+                              pathname === sub.to
+                                ? 'bg-purple-100 dark:bg-purple-950/60 text-[#683BA4] dark:text-[#BFA1FF]'
+                                : 'text-[#433754] dark:text-[#D8CEE9] hover:bg-black/5 dark:hover:bg-white/10'
+                            }`}
+                          >
+                            {sub.label}
+                          </Link>
+                        ))}
+                      </div>
                     )}
                   </div>
-                  {hasChildren && mobileShoppingOpen && (
-                    <div className="pl-3 pb-2 space-y-1">
-                      {item.children.map((sub) => (
-                        <Link
-                          key={sub.to}
-                          to={sub.to}
-                          onClick={() => setMobileOpen(false)}
-                          className={`block py-1.5 text-sm ${
-                            pathname === sub.to
-                              ? 'text-[#683BA4] dark:text-[#BFA1FF] font-semibold'
-                              : 'text-[#433754] dark:text-[#D8CEE9]'
-                          }`}
-                        >
-                          {sub.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </nav>
-        </div>
-      )}
+                );
+              })}
+            </nav>
+          </div>,
+          document.body
+        )}
     </header>
   );
 }

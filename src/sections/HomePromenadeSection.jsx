@@ -1,93 +1,249 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowUpRight, Compass, Sparkles, Layers } from 'lucide-react';
 import { ARCHITECTURAL_GALLERY, VIDEO_ASSETS } from '../assets/mediaManifest';
+import { SCENE_IMAGES, BRAND_IMAGES } from '../assets/imageRegistry';
 import { registerSectionMotion } from '../animations/scrollAnimations';
 import { VideoSectionBackground } from '../components/VideoSectionBackground';
 import { ResilientImage } from '../components/ResilientImage';
 
 export function HomePromenadeSection() {
   const sectionRef = useRef(null);
+  const [activeLevel, setActiveLevel] = useState(0);
 
   useEffect(() => {
     return registerSectionMotion(sectionRef.current, 'cascade');
   }, []);
 
+  const flowLevels = [
+    {
+      num: '01',
+      color: 'bg-[#EA580C]',
+      title: 'Ground & First Retail Promenade',
+      subtitle: 'Tailoring, denim culture, footwear & flagship tech',
+      route: '/shopping',
+      image: SCENE_IMAGES.home3dAtrium,
+    },
+    {
+      num: '02',
+      color: 'bg-[#7C3AED]',
+      title: 'Second Floor Couture & Junior Wing',
+      subtitle: 'Festive ethnic silhouettes, handbags & kidswear',
+      route: '/shopping/fashion',
+      image: BRAND_IMAGES.louisPhilippe,
+    },
+    {
+      num: '03',
+      color: 'bg-[#0D9488]',
+      title: 'Third Floor Dining & PVR INOX Above',
+      subtitle: 'Social food pavilion crowned by laser multiplex screens',
+      route: '/entertainment',
+      image: BRAND_IMAGES.wForWoman,
+    },
+  ];
+
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden py-20 sm:py-28 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#FDE8DF] dark:bg-[#241724]"
+      id="home-promenade"
+      className="relative min-h-0 lg:min-h-screen flex flex-col justify-start lg:justify-center overflow-visible lg:overflow-hidden py-10 sm:py-16 lg:py-24 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-transparent transition-colors duration-300"
     >
+      {/* Animated Warm Golden/Champagne Geometric Atmosphere */}
       <VideoSectionBackground
-        videoAsset={VIDEO_ASSETS.architecture}
-        videoOpacityClassName="opacity-86 dark:opacity-78"
-        tintClassName="bg-gradient-to-r from-[#FDE8DF]/72 via-[#FBF4EB]/28 to-[#EFE6FA]/48 dark:from-[#241724]/74 dark:via-[#1D1630]/34 dark:to-[#151021]/62"
+        videoAsset={VIDEO_ASSETS.mallHero}
+        variant="hero"
+        playbackRate={0.25}
+        videoOpacityClassName="opacity-88 dark:opacity-78"
+        tintClassName="bg-gradient-to-tr from-[#FBF4EB]/82 via-[#EFE6FA]/42 to-[#FDE8DF]/35 dark:from-[#151021]/84 dark:via-[#1D1630]/46 dark:to-[#241724]/38"
       />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        {/* Left Story Narrative */}
-        <div className="lg:col-span-5 space-y-6" data-motion="reveal">
-          <p className="text-xs font-semibold tracking-[0.18em] uppercase text-[#C9523C] dark:text-[#F48C74]">
-            Architectural Rhythm
-          </p>
-          <h2 className="font-display text-4xl sm:text-5xl font-semibold leading-[1.1] text-[#1B1325] dark:text-[#F6EFE7]">
-            Light, Movement &amp; Everyday Gathering
-          </h2>
-          <p className="text-base leading-relaxed text-[#433754] dark:text-[#D8CEE9]">
-            Across its retail promenades, CITY MALL pairs open daylight interiors with curated destinations—bringing national apparel leaders, fine jewellery, wellness salons, family dining, and cinema together in one cohesive setting for Gorakhpur.
-          </p>
-
-          <div className="pt-2 space-y-4 border-t border-[#2D1D48]/15 dark:border-[#E2D4FF]/15">
-            <div className="flex items-baseline justify-between py-2 border-b border-[#2D1D48]/10 dark:border-[#E2D4FF]/10">
-              <span className="text-sm font-medium text-[#433754] dark:text-[#D8CEE9]">
-                Approved Houses &amp; Outlets
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          
+          {/* =========================================================================
+              LEFT COLUMN: ELEGANT ARCHITECTURAL FLOW (Clean Direct Typography)
+             ========================================================================= */}
+          <div className="lg:col-span-5 space-y-5 sm:space-y-6" data-motion="reveal">
+            {/* Top Kicker */}
+            <div className="space-y-2">
+              <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#0D9488] dark:text-[#2DD4BF] block">
+                ARCHITECTURE &amp; FLOW
               </span>
-              <span className="font-display text-2xl font-bold tabular-nums text-[#683BA4] dark:text-[#BFA1FF]">
-                27
-              </span>
+              <h2 className="font-display text-2xl sm:text-4xl font-extrabold tracking-tight text-[#1D1129] dark:text-[#FAF0F8] leading-[1.12]">
+                Five Sunlit Levels in{' '}
+                <span className="font-serif italic font-normal inline-block bg-gradient-to-r from-[#0D9488] via-[#14B8A6] to-[#8B5CF6] bg-clip-text text-transparent">
+                  Gorakhpur
+                </span>
+              </h2>
             </div>
-            <div className="flex items-baseline justify-between py-2 border-b border-[#2D1D48]/10 dark:border-[#E2D4FF]/10">
-              <span className="text-sm font-medium text-[#433754] dark:text-[#D8CEE9]">
-                Curated Retail &amp; Leisure Realms
-              </span>
-              <span className="font-display text-2xl font-bold tabular-nums text-[#0E7C71] dark:text-[#5EEAD4]">
-                07
-              </span>
+
+            {/* 3 Flow Level Rows with Numbered Pill Circles */}
+            <div className="space-y-2.5">
+              {flowLevels.map((lvl, idx) => (
+                <Link
+                  key={lvl.num}
+                  to={lvl.route}
+                  onMouseEnter={() => setActiveLevel(idx)}
+                  className={`group/item flex items-center justify-between gap-4 p-3 rounded-2xl transition-all duration-300 border ${
+                    activeLevel === idx
+                      ? 'bg-black/5 dark:bg-white/10 border-black/15 dark:border-white/20'
+                      : 'border-transparent hover:bg-black/5 dark:hover:bg-white/5'
+                  }`}
+                >
+                  <div className="flex items-start gap-3.5 min-w-0">
+                    <span
+                      className={`w-7 h-7 rounded-full shrink-0 flex items-center justify-center font-bold text-xs text-white shadow-sm mt-0.5 ${lvl.color}`}
+                    >
+                      {lvl.num}
+                    </span>
+                    <div className="min-w-0">
+                      <h3 className="font-display text-sm sm:text-base font-bold text-[#1D1129] dark:text-[#FAF0F8] group-hover/item:text-[#EC4899] transition-colors truncate">
+                        {lvl.title}
+                      </h3>
+                      <p className="text-xs text-[#5C426E] dark:text-[#BFA1FF] truncate">
+                        {lvl.subtitle}
+                      </p>
+                    </div>
+                  </div>
+                  <ArrowUpRight className="w-4 h-4 text-[#5C426E] dark:text-[#BFA1FF] group-hover/item:text-[#EC4899] group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5 transition-all shrink-0" />
+                </Link>
+              ))}
+            </div>
+
+            {/* Walk 3D Atrium Pill Button */}
+            <div className="pt-1">
+              <Link
+                to="/discover"
+                className="inline-flex items-center gap-2 px-6 py-3 text-xs font-bold uppercase tracking-[0.14em] rounded-2xl bg-gradient-to-r from-[#7C3AED] via-[#9333EA] to-[#BE185D] text-white shadow-lg hover:opacity-95 hover:scale-[1.02] transition-all cursor-pointer"
+              >
+                <span>Walk 3D Mall Atrium</span>
+                <ArrowUpRight className="w-4 h-4" />
+              </Link>
             </div>
           </div>
 
-          <Link
-            to="/discover"
-            className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.14em] uppercase pb-1.5 border-b-2 border-[#C9523C] dark:border-[#F48C74] text-[#1B1325] dark:text-[#F6EFE7] hover:text-[#C9523C] dark:hover:text-[#F48C74] transition-colors"
-          >
-            <span>Discover Spatial Highlights</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
+          {/* =========================================================================
+              RIGHT COLUMN: PANORAMIC HORIZONTALLY OVERLAPPING STADIUM-ROUNDED IMAGES
+              Exact match to user's uploaded reference: rounded-[2.5rem], horizontal overlap
+             ========================================================================= */}
+          <div className="lg:col-span-7 relative w-full overflow-hidden sm:overflow-visible pt-4 lg:pt-0">
+            {/* Mobile View: Clean horizontal snap swipe track */}
+            <div className="flex sm:hidden overflow-x-auto snap-x snap-mandatory gap-3 pb-3 no-scrollbar select-none px-1">
+              <div
+                onClick={() => setActiveLevel(0)}
+                className={`relative shrink-0 w-[82%] aspect-[16/11] rounded-2xl overflow-hidden shadow-xl border-2 transition-all snap-center cursor-pointer ${
+                  activeLevel === 0 ? 'border-[#EA580C] ring-2 ring-[#EA580C]/30' : 'border-white/40 dark:border-white/20'
+                }`}
+              >
+                <ResilientImage
+                  src={SCENE_IMAGES.home3dAtrium}
+                  alt="Five sunlit levels atrium"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent pointer-events-none" />
+                <span className="absolute bottom-2.5 left-3 text-[10px] font-mono font-bold uppercase tracking-wider text-white bg-black/70 px-2.5 py-0.5 rounded-full backdrop-blur-md">
+                  Central Atrium
+                </span>
+              </div>
 
-        {/* Right Opposing Parallax Overlapping Layers */}
-        <div className="lg:col-span-7 relative min-h-[420px] sm:min-h-[500px] flex items-center">
-          <div
-            data-parallax="down"
-            className="w-[78%] aspect-[16/11] overflow-hidden border border-[#2D1D48]/18 dark:border-[#E2D4FF]/20 shadow-xl bg-[#FFFBF6] dark:bg-[#1D1630]"
-          >
-            <ResilientImage
-              src={ARCHITECTURAL_GALLERY[1]}
-              alt="Sunlit interior skylight atrium"
-              className="w-full h-full object-cover"
-            />
+              <div
+                onClick={() => setActiveLevel(1)}
+                className={`relative shrink-0 w-[82%] aspect-[16/11] rounded-2xl overflow-hidden shadow-xl border-2 transition-all snap-center cursor-pointer ${
+                  activeLevel === 1 ? 'border-[#7C3AED] ring-2 ring-[#7C3AED]/30' : 'border-white/40 dark:border-white/20'
+                }`}
+              >
+                <ResilientImage
+                  src={BRAND_IMAGES.louisPhilippe}
+                  alt="Tailored fashion boutique"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent pointer-events-none" />
+                <span className="absolute bottom-2.5 left-3 text-[10px] font-mono font-bold text-white bg-black/70 px-2.5 py-0.5 rounded-full backdrop-blur-md truncate max-w-[85%]">
+                  Fashion Promenade
+                </span>
+              </div>
+
+              <div
+                onClick={() => setActiveLevel(2)}
+                className={`relative shrink-0 w-[82%] aspect-[16/11] rounded-2xl overflow-hidden shadow-xl border-2 transition-all snap-center cursor-pointer ${
+                  activeLevel === 2 ? 'border-[#0D9488] ring-2 ring-[#0D9488]/30' : 'border-white/40 dark:border-white/20'
+                }`}
+              >
+                <ResilientImage
+                  src={BRAND_IMAGES.wForWoman}
+                  alt="Signature outlets gallery"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute bottom-2.5 left-2.5 right-2.5 z-20">
+                  <span className="block w-full text-center px-2 py-0.5 text-[9px] font-mono font-bold uppercase tracking-wider text-white bg-black/80 backdrop-blur-md rounded-full border border-white/20 truncate">
+                    18 APPROVED OUTLETS · FLOOR DIRECTORY
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Desktop View: Classic Overlapping Stadium */}
+            <div className="hidden sm:flex items-center -space-x-4 sm:-space-x-12 w-full select-none overflow-hidden sm:overflow-visible">
+              
+              {/* IMAGE 1: DOMINANT SUNLIT ATRIUM (Stadium-Rounded Front Canvas) */}
+              <div
+                className={`relative shrink-0 w-[50%] sm:w-[52%] aspect-[16/11] rounded-[2.5rem] overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 transition-all duration-500 hover:scale-[1.03] hover:z-40 ${
+                  activeLevel === 0 ? 'z-30 ring-2 ring-[#EA580C]/40' : 'z-10'
+                }`}
+              >
+                <ResilientImage
+                  src={SCENE_IMAGES.home3dAtrium}
+                  alt="Five sunlit levels atrium"
+                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent pointer-events-none" />
+                <span className="absolute bottom-3 left-4 text-[10px] font-mono font-bold uppercase tracking-wider text-white bg-black/60 px-3 py-1 rounded-full backdrop-blur-md">
+                  Central Atrium
+                </span>
+              </div>
+
+              {/* IMAGE 2: OVERLAPPING MIDDLE STADIUM CANVAS (Tailored Boutique) */}
+              <div
+                className={`relative shrink-0 w-[38%] sm:w-[40%] aspect-[3/3.8] rounded-[2.2rem] overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 transition-all duration-500 hover:scale-[1.04] hover:z-40 ${
+                  activeLevel === 1 ? 'z-30 ring-2 ring-[#7C3AED]/50' : 'z-20'
+                }`}
+              >
+                <ResilientImage
+                  src={BRAND_IMAGES.louisPhilippe}
+                  alt="Tailored fashion boutique"
+                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                <span className="absolute bottom-3 left-3 text-[9px] font-mono font-bold text-white bg-black/60 px-2.5 py-0.5 rounded-full backdrop-blur-md truncate max-w-[85%]">
+                  Fashion Promenade
+                </span>
+              </div>
+
+              {/* IMAGE 3: OVERLAPPING THIRD STADIUM CANVAS (Festive Ethnic Showcase) */}
+              <div
+                className={`relative shrink-0 w-[38%] sm:w-[40%] aspect-[3/3.8] rounded-[2.2rem] overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 transition-all duration-500 hover:scale-[1.04] hover:z-40 ${
+                  activeLevel === 2 ? 'z-30 ring-2 ring-[#0D9488]/50' : 'z-30'
+                }`}
+              >
+                <ResilientImage
+                  src={BRAND_IMAGES.wForWoman}
+                  alt="Signature outlets gallery"
+                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent pointer-events-none" />
+                
+                {/* Floating Bottom Pill Badge (Matches Reference: 26 SIGNATURE OUTLETS · FLOOR DIRECTORY) */}
+                <div className="absolute bottom-3 left-2.5 right-2.5 z-20">
+                  <span className="block w-full text-center px-2 py-1 text-[8px] sm:text-[9px] font-mono font-bold uppercase tracking-wider text-white bg-black/80 backdrop-blur-md rounded-full border border-white/20 shadow-sm truncate">
+                    18 APPROVED OUTLETS · FLOOR DIRECTORY
+                  </span>
+                </div>
+              </div>
+
+            </div>
           </div>
 
-          <div
-            data-parallax="up"
-            className="absolute right-0 bottom-2 sm:bottom-6 w-[52%] aspect-[4/3] overflow-hidden border-4 border-[#FBF4EB] dark:border-[#151021] shadow-2xl bg-[#EFE6FA] dark:bg-[#231B38]"
-          >
-            <ResilientImage
-              src={ARCHITECTURAL_GALLERY[6]}
-              alt="Elevated glass walkway inside CITY MALL"
-              className="w-full h-full object-cover"
-            />
-          </div>
         </div>
       </div>
     </section>

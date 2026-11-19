@@ -38,17 +38,18 @@ export function VisitUsPage() {
       {/* Section 1: Arrival Courtyard Hero over Visit Us Entrance Video */}
       <section
         ref={heroRef}
-        className="relative overflow-hidden py-16 sm:py-24 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#E4F5F0] dark:bg-[#112226]"
+        className="relative overflow-visible lg:overflow-hidden min-h-0 lg:min-h-screen flex items-center py-10 sm:py-16 lg:py-20 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-transparent"
       >
         <VideoSectionBackground
-          videoAsset={VIDEO_ASSETS.visitUsEntrance}
+          videoAsset={VIDEO_ASSETS.mallHero}
+          variant="hero"
           eager
-          playbackRate={0.78}
-          videoOpacityClassName="opacity-80 dark:opacity-72"
-          tintClassName="bg-gradient-to-tr from-[#E4F5F0]/88 via-[#FBF4EB]/48 to-[#EFE6FA]/82 dark:from-[#112226]/90 dark:via-[#151021]/55 dark:to-[#1D1630]/86"
+          playbackRate={0.25}
+          videoOpacityClassName="opacity-88 dark:opacity-78"
+          tintClassName="bg-gradient-to-tr from-[#FBF4EB]/82 via-[#EFE6FA]/42 to-[#FDE8DF]/35 dark:from-[#151021]/84 dark:via-[#1D1630]/46 dark:to-[#241724]/38"
         />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        <div className="relative z-10 max-w-7xl w-full mx-auto px-5 sm:px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           <div className="lg:col-span-6 space-y-6" data-motion="reveal">
             <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.18em] uppercase text-[#0E7C71] dark:text-[#5EEAD4]">
               <MapPin className="w-4 h-4" />
@@ -56,7 +57,10 @@ export function VisitUsPage() {
             </span>
 
             <h1 className="font-display text-4xl sm:text-6xl font-bold leading-[1.06] text-[#1B1325] dark:text-[#F6EFE7]">
-              Visit {MALL_IDENTITY.name}
+              Visit{' '}
+              <span className="font-serif italic font-normal inline-block bg-gradient-to-r from-[#9333EA] via-[#D946EF] to-[#EC4899] bg-clip-text text-transparent">
+                {MALL_IDENTITY.name}
+              </span>
             </h1>
 
             <p className="font-display text-xl sm:text-2xl text-[#C9523C] dark:text-[#F48C74]">
@@ -64,7 +68,7 @@ export function VisitUsPage() {
             </p>
 
             <p className="text-base sm:text-lg leading-relaxed text-[#433754] dark:text-[#D8CEE9]">
-              Welcome to CITY MALL, Gorakhpur—bringing together national fashion and sportswear labels, Tanishq and Titan World, Looks Salon, Arjun Mehendi Art, Spencer&apos;s hypermarket, INOX Cinemas, and nine dining destinations under one roof.
+              Premier shopping, fine jewellery, INOX multiplex &amp; dining promenade.
             </p>
 
             <div className="flex flex-wrap gap-3 pt-2">
@@ -72,7 +76,7 @@ export function VisitUsPage() {
                 to="/brands"
                 className="px-6 py-3 text-xs font-semibold uppercase tracking-[0.12em] bg-[#1B1325] dark:bg-[#5EEAD4] text-[#FBF4EB] dark:text-[#151021] hover:opacity-90"
               >
-                Explore 27 Houses
+                Explore Brand Showcase
               </Link>
               <Link
                 to="/discover"
@@ -86,24 +90,23 @@ export function VisitUsPage() {
           <div className="lg:col-span-6">
             <div
               data-parallax="up"
-              className="border border-[#2D1D48]/18 dark:border-[#E2D4FF]/18 bg-[#FFFBF6]/92 dark:bg-[#152427]/92 overflow-hidden shadow-2xl"
+              className="relative aspect-[16/11] rounded-[2.5rem] overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 group bg-[#152427]"
             >
-              <div className="aspect-[16/10] overflow-hidden">
-                <ResilientImage
-                  src={VIDEO_ASSETS.visitUsEntrance.fallbackImage}
-                  alt="CITY MALL Gorakhpur arrival courtyard"
-                  priority
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="p-6 sm:p-7 space-y-2">
-                <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#0E7C71] dark:text-[#5EEAD4]">
-                  <Navigation className="w-3.5 h-3.5" />
-                  <span>Destination Summary</span>
-                </p>
-                <p className="text-sm text-[#433754] dark:text-[#D8CEE9] leading-relaxed">
-                  Directory signage and information desks inside CITY MALL, Gorakhpur assist guests to all retail, hospitality, salon, and cinema wings.
-                </p>
+              <ResilientImage
+                src={VIDEO_ASSETS.visitUsEntrance.fallbackImage}
+                alt="CITY MALL Gorakhpur arrival courtyard"
+                priority
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent pointer-events-none" />
+              
+              <div className="absolute bottom-4 left-5 right-5 z-20 flex items-center justify-between gap-2">
+                <span className="text-xs font-bold text-white bg-black/70 px-3 py-1 rounded-full backdrop-blur-md">
+                  Central Arrival Courtyard
+                </span>
+                <span className="text-[10px] font-mono text-[#5EEAD4] bg-black/70 px-2.5 py-1 rounded-full backdrop-blur-md">
+                  10:00 AM – 10:00 PM
+                </span>
               </div>
             </div>
           </div>
@@ -113,13 +116,14 @@ export function VisitUsPage() {
       {/* Section 2: Personal Visit Checklist Planner over Architecture Video */}
       <section
         ref={plannerRef}
-        className="relative overflow-hidden py-20 sm:py-24 bg-[#FBF4EB] dark:bg-[#151021]"
+        className="relative overflow-hidden py-20 sm:py-24 bg-transparent"
       >
         <VideoSectionBackground
-          videoAsset={VIDEO_ASSETS.architecture}
-          playbackRate={0.75}
-          videoOpacityClassName="opacity-72 dark:opacity-64"
-          tintClassName="bg-gradient-to-b from-[#FBF4EB]/88 via-[#EFE6FA]/50 to-[#FDE8DF]/88 dark:from-[#151021]/90 dark:via-[#1D1630]/56 dark:to-[#241724]/90"
+          videoAsset={VIDEO_ASSETS.mallHero}
+          variant="hero"
+          playbackRate={0.25}
+          videoOpacityClassName="opacity-88 dark:opacity-78"
+          tintClassName="bg-gradient-to-tr from-[#FBF4EB]/82 via-[#EFE6FA]/42 to-[#FDE8DF]/35 dark:from-[#151021]/84 dark:via-[#1D1630]/46 dark:to-[#241724]/38"
         />
 
         <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
@@ -129,10 +133,13 @@ export function VisitUsPage() {
               <span>Day-Outing Planner</span>
             </span>
             <h2 className="font-display text-3xl sm:text-4xl font-semibold text-[#1B1325] dark:text-[#F6EFE7]">
-              Organize Your Outing Across Seven Wings
+              Organize Your Outing Across{' '}
+              <span className="font-serif italic font-normal inline-block bg-gradient-to-r from-[#0D9488] via-[#9333EA] to-[#EC4899] bg-clip-text text-transparent">
+                Seven Wings
+              </span>
             </h2>
             <p className="text-sm sm:text-base text-[#433754] dark:text-[#D8CEE9] leading-relaxed">
-              Choose your focus area and prepare a quick session checklist of stores, cinema, or dining stops you want to explore inside CITY MALL, Gorakhpur.
+              Plan your boutique, dining, and cinema stops across all levels.
             </p>
 
             <ul className="pt-2 space-y-2.5 text-sm text-[#433754] dark:text-[#D8CEE9]">

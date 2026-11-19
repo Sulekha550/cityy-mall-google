@@ -15,21 +15,30 @@ import { DiningPage } from './pages/DiningPage';
 import { EntertainmentPage } from './pages/EntertainmentPage';
 import { WhatsOnPage } from './pages/WhatsOnPage';
 import { VisitUsPage } from './pages/VisitUsPage';
+import { MallPageBackground } from './components/MallPageBackground';
+import { initSmoothScroll } from './utilities/smoothScroll';
 
 function MallRoutesShell() {
   const { pathname } = useLocation();
   const [selectedBrand, setSelectedBrand] = useState(null);
 
   useEffect(() => {
+    return initSmoothScroll();
+  }, []);
+
+  useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });
   }, [pathname]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FBF4EB] dark:bg-[#151021] text-[#1B1325] dark:text-[#F6EFE7] transition-colors duration-300">
+    <div className="relative min-h-screen flex flex-col bg-transparent text-[#1B1325] dark:text-[#F6EFE7] transition-colors duration-300">
+      {/* Universal CITY MALL Homepage Background Video & Visual Atmosphere */}
+      <MallPageBackground />
+
       <Navbar />
       <AutoScrollBar />
 
-      <main className="flex-1">
+      <main className="flex-1 relative z-10">
         <PageTransition routeKey={pathname}>
           <Routes>
             <Route
@@ -38,6 +47,10 @@ function MallRoutesShell() {
             />
             <Route
               path="/discover"
+              element={<DiscoverPage onInspectBrand={setSelectedBrand} />}
+            />
+            <Route
+              path="/explore"
               element={<DiscoverPage onInspectBrand={setSelectedBrand} />}
             />
             <Route
@@ -114,7 +127,9 @@ function MallRoutesShell() {
         </PageTransition>
       </main>
 
-      <DestinationFooter />
+      <div className="relative z-10">
+        <DestinationFooter />
+      </div>
 
       <BrandDetailDrawer
         brand={selectedBrand}

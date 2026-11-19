@@ -97,7 +97,7 @@ export const BRAND_CATEGORIES = [
 ];
 
 export const APPROVED_BRANDS = [
-  // Fashion & Apparel (6)
+  // Fashion & Apparel (4 Premier Houses)
   {
     id: 'louis-philippe',
     name: 'Louis Philippe',
@@ -138,28 +138,8 @@ export const APPROVED_BRANDS = [
     image: BRAND_IMAGES.allenSolly,
     accentColor: '#0E7C71',
   },
-  {
-    id: 'flying-machine',
-    name: 'Flying Machine',
-    monogram: 'FM',
-    categoryId: 'fashion',
-    categoryName: 'Fashion & Apparel',
-    tagline: 'Youth Denim & Urban Streetwear',
-    image: BRAND_IMAGES.flyingMachine,
-    accentColor: '#683BA4',
-  },
-  {
-    id: 'mufti',
-    name: 'Mufti',
-    monogram: 'MF',
-    categoryId: 'fashion',
-    categoryName: 'Fashion & Apparel',
-    tagline: 'Casual Shirts, Jeans & Menswear',
-    image: BRAND_IMAGES.mufti,
-    accentColor: '#C9523C',
-  },
 
-  // Footwear & Sportswear (6)
+  // Footwear & Sportswear (4 Global Marquee Brands)
   {
     id: 'adidas',
     name: 'Adidas',
@@ -200,28 +180,8 @@ export const APPROVED_BRANDS = [
     image: BRAND_IMAGES.skechers,
     accentColor: '#0E7C71',
   },
-  {
-    id: 'red-chief',
-    name: 'Red Chief',
-    monogram: 'RC',
-    categoryId: 'footwear',
-    categoryName: 'Footwear & Sportswear',
-    tagline: 'Leather Shoes, Boots & Rugged Casuals',
-    image: BRAND_IMAGES.redChief,
-    accentColor: '#C9523C',
-  },
-  {
-    id: 'metro-shoes',
-    name: 'Metro Shoes',
-    monogram: 'MS',
-    categoryId: 'footwear',
-    categoryName: 'Footwear & Sportswear',
-    tagline: 'Fashion Footwear & Handbags for Family',
-    image: BRAND_IMAGES.metroShoes,
-    accentColor: '#683BA4',
-  },
 
-  // Jewellery & Watches (2)
+  // Jewellery & Watches (2 Marquee Salons)
   {
     id: 'tanishq',
     name: 'Tanishq',
@@ -243,7 +203,7 @@ export const APPROVED_BRANDS = [
     accentColor: '#683BA4',
   },
 
-  // Beauty & Lifestyle (2)
+  // Beauty & Grooming (1 Premier Luxury Salon)
   {
     id: 'looks-salon',
     name: 'Looks Salon',
@@ -254,18 +214,8 @@ export const APPROVED_BRANDS = [
     image: BRAND_IMAGES.looksSalon,
     accentColor: '#C9523C',
   },
-  {
-    id: 'arjun-mehendi-art',
-    name: 'Arjun Mehendi Art',
-    monogram: 'AM',
-    categoryId: 'beauty',
-    categoryName: 'Beauty & Lifestyle',
-    tagline: 'Traditional Bridal & Festive Mehendi Artistry',
-    image: BRAND_IMAGES.arjunMehendi,
-    accentColor: '#0E7C71',
-  },
 
-  // Supermarket & Retail (1)
+  // Supermarket & Retail (1 Hypermarket Anchor)
   {
     id: 'spencers',
     name: "Spencer's",
@@ -277,7 +227,7 @@ export const APPROVED_BRANDS = [
     accentColor: '#0E7C71',
   },
 
-  // Cinema & Multiplex (1)
+  // Cinema & Multiplex (1 Anchor Multiplex)
   {
     id: 'inox-cinemas',
     name: 'INOX Cinemas',
@@ -289,7 +239,7 @@ export const APPROVED_BRANDS = [
     accentColor: '#683BA4',
   },
 
-  // Food & Restaurants (9)
+  // Food & Dining (Premier Dining Anchor)
   {
     id: 'barbeque-nation',
     name: 'Barbeque Nation',
@@ -299,86 +249,6 @@ export const APPROVED_BRANDS = [
     tagline: 'Live Table Grill & Buffet Dining',
     image: BRAND_IMAGES.barbequeNation,
     accentColor: '#C9523C',
-  },
-  {
-    id: 'pizza-hut',
-    name: 'Pizza Hut',
-    monogram: 'PH',
-    categoryId: 'dining',
-    categoryName: 'Food & Restaurants',
-    tagline: 'Pan Pizzas, Pastas & Sides',
-    image: BRAND_IMAGES.pizzaHut,
-    accentColor: '#C9523C',
-  },
-  {
-    id: 'kfc',
-    name: 'KFC',
-    monogram: 'KFC',
-    categoryId: 'dining',
-    categoryName: 'Food & Restaurants',
-    tagline: 'Crispy Chicken & Quick Meals',
-    image: BRAND_IMAGES.kfc,
-    accentColor: '#C9523C',
-  },
-  {
-    id: 'pind-balluchi',
-    name: 'Pind Balluchi',
-    monogram: 'PB',
-    categoryId: 'dining',
-    categoryName: 'Food & Restaurants',
-    tagline: 'Traditional North Indian & Punjabi Flavours',
-    image: BRAND_IMAGES.pindBalluchi,
-    accentColor: '#B36624',
-  },
-  {
-    id: 'the-mirch-masala-restaurant',
-    name: 'The Mirch Masala Restaurant',
-    monogram: 'MM',
-    categoryId: 'dining',
-    categoryName: 'Food & Restaurants',
-    tagline: 'Classic Indian Curries, Tandoors & Family Dining',
-    image: BRAND_IMAGES.mirchMasala,
-    accentColor: '#683BA4',
-  },
-  {
-    id: 'cinnamon-restaurant',
-    name: 'Cinnamon Restaurant',
-    monogram: 'CN',
-    categoryId: 'dining',
-    categoryName: 'Food & Restaurants',
-    tagline: 'Multi-Cuisine Table Service & Culinary Variety',
-    image: BRAND_IMAGES.cinnamon,
-    accentColor: '#0E7C71',
-  },
-  {
-    id: 'subrasa-orion-mall',
-    name: 'Subrasa Orion Mall',
-    monogram: 'SO',
-    categoryId: 'dining',
-    categoryName: 'Food & Restaurants',
-    tagline: 'Vegetarian Specialties & Wholesome Regional Fare',
-    image: BRAND_IMAGES.subrasa,
-    accentColor: '#0E7C71',
-  },
-  {
-    id: 'rangrezza-restaurant-banquet-hall',
-    name: 'Rangrezza Restaurant & Banquet Hall',
-    monogram: 'RR',
-    categoryId: 'dining',
-    categoryName: 'Food & Restaurants',
-    tagline: 'Restaurant Dining & Festive Banquet Hospitality',
-    image: BRAND_IMAGES.rangrezza,
-    accentColor: '#B36624',
-  },
-  {
-    id: 'dosa-plaza',
-    name: 'Dosa Plaza',
-    monogram: 'DP',
-    categoryId: 'dining',
-    categoryName: 'Food & Restaurants',
-    tagline: 'South Indian Dosas, Idlis & Filter Coffee',
-    image: BRAND_IMAGES.dosaPlaza,
-    accentColor: '#0E7C71',
   },
 ];
 

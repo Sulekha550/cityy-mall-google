@@ -9,6 +9,9 @@ export function ResilientImage({
   alt,
   className = '',
   priority = false,
+  width,
+  height,
+  sizes,
 }) {
   const imgRef = useRef(null);
   const [loaded, setLoaded] = useState(() => {
@@ -63,6 +66,9 @@ export function ResilientImage({
         key={src}
         src={src}
         alt={alt}
+        width={width}
+        height={height}
+        sizes={sizes}
         referrerPolicy="no-referrer"
         loading={priority ? 'eager' : 'lazy'}
         fetchPriority={priority ? 'high' : 'auto'}

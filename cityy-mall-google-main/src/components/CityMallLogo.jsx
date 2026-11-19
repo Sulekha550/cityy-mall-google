@@ -24,6 +24,8 @@ export function CityMallLogo({
         <img
           src={fullLogoWebp}
           alt="CITY MALL"
+          width={54}
+          height={34}
           className={`${currentSize.full} w-auto object-contain shrink-0 drop-shadow-xs transition-transform duration-300 hover:scale-105 ${iconClassName}`}
           loading="eager"
           decoding="async"
@@ -37,6 +39,8 @@ export function CityMallLogo({
       <img
         src={iconWebp}
         alt="CITY MALL"
+        width={20}
+        height={20}
         className={`${currentSize.icon} object-contain shrink-0 drop-shadow-xs transition-transform duration-300 hover:scale-105 ${iconClassName}`}
         loading="eager"
         decoding="async"

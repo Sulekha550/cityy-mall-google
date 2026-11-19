@@ -106,9 +106,10 @@ export function AbstractSectionBackground({
 
     // Responsive Canvas Resize (1x on mobile for max battery, 0 lag & 60fps)
     const resize = () => {
-      const rect = container.getBoundingClientRect();
-      width = Math.max(300, rect.width);
-      height = Math.max(300, rect.height);
+      const w = container.clientWidth || 300;
+      const h = container.clientHeight || 300;
+      width = Math.max(300, w);
+      height = Math.max(300, h);
       const isMobile = window.innerWidth < 768;
       dpr = isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
 
@@ -152,9 +153,8 @@ export function AbstractSectionBackground({
       }
 
       if (!hostSection) return;
-      const rect = hostSection.getBoundingClientRect();
-      targetMouseX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      targetMouseY = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+      targetMouseX = (e.clientX / Math.max(1, window.innerWidth)) * 2 - 1;
+      targetMouseY = (e.clientY / Math.max(1, window.innerHeight)) * 2 - 1;
     };
 
     const handleMouseLeave = () => {
@@ -183,21 +183,19 @@ export function AbstractSectionBackground({
 
     const handleTouchStart = (e) => {
       wakeMouseActivity(1.2);
-      if (e.touches && e.touches[0] && hostSection) {
+      if (e.touches && e.touches[0]) {
         const touch = e.touches[0];
-        const rect = hostSection.getBoundingClientRect();
-        targetMouseX = ((touch.clientX - rect.left) / rect.width) * 2 - 1;
-        targetMouseY = ((touch.clientY - rect.top) / rect.height) * 2 - 1;
+        targetMouseX = (touch.clientX / Math.max(1, window.innerWidth)) * 2 - 1;
+        targetMouseY = (touch.clientY / Math.max(1, window.innerHeight)) * 2 - 1;
       }
     };
 
     const handleTouchMove = (e) => {
       wakeMouseActivity(1.4);
-      if (e.touches && e.touches[0] && hostSection) {
+      if (e.touches && e.touches[0]) {
         const touch = e.touches[0];
-        const rect = hostSection.getBoundingClientRect();
-        targetMouseX = ((touch.clientX - rect.left) / rect.width) * 2 - 1;
-        targetMouseY = ((touch.clientY - rect.top) / rect.height) * 2 - 1;
+        targetMouseX = (touch.clientX / Math.max(1, window.innerWidth)) * 2 - 1;
+        targetMouseY = (touch.clientY / Math.max(1, window.innerHeight)) * 2 - 1;
       }
     };
 

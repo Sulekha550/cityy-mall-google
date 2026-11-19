@@ -106,6 +106,8 @@ export function HomeHeroSection({ onInspectBrand }) {
                   src={activeBrand?.image || ARCHITECTURAL_GALLERY[0]}
                   alt={activeBrand?.name || 'CITY MALL Gorakhpur'}
                   priority
+                  width={560}
+                  height={385}
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/10 pointer-events-none" />
@@ -194,6 +196,8 @@ export function HomeHeroSection({ onInspectBrand }) {
                   <ResilientImage
                     src={featuredBrands[(activeIndex + 1) % featuredBrands.length].image}
                     alt="Next boutique preview"
+                    width={180}
+                    height={135}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition-colors flex items-end p-1.5">

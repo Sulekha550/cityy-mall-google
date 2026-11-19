@@ -5,7 +5,7 @@ import brandFlyingMachine from './images/brand_flying_machine_1794890882195.webp
 import brandInoxCinemas from './images/brand_inox_cinemas_1794890994736.webp';
 import brandLevisStore from './images/brand_levis_store_1794890881145.webp';
 import brandLooksSalon from './images/brand_looks_salon_1794890994338.webp';
-import brandLouisPhilippe from './images/brand_louis_philippe_1794890880359.webp';
+const brandLouisPhilippe = '/images/hero-lcp-brand.webp';
 import brandMetroShoes from './images/brand_metro_shoes_1794890885502.webp';
 import brandMufti from './images/brand_mufti_1794890882506.webp';
 import brandPuma from './images/brand_puma_1794890883151.webp';

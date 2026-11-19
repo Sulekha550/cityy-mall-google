@@ -231,15 +231,15 @@ export function HomeRealmsCarouselSection() {
       id="home-realms"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative min-h-screen flex flex-col justify-center overflow-hidden py-16 sm:py-24 border-b border-[#683BA4]/15 dark:border-[#BFA1FF]/15 bg-[#FAF4ED] dark:bg-[#120B1C] transition-colors duration-300"
+      className="relative min-h-screen flex flex-col justify-center overflow-hidden py-16 sm:py-24 border-b border-[#683BA4]/15 dark:border-[#BFA1FF]/15 bg-transparent transition-colors duration-300"
     >
       {/* Dynamic Animated Ambient Background */}
       <VideoSectionBackground
-        videoAsset={VIDEO_ASSETS.brandsStorefronts}
-        variant="shopping"
-        playbackRate={0.7}
-        videoOpacityClassName="opacity-60 dark:opacity-45"
-        tintClassName="bg-gradient-to-b from-[#FAF4ED]/92 via-[#F4E6F7]/65 to-[#FDE8DF]/88 dark:from-[#120B1C]/95 dark:via-[#1B1028]/75 dark:to-[#120B1C]/96"
+        videoAsset={VIDEO_ASSETS.mallHero}
+        variant="hero"
+        playbackRate={0.25}
+        videoOpacityClassName="opacity-88 dark:opacity-78"
+        tintClassName="bg-gradient-to-tr from-[#FBF4EB]/82 via-[#EFE6FA]/42 to-[#FDE8DF]/35 dark:from-[#151021]/84 dark:via-[#1D1630]/46 dark:to-[#241724]/38"
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full space-y-8 sm:space-y-10">

@@ -581,8 +581,11 @@ export function DiningPage({ onInspectBrand }) {
                 </div>
 
                 {/* Display Headline */}
-                <h1 className="font-display text-3xl sm:text-6xl lg:text-7xl font-normal tracking-tight text-[#1B1325] dark:text-[#F6EFE7] leading-[1.08] sm:leading-[1.04]">
-                  Third Floor Flavours
+                <h1 className="font-display text-3xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-[#1B1325] dark:text-[#F6EFE7] leading-[1.08] sm:leading-[1.04]">
+                  Third Floor{' '}
+                  <span className="font-serif italic font-normal inline-block bg-gradient-to-r from-[#EA580C] via-[#F97316] to-[#E11D48] bg-clip-text text-transparent">
+                    Flavours &amp; Feasts
+                  </span>
                 </h1>
 
                 {/* Subtitle - Crisp & Needful */}
@@ -650,6 +653,7 @@ export function DiningPage({ onInspectBrand }) {
                 <ResilientImage
                   src={SCENE_IMAGES.dining3dTerrace}
                   alt="CITY MALL Dining Terrace"
+                  priority
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10 pointer-events-none" />
@@ -662,12 +666,12 @@ export function DiningPage({ onInspectBrand }) {
                   </span>
                 </div>
 
-                {/* Floating Bottom-Left Card (hidden on narrow mobile to avoid overlap with thumbnail) */}
-                <div className="hidden sm:block absolute bottom-4 left-4 z-20 max-w-[210px] bg-black/75 backdrop-blur-md p-3 rounded-2xl border border-white/20 text-white space-y-0.5">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#FFA07A]">
+                {/* Floating Bottom-Left Card (compact on narrow mobile) */}
+                <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-20 max-w-[170px] sm:max-w-[210px] bg-black/75 backdrop-blur-md p-2 sm:p-3 rounded-xl sm:rounded-2xl border border-white/20 text-white space-y-0.5">
+                  <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-[#FFA07A] block">
                     Third Floor Terrace
                   </span>
-                  <p className="text-xs text-white/90 font-medium leading-tight">
+                  <p className="text-[11px] sm:text-xs text-white/90 font-medium leading-tight">
                     Sunlit Promenade &amp; Social Culinary Deck
                   </p>
                 </div>
@@ -702,7 +706,7 @@ export function DiningPage({ onInspectBrand }) {
       <section
         ref={flameRef}
         id="dining-flame"
-        className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-16 sm:py-24 border-b border-[#2D1D48]/14 dark:border-[#D63F28]/25 bg-[#FAF4ED] dark:bg-[#170605] text-[#1B1325] dark:text-[#F6EFE7]"
+        className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-16 sm:py-24 border-b border-[#2D1D48]/14 dark:border-[#D63F28]/25 bg-transparent text-[#1B1325] dark:text-[#F6EFE7]"
       >
         <VideoSectionBackground
           variant="dining"
@@ -764,7 +768,7 @@ export function DiningPage({ onInspectBrand }) {
                   {activeOutlet.name}
                 </h2>
 
-                <p className="text-base sm:text-lg font-bold text-[#C9523C] dark:text-[#FFA07A] leading-snug">
+                <p className="text-base sm:text-lg font-bold bg-gradient-to-r from-[#EA580C] via-[#F97316] to-[#E11D48] bg-clip-text text-transparent leading-snug">
                   {activeOutlet.headline}
                 </p>
               </div>
@@ -870,7 +874,7 @@ export function DiningPage({ onInspectBrand }) {
       <section
         ref={pizzaRef}
         id="dining-pizza"
-        className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-16 sm:py-24 border-b border-[#2D1D48]/14 bg-[#FDF7EE] dark:bg-[#1A0F0B] text-[#1B1325] dark:text-[#F6EFE7]"
+        className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-16 sm:py-24 border-b border-[#2D1D48]/14 bg-transparent text-[#1B1325] dark:text-[#F6EFE7]"
       >
         <VideoSectionBackground
           variant="bake"
@@ -905,7 +909,10 @@ export function DiningPage({ onInspectBrand }) {
               </div>
 
               <h3 className="font-display text-3xl sm:text-4xl font-bold leading-[1.08] text-[#1B1325] dark:text-[#F6EFE7] tracking-tight">
-                Fresh Dough. 450° Oven Heat.
+                Fresh Dough.{' '}
+                <span className="font-serif italic font-normal inline-block bg-gradient-to-r from-[#EA580C] via-[#F97316] to-[#E11D48] bg-clip-text text-transparent">
+                  450° Oven Heat.
+                </span>
               </h3>
 
               <p className="text-sm sm:text-base text-[#3D2E50] dark:text-[#D8CEE9] font-medium leading-relaxed max-w-xl">
@@ -999,7 +1006,7 @@ export function DiningPage({ onInspectBrand }) {
       <section
         ref={mosaicRef}
         id="dining-styles"
-        className="relative overflow-hidden py-16 sm:py-24 bg-[#FAF4ED] dark:bg-[#1B0A08] border-b border-[#2D1D48]/14 dark:border-white/10 text-[#1B1325] dark:text-[#F6EFE7]"
+        className="relative overflow-hidden py-16 sm:py-24 bg-transparent border-b border-[#2D1D48]/14 dark:border-white/10 text-[#1B1325] dark:text-[#F6EFE7]"
       >
         <VideoSectionBackground
           variant="events"
@@ -1021,7 +1028,10 @@ export function DiningPage({ onInspectBrand }) {
                       <span>Culinary Expressions</span>
                     </span>
                     <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-[#1B1325] dark:text-[#FAF0F8] tracking-tight leading-[1.08]">
-                      Four Dining Atmospheres
+                      Four Dining{' '}
+                      <span className="font-serif italic font-normal inline-block bg-gradient-to-r from-[#EA580C] via-[#E11D48] to-[#9333EA] bg-clip-text text-transparent">
+                        Atmospheres
+                      </span>
                     </h2>
                     <p className="text-sm sm:text-base text-[#3D2E50] dark:text-[#D8CEE9] font-medium leading-relaxed">
                       Distinctive culinary moods across Level 3.
@@ -1134,7 +1144,7 @@ export function DiningPage({ onInspectBrand }) {
       <section
         ref={terraceRef}
         id="dining-terrace"
-        className="relative overflow-hidden py-16 sm:py-24 border-b border-[#2D1D48]/14 dark:border-white/10 bg-[#FAF4ED] dark:bg-[#140605] text-[#1B1325] dark:text-[#F6EFE7]"
+        className="relative overflow-hidden py-16 sm:py-24 border-b border-[#2D1D48]/14 dark:border-white/10 bg-transparent text-[#1B1325] dark:text-[#F6EFE7]"
       >
         <VideoSectionBackground
           variant="explore"
@@ -1151,7 +1161,10 @@ export function DiningPage({ onInspectBrand }) {
             </span>
 
             <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-[#1B1325] dark:text-[#FAF0F8] tracking-tight leading-[1.08]">
-              The Sunlit Dining Terrace
+              The Sunlit{' '}
+              <span className="font-serif italic font-normal inline-block bg-gradient-to-r from-[#F59E0B] via-[#EA580C] to-[#E11D48] bg-clip-text text-transparent">
+                Dining Terrace
+              </span>
             </h2>
 
             <p className="text-base sm:text-lg text-[#3D2E50] dark:text-[#D8CEE9] font-medium leading-relaxed max-w-xl">

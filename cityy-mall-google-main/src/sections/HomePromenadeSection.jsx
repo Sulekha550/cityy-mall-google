@@ -46,14 +46,15 @@ export function HomePromenadeSection() {
     <section
       ref={sectionRef}
       id="home-promenade"
-      className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-16 sm:py-24 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#FAF4ED] dark:bg-[#140D1F] transition-colors duration-300"
+      className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-16 sm:py-24 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-transparent transition-colors duration-300"
     >
       {/* Animated Warm Golden/Champagne Geometric Atmosphere */}
       <VideoSectionBackground
-        videoAsset={VIDEO_ASSETS.architecture}
-        variant="explore"
-        videoOpacityClassName="opacity-75 dark:opacity-60"
-        tintClassName="bg-gradient-to-r from-[#FAF4ED]/88 via-[#FCEAD2]/45 to-[#F3E5F5]/70 dark:from-[#140D1F]/92 dark:via-[#1E122E]/65 dark:to-[#140D1F]/94"
+        videoAsset={VIDEO_ASSETS.mallHero}
+        variant="hero"
+        playbackRate={0.25}
+        videoOpacityClassName="opacity-88 dark:opacity-78"
+        tintClassName="bg-gradient-to-tr from-[#FBF4EB]/82 via-[#EFE6FA]/42 to-[#FDE8DF]/35 dark:from-[#151021]/84 dark:via-[#1D1630]/46 dark:to-[#241724]/38"
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
@@ -69,7 +70,10 @@ export function HomePromenadeSection() {
                 ARCHITECTURE &amp; FLOW
               </span>
               <h2 className="font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-[#1D1129] dark:text-[#FAF0F8] leading-[1.12]">
-                Five sunlit levels in Gorakhpur
+                Five Sunlit Levels in{' '}
+                <span className="font-serif italic font-normal inline-block bg-gradient-to-r from-[#0D9488] via-[#14B8A6] to-[#8B5CF6] bg-clip-text text-transparent">
+                  Gorakhpur
+                </span>
               </h2>
             </div>
 

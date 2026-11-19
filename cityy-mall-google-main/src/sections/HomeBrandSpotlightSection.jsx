@@ -586,7 +586,7 @@ export function HomeBrandSpotlightSection({ onInspectBrand }) {
       id="home-spotlight"
       onMouseEnter={() => setIsAutoPlaying(false)}
       onMouseLeave={() => setIsAutoPlaying(true)}
-      className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-14 sm:py-20 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#FBF4EB] dark:bg-[#151021] select-none"
+      className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-14 sm:py-20 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-transparent select-none"
     >
       {/* =========================================================================
           BACKGROUND (Hero Section Signature Interactive Video & Abstract Canvas)
@@ -601,7 +601,7 @@ export function HomeBrandSpotlightSection({ onInspectBrand }) {
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full space-y-8 sm:space-y-10">
-        
+
         {/* =========================================================================
             HERO DISPLAY HEADER (Exact Reference Style from Screenshot)
             "P R E M I U M   B R A N D S"
@@ -620,7 +620,7 @@ export function HomeBrandSpotlightSection({ onInspectBrand }) {
           {/* Grand Title */}
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.08] text-[#1E112A] dark:text-[#FAF0F8]">
             Shop the World&apos;s{' '}
-            <span className="font-serif italic font-normal bg-gradient-to-r from-[#9333EA] via-[#D946EF] to-[#EC4899] bg-clip-text text-transparent">
+            <span className="font-serif italic font-normal inline-block bg-gradient-to-r from-[#9333EA] via-[#D946EF] to-[#EC4899] bg-clip-text text-[#9333EA] sm:text-transparent">
               Leading Brands
             </span>
           </h2>
@@ -647,7 +647,7 @@ export function HomeBrandSpotlightSection({ onInspectBrand }) {
             9 Floating frosted glass panels along the illuminated floor track
            ========================================================================= */}
         <div className="relative pt-6 pb-4">
-          
+
           {/* Circular Illuminated Floor Ring Reflection */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-[92%] max-w-5xl h-20 rounded-[100%] border-2 border-white/70 dark:border-white/20 bg-gradient-to-r from-pink-300/25 via-purple-300/20 to-amber-200/25 shadow-[0_0_40px_rgba(236,72,153,0.3)] pointer-events-none" />
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-[80%] max-w-4xl h-14 rounded-[100%] border border-white/40 dark:border-white/10 pointer-events-none" />
@@ -723,11 +723,10 @@ export function HomeBrandSpotlightSection({ onInspectBrand }) {
                 >
                   {/* Floating Frosted Glass Panel Container */}
                   <div
-                    className={`relative w-full h-full rounded-3xl p-4 sm:p-5 flex flex-col items-center justify-center transition-all duration-300 border-2 ${
-                      isCenter
-                        ? 'bg-white/92 dark:bg-[#1D112E]/92 backdrop-blur-2xl border-white shadow-[0_20px_50px_rgba(236,72,153,0.3)] ring-4 ring-pink-400/30'
-                        : 'bg-white/80 dark:bg-[#1C122C]/80 backdrop-blur-xl border-white/80 dark:border-white/15 shadow-xl hover:border-pink-300 hover:scale-105'
-                    }`}
+                    className={`relative w-full h-full rounded-3xl p-4 sm:p-5 flex flex-col items-center justify-center transition-all duration-300 border-2 ${isCenter
+                      ? 'bg-white/92 dark:bg-[#1D112E]/92 backdrop-blur-2xl border-white shadow-[0_20px_50px_rgba(236,72,153,0.3)] ring-4 ring-pink-400/30'
+                      : 'bg-white/80 dark:bg-[#1C122C]/80 backdrop-blur-xl border-white/80 dark:border-white/15 shadow-xl hover:border-pink-300 hover:scale-105'
+                      }`}
                   >
                     {/* Glossy Top Sheen Reflection Diagonal */}
                     <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-white/30 via-white/10 to-transparent pointer-events-none" />
@@ -746,9 +745,8 @@ export function HomeBrandSpotlightSection({ onInspectBrand }) {
                     {/* REVEAL ON HOVER (Center Card): Real Store Architectural Image + Quick Inspect */}
                     {isCenter && (
                       <div
-                        className={`absolute inset-2 rounded-2xl overflow-hidden transition-all duration-300 ${
-                          isHovered ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
-                        }`}
+                        className={`absolute inset-2 rounded-2xl overflow-hidden transition-all duration-300 ${isHovered ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
+                          }`}
                       >
                         <ResilientImage
                           src={brand.image}
@@ -809,11 +807,10 @@ export function HomeBrandSpotlightSection({ onInspectBrand }) {
                   type="button"
                   onClick={() => setActiveIndex(Math.floor((dotIdx / 5) * total))}
                   aria-label={`Go to section ${dotIdx + 1}`}
-                  className={`rounded-full transition-all duration-300 cursor-pointer ${
-                    isCurrent
-                      ? 'w-2.5 h-2.5 bg-[#9333EA] ring-2 ring-purple-400/50'
-                      : 'w-2 h-2 bg-black/20 dark:bg-white/30 hover:bg-black/40'
-                  }`}
+                  className={`rounded-full transition-all duration-300 cursor-pointer ${isCurrent
+                    ? 'w-2.5 h-2.5 bg-[#9333EA] ring-2 ring-purple-400/50'
+                    : 'w-2 h-2 bg-black/20 dark:bg-white/30 hover:bg-black/40'
+                    }`}
                 />
               );
             })}

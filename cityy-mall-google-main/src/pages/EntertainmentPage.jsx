@@ -101,7 +101,7 @@ export function EntertainmentPage({ onInspectBrand }) {
       <section
         ref={heroRef}
         id="cinema-hero"
-        className="relative overflow-hidden min-h-[100vh] flex flex-col justify-between py-12 sm:py-16 px-5 sm:px-8 lg:px-12 border-b border-[#2D1D48]/14 dark:border-white/10 bg-[#FBF4EB] dark:bg-[#151021]"
+        className="relative overflow-hidden min-h-[100vh] flex flex-col justify-between py-12 sm:py-16 px-5 sm:px-8 lg:px-12 border-b border-[#2D1D48]/14 dark:border-white/10 bg-transparent"
       >
         {/* Active Background Video & Procedural Cinema Projector Beam (Zero Humans) */}
         <VideoSectionBackground
@@ -190,9 +190,12 @@ export function EntertainmentPage({ onInspectBrand }) {
               <span>MULTIPLEX EXPERIENCE</span>
             </div>
 
-            {/* Display Headline in Grand Serif with Deep Plum-to-Rose Gradient */}
-            <h1 className="font-display text-5xl sm:text-7xl lg:text-[5.5rem] font-bold tracking-tight leading-[1.04] text-transparent bg-clip-text bg-gradient-to-r from-[#24083E] via-[#5B138A] to-[#86198F] dark:from-white dark:via-[#FCE7F3] dark:to-[#E9D5FF] drop-shadow-sm">
-              PVR INOX Cinemas
+            {/* Display Headline with Vibrant Violet-Rose Gradient */}
+            <h1 className="font-display text-5xl sm:text-7xl lg:text-[5.5rem] font-bold tracking-tight leading-[1.04] text-[#1B1028] dark:text-[#FAF0F8]">
+              PVR INOX{' '}
+              <span className="font-serif italic font-normal inline-block bg-gradient-to-r from-[#8B5CF6] via-[#D946EF] to-[#EC4899] bg-clip-text text-transparent">
+                Laser 4K Cinemas
+              </span>
             </h1>
 
             {/* Subtext */}
@@ -252,7 +255,7 @@ export function EntertainmentPage({ onInspectBrand }) {
       <section
         ref={audisRef}
         id="cinema-auditoriums"
-        className="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-b from-[#FBF4EB]/90 via-[#FAF6F0]/80 to-[#FFFDF9]/90 dark:from-[#151021]/92 dark:via-[#1D1630]/80 dark:to-[#151021]/92 border-b border-[#2D1D48]/10 dark:border-white/10"
+        className="relative overflow-hidden py-16 sm:py-24 bg-transparent border-b border-[#2D1D48]/10 dark:border-white/10"
       >
         {/* Animated Background Canvas & Cinema Video Layer */}
         <VideoSectionBackground
@@ -273,7 +276,10 @@ export function EntertainmentPage({ onInspectBrand }) {
               Next-Gen Projection &amp; Sound
             </span>
             <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1B1028] dark:text-white tracking-tight">
-              Crafted for Cinematic Immersion
+              Crafted for{' '}
+              <span className="font-serif italic font-normal inline-block bg-gradient-to-r from-[#8B5CF6] via-[#D946EF] to-[#EC4899] bg-clip-text text-transparent">
+                Cinematic Immersion
+              </span>
             </h2>
             <p className="text-sm sm:text-base text-[#5D5070] dark:text-[#D8CEE9] leading-relaxed">
               Pristine 4K laser projection, immersive acoustics &amp; recliner comfort.
@@ -314,7 +320,7 @@ export function EntertainmentPage({ onInspectBrand }) {
       <section
         ref={featuresRef}
         id="cinema-screenings"
-        className="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-b from-[#FFFDF9]/90 via-[#FBF4EB]/85 to-[#FAF6F0]/90 dark:from-[#151021]/92 dark:via-[#1D1630]/80 dark:to-[#151021]/92 border-b border-[#2D1D48]/10 dark:border-white/10"
+        className="relative overflow-hidden py-16 sm:py-24 bg-transparent border-b border-[#2D1D48]/10 dark:border-white/10"
       >
         {/* Animated Background Canvas & Cinema Video Layer */}
         <VideoSectionBackground
@@ -335,7 +341,10 @@ export function EntertainmentPage({ onInspectBrand }) {
                 Theatrical Programme
               </span>
               <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1B1325] dark:text-white tracking-tight">
-                Now Showing &amp; Film Genres
+                Now Showing &amp;{' '}
+                <span className="font-serif italic font-normal inline-block bg-gradient-to-r from-[#EC4899] via-[#8B5CF6] to-[#06B6D4] bg-clip-text text-transparent">
+                  Film Genres
+                </span>
               </h2>
             </div>
             <p className="text-xs text-[#5D5070] dark:text-white/65 max-w-sm">
@@ -423,7 +432,7 @@ export function EntertainmentPage({ onInspectBrand }) {
       <section
         ref={concourseRef}
         id="cinema-concourse"
-        className="relative overflow-hidden py-16 sm:py-20 bg-gradient-to-t from-[#FBF4EB]/95 via-[#FFFDF9]/85 to-[#FAF6F0]/90 dark:from-[#151021]/95 dark:via-[#1D1630]/85 dark:to-[#151021]/90"
+        className="relative overflow-hidden py-16 sm:py-20 bg-transparent"
       >
         {/* Animated Background Canvas & Cinema Video Layer */}
         <VideoSectionBackground
@@ -441,7 +450,10 @@ export function EntertainmentPage({ onInspectBrand }) {
           </div>
 
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#1B1325] dark:text-white tracking-tight">
-            Seamless Booking &amp; Evening Entertainment
+            Seamless Booking &amp;{' '}
+            <span className="font-serif italic font-normal inline-block bg-gradient-to-r from-[#9333EA] via-[#D946EF] to-[#EC4899] bg-clip-text text-transparent">
+              Evening Entertainment
+            </span>
           </h2>
 
           <p className="text-xs sm:text-sm text-[#5D5070] dark:text-white/80 max-w-xl mx-auto leading-relaxed">

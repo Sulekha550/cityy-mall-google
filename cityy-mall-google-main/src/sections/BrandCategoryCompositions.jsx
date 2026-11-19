@@ -4,7 +4,7 @@ import {
   ArrowRight,
   ArrowUpRight,
 } from 'lucide-react';
-import { CINEMA_POSTER_ASSETS } from '../assets/mediaManifest';
+import { CINEMA_POSTER_ASSETS, VIDEO_ASSETS } from '../assets/mediaManifest';
 import { registerSectionMotion } from '../animations/scrollAnimations';
 import { VideoSectionBackground } from '../components/VideoSectionBackground';
 import { ResilientImage } from '../components/ResilientImage';
@@ -20,7 +20,16 @@ function CategorySectionHeader({ category, count, actionRoute, actionLabel }) {
           Section {category.number} · {count} {count === 1 ? 'Approved House' : 'Approved Houses'}
         </p>
         <h2 className="font-display text-3xl sm:text-5xl font-semibold text-[#1B1325] dark:text-[#F6EFE7]">
-          {category.title}
+          {category.title.includes('&') ? (
+            <>
+              {category.title.split('&')[0]}&amp;{' '}
+              <span className="font-serif italic font-normal inline-block bg-gradient-to-r from-[#9333EA] via-[#D946EF] to-[#EC4899] bg-clip-text text-transparent">
+                {category.title.split('&').slice(1).join('&').trim()}
+              </span>
+            </>
+          ) : (
+            category.title
+          )}
         </h2>
         <p className="text-sm sm:text-base text-[#433754] dark:text-[#D8CEE9]">
           {category.subtitle}
@@ -64,13 +73,14 @@ function FashionLookbookSection({ category, brands, onInspectBrand }) {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden py-20 sm:py-24 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#EFE6FA] dark:bg-[#1D1630]"
+      className="relative overflow-hidden py-20 sm:py-24 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-transparent"
     >
       <VideoSectionBackground
-        videoAsset={category.video}
-        playbackRate={0.76}
-        videoOpacityClassName="opacity-76 dark:opacity-68"
-        tintClassName={`bg-gradient-to-br ${category.accentLight} dark:${category.accentDark}`}
+        videoAsset={VIDEO_ASSETS.mallHero}
+        variant="hero"
+        playbackRate={0.25}
+        videoOpacityClassName="opacity-88 dark:opacity-78"
+        tintClassName="bg-gradient-to-tr from-[#FBF4EB]/82 via-[#EFE6FA]/42 to-[#FDE8DF]/35 dark:from-[#151021]/84 dark:via-[#1D1630]/46 dark:to-[#241724]/38"
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 space-y-12">
@@ -231,13 +241,14 @@ function FootwearRunwaySection({ category, brands, onInspectBrand }) {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden py-20 sm:py-24 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#E4F5F0] dark:bg-[#112226]"
+      className="relative overflow-hidden py-20 sm:py-24 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-transparent"
     >
       <VideoSectionBackground
-        videoAsset={category.video}
-        playbackRate={0.78}
-        videoOpacityClassName="opacity-76 dark:opacity-68"
-        tintClassName={`bg-gradient-to-br ${category.accentLight} dark:${category.accentDark}`}
+        videoAsset={VIDEO_ASSETS.mallHero}
+        variant="hero"
+        playbackRate={0.25}
+        videoOpacityClassName="opacity-88 dark:opacity-78"
+        tintClassName="bg-gradient-to-tr from-[#FBF4EB]/82 via-[#EFE6FA]/42 to-[#FDE8DF]/35 dark:from-[#151021]/84 dark:via-[#1D1630]/46 dark:to-[#241724]/38"
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 space-y-12">
@@ -390,13 +401,14 @@ function JewelleryVitrinesSection({ category, brands, onInspectBrand }) {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden py-20 sm:py-24 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#FDE8DF] dark:bg-[#241724]"
+      className="relative overflow-hidden py-20 sm:py-24 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-transparent"
     >
       <VideoSectionBackground
-        videoAsset={category.video}
-        playbackRate={0.74}
-        videoOpacityClassName="opacity-76 dark:opacity-68"
-        tintClassName={`bg-gradient-to-br ${category.accentLight} dark:${category.accentDark}`}
+        videoAsset={VIDEO_ASSETS.mallHero}
+        variant="hero"
+        playbackRate={0.25}
+        videoOpacityClassName="opacity-88 dark:opacity-78"
+        tintClassName="bg-gradient-to-tr from-[#FBF4EB]/82 via-[#EFE6FA]/42 to-[#FDE8DF]/35 dark:from-[#151021]/84 dark:via-[#1D1630]/46 dark:to-[#241724]/38"
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 space-y-12">
@@ -420,7 +432,10 @@ function JewelleryVitrinesSection({ category, brands, onInspectBrand }) {
                 </span>
               </div>
               <h3 className="font-display text-3xl sm:text-4xl font-black text-[#1B1325] dark:text-[#FAF0F8] tracking-tight">
-                Tanishq &amp; Titan World
+                Tanishq &amp;{' '}
+                <span className="font-serif italic font-normal inline-block bg-gradient-to-r from-[#D97706] via-[#F59E0B] to-[#DB2777] bg-clip-text text-transparent">
+                  Titan World
+                </span>
               </h3>
               <p className="text-xs sm:text-sm font-semibold text-[#B36624] dark:text-[#FBBF24] leading-snug">
                 Certified 22K/18K Gold, Bridal Solitaires &amp; Precision Swiss Chronometers.
@@ -513,13 +528,14 @@ function BeautyDualStageSection({ category, brands, onInspectBrand }) {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden py-20 sm:py-24 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#FAE4EC] dark:bg-[#231526]"
+      className="relative overflow-hidden py-20 sm:py-24 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-transparent"
     >
       <VideoSectionBackground
-        videoAsset={category.video}
-        playbackRate={0.75}
-        videoOpacityClassName="opacity-76 dark:opacity-68"
-        tintClassName={`bg-gradient-to-br ${category.accentLight} dark:${category.accentDark}`}
+        videoAsset={VIDEO_ASSETS.mallHero}
+        variant="hero"
+        playbackRate={0.25}
+        videoOpacityClassName="opacity-88 dark:opacity-78"
+        tintClassName="bg-gradient-to-tr from-[#FBF4EB]/82 via-[#EFE6FA]/42 to-[#FDE8DF]/35 dark:from-[#151021]/84 dark:via-[#1D1630]/46 dark:to-[#241724]/38"
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 space-y-12">
@@ -543,7 +559,10 @@ function BeautyDualStageSection({ category, brands, onInspectBrand }) {
                 </span>
               </div>
               <h3 className="font-display text-3xl sm:text-4xl font-black text-[#1B1325] dark:text-[#FAF0F8] tracking-tight">
-                Looks Salon &amp; Mehendi Art
+                Looks Salon &amp;{' '}
+                <span className="font-serif italic font-normal inline-block bg-gradient-to-r from-[#DB2777] via-[#EC4899] to-[#9333EA] bg-clip-text text-transparent">
+                  Mehendi Art
+                </span>
               </h3>
               <p className="text-xs sm:text-sm font-semibold text-[#EC4899] dark:text-[#F472B6] leading-snug">
                 Hair Sanctuaries, Skin Therapies &amp; Traditional Bridal Artistry.
@@ -637,13 +656,14 @@ function SupermarketPanoramicSection({ category, brands, onInspectBrand }) {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden py-20 sm:py-24 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#E4F5F0] dark:bg-[#122524]"
+      className="relative overflow-hidden py-20 sm:py-24 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-transparent"
     >
       <VideoSectionBackground
-        videoAsset={category.video}
-        playbackRate={0.78}
-        videoOpacityClassName="opacity-76 dark:opacity-68"
-        tintClassName={`bg-gradient-to-br ${category.accentLight} dark:${category.accentDark}`}
+        videoAsset={VIDEO_ASSETS.mallHero}
+        variant="hero"
+        playbackRate={0.25}
+        videoOpacityClassName="opacity-88 dark:opacity-78"
+        tintClassName="bg-gradient-to-tr from-[#FBF4EB]/82 via-[#EFE6FA]/42 to-[#FDE8DF]/35 dark:from-[#151021]/84 dark:via-[#1D1630]/46 dark:to-[#241724]/38"
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 space-y-12">
@@ -744,13 +764,14 @@ function CinemaTheatricalSection({ category, brands, onInspectBrand }) {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden py-20 sm:py-24 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#E6F1FC] dark:bg-[#131C2E]"
+      className="relative overflow-hidden py-20 sm:py-24 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-transparent"
     >
       <VideoSectionBackground
-        videoAsset={category.video}
-        playbackRate={0.78}
-        videoOpacityClassName="opacity-78 dark:opacity-70"
-        tintClassName={`bg-gradient-to-br ${category.accentLight} dark:${category.accentDark}`}
+        videoAsset={VIDEO_ASSETS.mallHero}
+        variant="hero"
+        playbackRate={0.25}
+        videoOpacityClassName="opacity-88 dark:opacity-78"
+        tintClassName="bg-gradient-to-tr from-[#FBF4EB]/82 via-[#EFE6FA]/42 to-[#FDE8DF]/35 dark:from-[#151021]/84 dark:via-[#1D1630]/46 dark:to-[#241724]/38"
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 space-y-12">
@@ -902,13 +923,14 @@ function DiningFilmstripSection({ category, brands, onInspectBrand }) {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden py-20 sm:py-24 bg-[#FDE8DF] dark:bg-[#241724]"
+      className="relative overflow-hidden py-20 sm:py-24 bg-transparent"
     >
       <VideoSectionBackground
-        videoAsset={category.video}
-        playbackRate={0.76}
-        videoOpacityClassName="opacity-76 dark:opacity-68"
-        tintClassName={`bg-gradient-to-br ${category.accentLight} dark:${category.accentDark}`}
+        videoAsset={VIDEO_ASSETS.mallHero}
+        variant="hero"
+        playbackRate={0.25}
+        videoOpacityClassName="opacity-88 dark:opacity-78"
+        tintClassName="bg-gradient-to-tr from-[#FBF4EB]/82 via-[#EFE6FA]/42 to-[#FDE8DF]/35 dark:from-[#151021]/84 dark:via-[#1D1630]/46 dark:to-[#241724]/38"
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 space-y-12">

@@ -3,35 +3,27 @@ import { AbstractSectionBackground } from './AbstractSectionBackground';
 
 /**
  * Premium Video & Animated Section Backdrop.
- * Video & ambient canvas animations run ONLY when mouse is used (move, scroll, click, touch),
- * and automatically pause when the mouse stops / becomes idle.
+ * Mobile View: Runs continuously on GPU hardware decoding (autoPlay, muted, loop, playsInline)
+ * for buttery-smooth 60fps performance without CPU/decoder thread stalls.
+ * Desktop View: Interactive mouse-guided video and ambient motion.
  */
 export function VideoSectionBackground({
   videoAsset,
   variant,
   tintClassName,
   className = '',
-  videoOpacityClassName = 'opacity-55 dark:opacity-45',
+  videoOpacityClassName = 'opacity-88 dark:opacity-78',
   videoFilterClassName = '',
   eager = false,
   playbackRate = 1,
+  renderVideo = false,
 }) {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // Derive video source if not provided explicitly but known by variant
-  const isCinemaVariant = variant?.startsWith('entertainment') || variant === 'cinema';
-  const videoSrc =
-    videoAsset?.src ||
-    (isCinemaVariant
-      ? '/videos/cinema.mp4'
-      : undefined);
-
-  const videoPoster =
-    videoAsset?.poster ||
-    (isCinemaVariant
-      ? '/posters/cinema.webp'
-      : undefined);
+  // Unified homepage background video asset
+  const videoSrc = videoAsset?.src || '/videos/mall-hero.mp4';
+  const videoPoster = videoAsset?.poster || '/posters/mall-hero.webp';
 
   useEffect(() => {
     const video = videoRef.current;
@@ -39,10 +31,39 @@ export function VideoSectionBackground({
 
     video.defaultMuted = true;
     video.muted = true;
+    video.playsInline = true;
     if (playbackRate && isFinite(playbackRate)) {
       video.playbackRate = playbackRate;
     }
 
+    const isMobile =
+      typeof window !== 'undefined' &&
+      (window.innerWidth < 768 || 'ontouchstart' in window || navigator.maxTouchPoints > 0);
+
+    // =========================================================================
+    // MOBILE / PHONE VIEW: Continuous hardware-accelerated playback
+    // Avoids rapid pause/play calls that stall mobile decoders and cause stutter
+    // =========================================================================
+    if (isMobile) {
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => setIsPlaying(true))
+          .catch(() => {
+            // Autoplay with muted fallback
+            video.muted = true;
+            video.play().then(() => setIsPlaying(true)).catch(() => {});
+          });
+      }
+
+      return () => {
+        video.pause();
+      };
+    }
+
+    // =========================================================================
+    // DESKTOP VIEW: Activity-based controller with gentle idle pause
+    // =========================================================================
     let isVideoPlaying = false;
     let stopTimeout = null;
     let prevX = 0;
@@ -68,15 +89,13 @@ export function VideoSectionBackground({
       }
     };
 
-    // Wake video playback on mouse activity and schedule auto-pause when idle
     const handleActivity = (distance = 1) => {
       if (distance > 0.5) {
         playVideo();
         if (stopTimeout) clearTimeout(stopTimeout);
-        // When mouse/user activity stops for 600ms, pause the video
         stopTimeout = setTimeout(() => {
           pauseVideo();
-        }, 600);
+        }, 1200);
       }
     };
 
@@ -96,42 +115,21 @@ export function VideoSectionBackground({
       handleActivity(5);
     };
 
-    const handleTouchMove = (e) => {
-      if (e.touches && e.touches[0]) {
-        const t = e.touches[0];
-        const dist = Math.hypot(t.clientX - prevX, t.clientY - prevY);
-        prevX = t.clientX;
-        prevY = t.clientY;
-        handleActivity(dist);
-      }
-    };
-
-    let lastScrollY = window.scrollY;
-    const handleScroll = () => {
-      const delta = Math.abs(window.scrollY - lastScrollY);
-      lastScrollY = window.scrollY;
-      if (delta > 0) {
-        handleActivity(delta);
-      }
-    };
-
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
     window.addEventListener('wheel', handleWheel, { passive: true });
-    window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('pointerdown', handlePointerDown, { passive: true });
-    window.addEventListener('touchmove', handleTouchMove, { passive: true });
 
-    // Video is paused on initial load until mouse is used
-    video.pause();
-    isVideoPlaying = false;
+    // Initial play check
+    playVideo();
+    stopTimeout = setTimeout(() => {
+      pauseVideo();
+    }, 1500);
 
     return () => {
       if (stopTimeout) clearTimeout(stopTimeout);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('wheel', handleWheel);
-      window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('pointerdown', handlePointerDown);
-      window.removeEventListener('touchmove', handleTouchMove);
       video.pause();
     };
   }, [videoSrc, playbackRate]);
@@ -141,12 +139,13 @@ export function VideoSectionBackground({
       aria-hidden="true"
       className={`absolute inset-0 z-0 overflow-hidden pointer-events-none select-none ${className}`}
     >
-      {/* 1. Actual Background MP4 Video (Plays ONLY on mouse use) */}
-      {videoSrc && (
+      {/* 1. Actual Background MP4 Video (only when explicitly requested as standalone) */}
+      {renderVideo && videoSrc && (
         <video
           ref={videoRef}
           src={videoSrc}
           poster={videoPoster}
+          autoPlay
           muted
           loop
           playsInline
@@ -160,8 +159,11 @@ export function VideoSectionBackground({
         videoAsset={videoAsset || (videoSrc ? { src: videoSrc, poster: videoPoster } : undefined)}
         variant={variant}
         tintClassName={tintClassName}
+        hasVideo={Boolean(videoSrc)}
         className="absolute inset-0 z-10"
       />
     </div>
   );
 }
+
+export default VideoSectionBackground;

@@ -35,8 +35,7 @@ export function registerSectionMotion(containerEl, mode = 'editorial') {
             scrollTrigger: {
               trigger: el,
               start: 'top 92%',
-              end: 'bottom 10%',
-              toggleActions: 'play reverse play reverse',
+              once: true,
             },
           }
         );
@@ -71,8 +70,7 @@ export function registerSectionMotion(containerEl, mode = 'editorial') {
             scrollTrigger: {
               trigger: containerEl,
               start: 'top 85%',
-              end: 'bottom 12%',
-              toggleActions: 'play reverse play reverse',
+              once: true,
             },
           }
         );

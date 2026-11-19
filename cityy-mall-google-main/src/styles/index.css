@@ -14,6 +14,14 @@
     background-color: var(--surface-base);
     color: var(--text-primary);
     transition: background-color 280ms ease, color 280ms ease;
+    -webkit-overflow-scrolling: touch;
+    touch-action: manipulation;
+  }
+
+  @media (min-width: 768px) {
+    html {
+      scroll-behavior: smooth;
+    }
   }
 
   body {
@@ -21,7 +29,10 @@
     background-color: var(--surface-base);
     color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     overflow-x: clip;
+    text-rendering: optimizeSpeed;
+    -webkit-overflow-scrolling: touch;
   }
 
   h1,
@@ -30,6 +41,10 @@
   .font-display {
     font-family: var(--font-serif);
     text-wrap: balance;
+  }
+
+  img {
+    content-visibility: auto;
   }
 }
 

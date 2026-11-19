@@ -66,6 +66,7 @@ export function AbstractSectionBackground({
   videoAsset,
   tintClassName,
   className = '',
+  hasVideo = false,
 }) {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
@@ -77,7 +78,8 @@ export function AbstractSectionBackground({
     const container = containerRef.current;
     if (!canvas || !container) return undefined;
 
-    const ctx = canvas.getContext('2d', { alpha: false });
+    // alpha: true allows background MP4 video to be crystal clear underneath
+    const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return undefined;
 
     let animId = null;
@@ -102,12 +104,13 @@ export function AbstractSectionBackground({
       '(prefers-reduced-motion: reduce)'
     ).matches;
 
-    // Responsive Canvas Resize
+    // Responsive Canvas Resize (1x on mobile for max battery, 0 lag & 60fps)
     const resize = () => {
       const rect = container.getBoundingClientRect();
       width = Math.max(300, rect.width);
       height = Math.max(300, rect.height);
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const isMobile = window.innerWidth < 768;
+      dpr = isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
 
       canvas.width = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
@@ -226,7 +229,8 @@ export function AbstractSectionBackground({
     // =========================================================================
     // PROCEDURAL PARTICLES & GEOMETRY POOLS
     // =========================================================================
-    const particleCount = activeVariant === 'events' ? 70 : 45;
+    const isMobileScreen = typeof window !== 'undefined' && window.innerWidth < 768;
+    const particleCount = isMobileScreen ? 18 : (activeVariant === 'events' ? 45 : 32);
     const particles = Array.from({ length: particleCount }, () => ({
       x: Math.random() * 2000,
       y: Math.random() * 2000,
@@ -303,8 +307,9 @@ export function AbstractSectionBackground({
         mouseActivity = 0;
       }
 
-      // Background animation runs ONLY when mouse/touch/wheel is active, smoothly pausing when idle!
-      const motionSpeed = mouseActivity;
+      // Background animation: steady on mobile, mouse-guided on desktop
+      const isMobile = window.innerWidth < 768;
+      const motionSpeed = isMobile ? 0.35 : mouseActivity;
       time += dt * 0.55 * motionSpeed * speedFactor;
 
       // Mouse lerp

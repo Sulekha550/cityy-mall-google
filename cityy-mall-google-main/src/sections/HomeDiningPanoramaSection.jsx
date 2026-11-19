@@ -47,20 +47,20 @@ export function HomeDiningPanoramaSection({ onInspectBrand }) {
     <section
       ref={sectionRef}
       id="home-dining"
-      className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-16 sm:py-24 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#FAF4ED] dark:bg-[#140D1F] transition-colors duration-300"
+      className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-16 sm:py-24 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-transparent transition-colors duration-300"
     >
       {/* Animated Warm Dining Video Atmosphere */}
       <VideoSectionBackground
-        videoAsset={VIDEO_ASSETS.dining}
-        variant="dining"
-        playbackRate={0.7}
-        videoOpacityClassName="opacity-75 dark:opacity-60"
-        tintClassName="bg-gradient-to-r from-[#FAF4ED]/90 via-[#FCEAD2]/45 to-[#FDE8DF]/80 dark:from-[#140D1F]/94 dark:via-[#1E122E]/70 dark:to-[#140D1F]/96"
+        videoAsset={VIDEO_ASSETS.mallHero}
+        variant="hero"
+        playbackRate={0.25}
+        videoOpacityClassName="opacity-88 dark:opacity-78"
+        tintClassName="bg-gradient-to-tr from-[#FBF4EB]/82 via-[#EFE6FA]/42 to-[#FDE8DF]/35 dark:from-[#151021]/84 dark:via-[#1D1630]/46 dark:to-[#241724]/38"
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
-          
+
           {/* =========================================================================
               LEFT COLUMN: ELEGANT DINING DOSSIER (Clean Direct Typography)
              ========================================================================= */}
@@ -71,7 +71,10 @@ export function HomeDiningPanoramaSection({ onInspectBrand }) {
                 CULINARY &amp; BANQUET PROMENADE
               </span>
               <h2 className="font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-[#1D1129] dark:text-[#FAF0F8] leading-[1.12]">
-                Nine gastronomic tables in Gorakhpur
+                Nine Gastronomic Tables in{' '}
+                <span className="font-serif italic font-normal inline-block bg-gradient-to-r from-[#EA580C] via-[#F97316] to-[#E11D48] bg-clip-text text-transparent">
+                  Gorakhpur
+                </span>
               </h2>
             </div>
 
@@ -82,11 +85,10 @@ export function HomeDiningPanoramaSection({ onInspectBrand }) {
                   key={v.num}
                   to={v.route}
                   onMouseEnter={() => setActiveDiningIndex(idx)}
-                  className={`group/item flex items-center justify-between gap-4 p-3 rounded-2xl transition-all duration-300 border ${
-                    activeDiningIndex === idx
+                  className={`group/item flex items-center justify-between gap-4 p-3 rounded-2xl transition-all duration-300 border ${activeDiningIndex === idx
                       ? 'bg-black/5 dark:bg-white/10 border-black/15 dark:border-white/20'
                       : 'border-transparent hover:bg-black/5 dark:hover:bg-white/5'
-                  }`}
+                    }`}
                 >
                   <div className="flex items-start gap-3.5 min-w-0">
                     <span
@@ -125,12 +127,11 @@ export function HomeDiningPanoramaSection({ onInspectBrand }) {
              ========================================================================= */}
           <div className="lg:col-span-7 relative flex items-center justify-start overflow-visible pt-4 lg:pt-0">
             <div className="flex items-center -space-x-8 sm:-space-x-12 w-full select-none">
-              
+
               {/* IMAGE 1: DOMINANT SUNLIT DINING TERRACE (Stadium-Rounded Front Canvas) */}
               <div
-                className={`relative shrink-0 w-[50%] sm:w-[52%] aspect-[16/11] rounded-[2.5rem] overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 transition-all duration-500 hover:scale-[1.03] hover:z-40 ${
-                  activeDiningIndex === 0 ? 'z-30 ring-2 ring-[#EA580C]/40' : 'z-10'
-                }`}
+                className={`relative shrink-0 w-[50%] sm:w-[52%] aspect-[16/11] rounded-[2.5rem] overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 transition-all duration-500 hover:scale-[1.03] hover:z-40 ${activeDiningIndex === 0 ? 'z-30 ring-2 ring-[#EA580C]/40' : 'z-10'
+                  }`}
               >
                 <ResilientImage
                   src={SCENE_IMAGES.dining3dTerrace}
@@ -145,9 +146,8 @@ export function HomeDiningPanoramaSection({ onInspectBrand }) {
 
               {/* IMAGE 2: OVERLAPPING LIVE GRILL SALON */}
               <div
-                className={`relative shrink-0 w-[38%] sm:w-[40%] aspect-[3/3.8] rounded-[2.2rem] overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 transition-all duration-500 hover:scale-[1.04] hover:z-40 ${
-                  activeDiningIndex === 1 ? 'z-30 ring-2 ring-[#B45309]/50' : 'z-20'
-                }`}
+                className={`relative shrink-0 w-[38%] sm:w-[40%] aspect-[3/3.8] rounded-[2.2rem] overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 transition-all duration-500 hover:scale-[1.04] hover:z-40 ${activeDiningIndex === 1 ? 'z-30 ring-2 ring-[#B45309]/50' : 'z-20'
+                  }`}
               >
                 <ResilientImage
                   src={BRAND_IMAGES.barbequeNation}
@@ -162,9 +162,8 @@ export function HomeDiningPanoramaSection({ onInspectBrand }) {
 
               {/* IMAGE 3: OVERLAPPING ROYAL BANQUET & REGIONAL SPECIALTIES */}
               <div
-                className={`relative shrink-0 w-[38%] sm:w-[40%] aspect-[3/3.8] rounded-[2.2rem] overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 transition-all duration-500 hover:scale-[1.04] hover:z-40 ${
-                  activeDiningIndex === 2 ? 'z-30 ring-2 ring-[#C026D3]/50' : 'z-30'
-                }`}
+                className={`relative shrink-0 w-[38%] sm:w-[40%] aspect-[3/3.8] rounded-[2.2rem] overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 transition-all duration-500 hover:scale-[1.04] hover:z-40 ${activeDiningIndex === 2 ? 'z-30 ring-2 ring-[#C026D3]/50' : 'z-30'
+                  }`}
               >
                 <ResilientImage
                   src={BRAND_IMAGES.rangrezzaBanquet}
@@ -172,7 +171,7 @@ export function HomeDiningPanoramaSection({ onInspectBrand }) {
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent pointer-events-none" />
-                
+
                 <div className="absolute bottom-3 left-2.5 right-2.5 z-20">
                   <span className="block w-full text-center px-2 py-1 text-[8px] sm:text-[9px] font-mono font-bold uppercase tracking-wider text-white bg-black/80 backdrop-blur-md rounded-full border border-white/20 shadow-sm truncate">
                     9 SIGNATURE TABLES · BANQUET SUITES

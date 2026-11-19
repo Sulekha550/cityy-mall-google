@@ -19,7 +19,7 @@ export function HomeDiningCinemaDualSection({ onInspectBrand }) {
     <section
       ref={sectionRef}
       id="home-dining-cinema"
-      className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#140C20]"
+      className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#140C20]/85 backdrop-blur-md"
     >
       <div className="w-full grid grid-cols-1 lg:grid-cols-2 min-h-[100vh] items-stretch">
         {/* =====================================================================

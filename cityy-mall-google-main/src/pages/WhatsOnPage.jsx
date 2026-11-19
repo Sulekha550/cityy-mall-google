@@ -68,18 +68,19 @@ export function WhatsOnPage({ onInspectBrand }) {
   }, []);
 
   return (
-    <div className="bg-[#FBF4EB] dark:bg-[#151021] text-[#1B1325] dark:text-[#F6EFE7]">
+    <div className="bg-transparent text-[#1B1325] dark:text-[#F6EFE7]">
       {/* Section 1: What's On Atrium Showcase */}
       <section
         ref={heroRef}
-        className="relative overflow-hidden min-h-[92vh] flex items-center py-12 sm:py-16 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14"
+        className="relative overflow-hidden min-h-[92vh] flex items-center py-12 sm:py-16 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-transparent"
       >
         <VideoSectionBackground
-          videoAsset={VIDEO_ASSETS.events}
+          videoAsset={VIDEO_ASSETS.mallHero}
+          variant="hero"
           eager
-          playbackRate={0.76}
-          videoOpacityClassName="opacity-80 dark:opacity-72"
-          tintClassName="bg-gradient-to-tr from-[#FAE4EC]/88 via-[#EFE6FA]/48 to-[#FDE8DF]/84 dark:from-[#231526]/90 dark:via-[#1D1630]/54 dark:to-[#151021]/84"
+          playbackRate={0.25}
+          videoOpacityClassName="opacity-88 dark:opacity-78"
+          tintClassName="bg-gradient-to-tr from-[#FBF4EB]/82 via-[#EFE6FA]/42 to-[#FDE8DF]/35 dark:from-[#151021]/84 dark:via-[#1D1630]/46 dark:to-[#241724]/38"
         />
 
         <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
@@ -91,7 +92,10 @@ export function WhatsOnPage({ onInspectBrand }) {
             </div>
 
             <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#1B1325] dark:text-[#F6EFE7]">
-              What&apos;s On at CITY MALL
+              What&apos;s On at{' '}
+              <span className="font-serif italic font-normal inline-block bg-gradient-to-r from-[#9333EA] via-[#D946EF] to-[#EC4899] bg-clip-text text-transparent">
+                CITY MALL
+              </span>
             </h1>
 
             <p className="text-sm sm:text-base text-[#433754] dark:text-[#D8CEE9] leading-relaxed">
@@ -110,11 +114,10 @@ export function WhatsOnPage({ onInspectBrand }) {
                     key={themeItem.id}
                     type="button"
                     onClick={() => setSelectedThemeId(themeItem.id)}
-                    className={`w-full text-left p-4 rounded-sm border transition-all duration-200 cursor-pointer ${
-                      isSelected
+                    className={`w-full text-left p-4 rounded-sm border transition-all duration-200 cursor-pointer ${isSelected
                         ? 'bg-[#1B1325] dark:bg-[#F48C74] text-[#FBF4EB] dark:text-[#151021] border-[#1B1325] dark:border-[#F48C74] shadow-md -translate-y-0.5'
                         : 'bg-[#FFFBF6]/90 dark:bg-[#191326]/90 text-[#1B1325] dark:text-[#F6EFE7] border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 hover:border-[#C9523C] dark:hover:border-[#F48C74]'
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-[10px] font-semibold uppercase tracking-wider opacity-80">
@@ -204,13 +207,14 @@ export function WhatsOnPage({ onInspectBrand }) {
       {/* Section 2: Year-Round Visitor Direction */}
       <section
         ref={showcaseRef}
-        className="relative overflow-hidden py-14 sm:py-18 bg-[#FBF4EB] dark:bg-[#151021] border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14"
+        className="relative overflow-hidden py-14 sm:py-18 bg-transparent border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14"
       >
         <VideoSectionBackground
-          videoAsset={VIDEO_ASSETS.brandsStorefronts}
-          playbackRate={0.75}
-          videoOpacityClassName="opacity-72 dark:opacity-64"
-          tintClassName="bg-gradient-to-b from-[#FBF4EB]/88 via-[#E4F5F0]/46 to-[#EFE6FA]/88 dark:from-[#151021]/90 dark:via-[#112226]/52 dark:to-[#1D1630]/90"
+          videoAsset={VIDEO_ASSETS.mallHero}
+          variant="hero"
+          playbackRate={0.25}
+          videoOpacityClassName="opacity-88 dark:opacity-78"
+          tintClassName="bg-gradient-to-tr from-[#FBF4EB]/82 via-[#EFE6FA]/42 to-[#FDE8DF]/35 dark:from-[#151021]/84 dark:via-[#1D1630]/46 dark:to-[#241724]/38"
         />
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-4">
@@ -218,7 +222,10 @@ export function WhatsOnPage({ onInspectBrand }) {
             Year-Round Experiences
           </p>
           <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#1B1325] dark:text-[#F6EFE7]">
-            Explore Every Wing at Your Own Pace
+            Explore Every Wing at Your{' '}
+            <span className="font-serif italic font-normal inline-block bg-gradient-to-r from-[#F59E0B] via-[#EC4899] to-[#8B5CF6] bg-clip-text text-transparent">
+              Own Pace
+            </span>
           </h2>
           <p className="text-xs sm:text-sm text-[#433754] dark:text-[#D8CEE9] max-w-lg mx-auto leading-relaxed">
             In-mall festive announcements, outlet launches, and movie showtimes are displayed daily at the central concierge desk of CITY MALL, Gorakhpur.

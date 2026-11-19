@@ -169,13 +169,14 @@ export function DiscoverPage({ onInspectBrand }) {
         ref={heroRef}
         className="relative overflow-hidden pt-12 pb-16 sm:pb-24 border-b border-[#2D1D48]/14 dark:border-white/10"
       >
-        {/* Unified Animated Champagne Geometric Atmosphere */}
+        {/* Unified Homepage Background Atmosphere */}
         <VideoSectionBackground
-          videoAsset={VIDEO_ASSETS.discover || VIDEO_ASSETS.architecture}
-          variant="explore"
+          videoAsset={VIDEO_ASSETS.mallHero}
+          variant="hero"
           eager
-          videoOpacityClassName="opacity-80 dark:opacity-65"
-          tintClassName="bg-gradient-to-r from-[#FAF4ED]/88 via-[#FCEAD2]/45 to-[#F3E5F5]/70 dark:from-[#140D1F]/92 dark:via-[#1E122E]/65 dark:to-[#140D1F]/94"
+          playbackRate={0.25}
+          videoOpacityClassName="opacity-88 dark:opacity-78"
+          tintClassName="bg-gradient-to-tr from-[#FBF4EB]/82 via-[#EFE6FA]/42 to-[#FDE8DF]/35 dark:from-[#151021]/84 dark:via-[#1D1630]/46 dark:to-[#241724]/38"
         />
 
         <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
@@ -200,14 +201,14 @@ export function DiscoverPage({ onInspectBrand }) {
                 Ground to Sky Terrace
               </span>
             </div>
-          </div> 
+          </div>
 
           {/* =========================================================================
               ARCHITECTURAL COMPOSITION: FROSTED DOSSIER LEFT + OVERLAPPING STADIUM VITRINES RIGHT
               Exact match to Orion Mall reference design
              ========================================================================= */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
-            
+
             {/* LEFT COLUMN: Clean Direct Typography (Zero Card Box) */}
             <div className="lg:col-span-5 space-y-5" data-motion="reveal">
               <div className="space-y-2">
@@ -215,7 +216,10 @@ export function DiscoverPage({ onInspectBrand }) {
                   ARCHITECTURE &amp; FLOW
                 </span>
                 <h1 className="font-display text-3xl sm:text-4xl font-black tracking-tight text-[#1D1129] dark:text-[#FAF0F8] leading-[1.12]">
-                  Five Sunlit Levels in Gorakhpur
+                  Five Sunlit Levels in{' '}
+                  <span className="font-serif italic font-normal inline-block bg-gradient-to-r from-[#0D9488] via-[#14B8A6] to-[#8B5CF6] bg-clip-text text-transparent">
+                    Gorakhpur
+                  </span>
                 </h1>
                 <p className="text-sm text-[#3D2E50] dark:text-[#D8CEE9] font-medium leading-relaxed">
                   Soaring glass rotundas, fashion mezzanines, athletic concourses, and open-air dining.
@@ -232,11 +236,10 @@ export function DiscoverPage({ onInspectBrand }) {
                       type="button"
                       onMouseEnter={() => setActiveFloorIndex(idx)}
                       onClick={() => setActiveFloorIndex(idx)}
-                      className={`w-full flex items-center justify-between gap-3 p-3 rounded-2xl transition-all duration-300 cursor-pointer text-left border ${
-                        isActive
-                          ? 'bg-[#7C3AED]/15 dark:bg-white/15 border-[#7C3AED] shadow-xs'
-                          : 'bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10 hover:border-[#7C3AED]/50'
-                      }`}
+                      className={`w-full flex items-center justify-between gap-3 p-3 rounded-2xl transition-all duration-300 cursor-pointer text-left border ${isActive
+                        ? 'bg-[#7C3AED]/15 dark:bg-white/15 border-[#7C3AED] shadow-xs'
+                        : 'bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10 hover:border-[#7C3AED]/50'
+                        }`}
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <span
@@ -254,9 +257,8 @@ export function DiscoverPage({ onInspectBrand }) {
                         </div>
                       </div>
                       <ArrowUpRight
-                        className={`w-4 h-4 text-[#7C3AED] dark:text-[#C084FC] shrink-0 transition-transform ${
-                          isActive ? 'translate-x-0.5 -translate-y-0.5 opacity-100' : 'opacity-40'
-                        }`}
+                        className={`w-4 h-4 text-[#7C3AED] dark:text-[#C084FC] shrink-0 transition-transform ${isActive ? 'translate-x-0.5 -translate-y-0.5 opacity-100' : 'opacity-40'
+                          }`}
                       />
                     </button>
                   );
@@ -285,11 +287,10 @@ export function DiscoverPage({ onInspectBrand }) {
                       key={floor.level}
                       onMouseEnter={() => setActiveFloorIndex(idx)}
                       onClick={() => setActiveFloorIndex(idx)}
-                      className={`relative shrink-0 ${
-                        isMain
-                          ? 'w-[54%] aspect-[16/11] rounded-[2.5rem] z-30 ring-3 ring-[#7C3AED]/40 scale-[1.02]'
-                          : 'w-[38%] aspect-[3/3.8] rounded-[2.2rem] ' + (idx % 2 === 0 ? 'z-20' : 'z-10')
-                      } overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 transition-all duration-500 hover:scale-[1.04] hover:z-40 cursor-pointer group`}
+                      className={`relative shrink-0 ${isMain
+                        ? 'w-[54%] aspect-[16/11] rounded-[2.5rem] z-30 ring-3 ring-[#7C3AED]/40 scale-[1.02]'
+                        : 'w-[38%] aspect-[3/3.8] rounded-[2.2rem] ' + (idx % 2 === 0 ? 'z-20' : 'z-10')
+                        } overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 transition-all duration-500 hover:scale-[1.04] hover:z-40 cursor-pointer group`}
                     >
                       <ResilientImage
                         src={floor.image}
@@ -343,12 +344,14 @@ export function DiscoverPage({ onInspectBrand }) {
           ========================================================================= */}
       <section
         ref={archRef}
-        className="relative overflow-hidden py-16 sm:py-24 border-b border-[#2D1D48]/14 dark:border-white/10 bg-[#F5E6F6] dark:bg-[#1A1228]"
+        className="relative overflow-hidden py-16 sm:py-24 border-b border-[#2D1D48]/14 dark:border-white/10 bg-transparent"
       >
         <VideoSectionBackground
-          variant="explore"
-          videoOpacityClassName="opacity-60 dark:opacity-50"
-          tintClassName="bg-gradient-to-b from-[#F5E6F6]/90 via-[#FAF2F8]/70 to-[#F5E6F6]/90 dark:from-[#1A1228]/92 dark:via-[#151021]/80 dark:to-[#1A1228]/92"
+          videoAsset={VIDEO_ASSETS.mallHero}
+          variant="hero"
+          playbackRate={0.25}
+          videoOpacityClassName="opacity-88 dark:opacity-78"
+          tintClassName="bg-gradient-to-tr from-[#FBF4EB]/82 via-[#EFE6FA]/42 to-[#FDE8DF]/35 dark:from-[#151021]/84 dark:via-[#1D1630]/46 dark:to-[#241724]/38"
         />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
@@ -361,7 +364,10 @@ export function DiscoverPage({ onInspectBrand }) {
                 Approved Retail, Culinary &amp; Cinema Directory
               </span>
               <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#1B1325] dark:text-[#F8F0FA]">
-                Inspect Brands Along the Walkthrough
+                Inspect Brands Along the{' '}
+                <span className="font-serif italic font-normal inline-block bg-gradient-to-r from-[#7C3AED] via-[#9333EA] to-[#EC4899] bg-clip-text text-transparent">
+                  Walkthrough
+                </span>
               </h2>
             </div>
 
@@ -374,11 +380,10 @@ export function DiscoverPage({ onInspectBrand }) {
                     key={cat.id}
                     type="button"
                     onClick={() => setSelectedCatId(cat.id)}
-                    className={`px-3.5 py-1.5 rounded-xl text-xs font-bold tracking-wider uppercase transition-all cursor-pointer ${
-                      isSelected
-                        ? 'bg-[#7C3AED] text-white shadow-lg ring-1 ring-[#C084FC]/40 -translate-y-0.5'
-                        : 'bg-white/70 dark:bg-white/10 text-[#1B1325] dark:text-[#F8F0FA] border border-[#2D1D48]/12 dark:border-white/12 hover:border-[#7C3AED]'
-                    }`}
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-bold tracking-wider uppercase transition-all cursor-pointer ${isSelected
+                      ? 'bg-[#7C3AED] text-white shadow-lg ring-1 ring-[#C084FC]/40 -translate-y-0.5'
+                      : 'bg-white/70 dark:bg-white/10 text-[#1B1325] dark:text-[#F8F0FA] border border-[#2D1D48]/12 dark:border-white/12 hover:border-[#7C3AED]'
+                      }`}
                   >
                     {cat.shortLabel}
                   </button>
@@ -440,18 +445,17 @@ export function DiscoverPage({ onInspectBrand }) {
 
               {/* Right Column: Horizontally Overlapping Stadium-Rounded Image Showcase */}
               <div className="lg:col-span-7 relative flex items-center justify-start overflow-visible">
-                  <div className="flex items-center -space-x-8 sm:-space-x-12 w-full select-none">
+                <div className="flex items-center -space-x-8 sm:-space-x-12 w-full select-none">
                   {categoryBrands.slice(0, 3).map((brand, idx) => {
                     const isMain = idx === 0;
                     return (
                       <div
                         key={brand.id}
                         onClick={() => onInspectBrand?.(brand)}
-                        className={`relative shrink-0 ${
-                          isMain
-                            ? 'w-[52%] aspect-[16/11] rounded-[2.5rem] z-30'
-                            : 'w-[38%] aspect-[3/3.8] rounded-[2.2rem] ' + (idx === 1 ? 'z-20' : 'z-10')
-                        } overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 transition-all duration-500 hover:scale-[1.04] hover:z-40 cursor-pointer group`}
+                        className={`relative shrink-0 ${isMain
+                          ? 'w-[52%] aspect-[16/11] rounded-[2.5rem] z-30'
+                          : 'w-[38%] aspect-[3/3.8] rounded-[2.2rem] ' + (idx === 1 ? 'z-20' : 'z-10')
+                          } overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 transition-all duration-500 hover:scale-[1.04] hover:z-40 cursor-pointer group`}
                       >
                         <ResilientImage
                           src={brand.image}
@@ -459,7 +463,7 @@ export function DiscoverPage({ onInspectBrand }) {
                           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent pointer-events-none" />
-                        
+
                         <div className="absolute bottom-3 left-3 right-3 z-20 flex items-center justify-between gap-1">
                           <span className="text-[10px] font-bold text-white bg-black/70 px-2.5 py-0.5 rounded-full backdrop-blur-md truncate">
                             {brand.name}
@@ -484,12 +488,14 @@ export function DiscoverPage({ onInspectBrand }) {
           ========================================================================= */}
       <section
         ref={matrixRef}
-        className="relative overflow-hidden py-16 sm:py-24 bg-[#FAF2F8] dark:bg-[#151021]"
+        className="relative overflow-hidden py-16 sm:py-24 bg-transparent"
       >
         <VideoSectionBackground
-          variant="shopping"
-          videoOpacityClassName="opacity-60 dark:opacity-45"
-          tintClassName="bg-transparent"
+          videoAsset={VIDEO_ASSETS.mallHero}
+          variant="hero"
+          playbackRate={0.25}
+          videoOpacityClassName="opacity-88 dark:opacity-78"
+          tintClassName="bg-gradient-to-tr from-[#FBF4EB]/82 via-[#EFE6FA]/42 to-[#FDE8DF]/35 dark:from-[#151021]/84 dark:via-[#1D1630]/46 dark:to-[#241724]/38"
         />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
@@ -504,7 +510,10 @@ export function DiscoverPage({ onInspectBrand }) {
                 <span>Atrium Materiality &amp; Space</span>
               </span>
               <h2 className="font-display text-3xl sm:text-5xl font-bold text-[#1B1325] dark:text-[#F8F0FA]">
-                Promenade Views &amp; Gathering Spaces
+                Promenade Views &amp;{' '}
+                <span className="font-serif italic font-normal inline-block bg-gradient-to-r from-[#0D9488] via-[#06B6D4] to-[#8B5CF6] bg-clip-text text-transparent">
+                  Gathering Spaces
+                </span>
               </h2>
             </div>
 
@@ -521,10 +530,10 @@ export function DiscoverPage({ onInspectBrand }) {
 
           {/* Asymmetric Luxury Editorial Showcase (Completely Non-Card, Magazine Style) */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-2">
-            
+
             {/* LEFT COLUMN: Floor Navigation, Spatial Story, and Prominent Brand Pills (~5 cols) */}
             <div className="lg:col-span-5 space-y-6">
-              
+
               {/* Floor Selector Pills (Sleek horizontal track) */}
               <div className="flex flex-wrap items-center gap-2">
                 {ARCHITECTURAL_PORTALS.map((portal, idx) => {
@@ -534,11 +543,10 @@ export function DiscoverPage({ onInspectBrand }) {
                       key={portal.id}
                       type="button"
                       onClick={() => setActivePortalIndex(idx)}
-                      className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-300 cursor-pointer border ${
-                        isActive
-                          ? 'bg-gradient-to-r from-[#7C3AED] to-[#DB2777] text-white border-transparent shadow-md shadow-pink-500/25 scale-105'
-                          : 'bg-white/70 dark:bg-white/10 text-[#4A3258] dark:text-[#D8CEE9] border-black/10 dark:border-white/10 hover:bg-white/95'
-                      }`}
+                      className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-300 cursor-pointer border ${isActive
+                        ? 'bg-gradient-to-r from-[#7C3AED] to-[#DB2777] text-white border-transparent shadow-md shadow-pink-500/25 scale-105'
+                        : 'bg-white/70 dark:bg-white/10 text-[#4A3258] dark:text-[#D8CEE9] border-black/10 dark:border-white/10 hover:bg-white/95'
+                        }`}
                     >
                       <span>{portal.level.replace('LEVEL ', 'L')}</span> · {portal.tag}
                     </button>
@@ -564,7 +572,7 @@ export function DiscoverPage({ onInspectBrand }) {
                 <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#7C3AED] dark:text-[#C084FC] block">
                   Featured Concourse Boutiques
                 </span>
-                
+
                 <div className="flex flex-wrap items-center gap-2">
                   {currentPortalBrands.map((brand) => (
                     <button

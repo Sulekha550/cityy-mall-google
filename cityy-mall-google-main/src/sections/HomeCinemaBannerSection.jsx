@@ -21,14 +21,14 @@ export function HomeCinemaBannerSection({ onInspectBrand }) {
     <section
       ref={sectionRef}
       id="home-cinema"
-      className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-16 sm:py-24 bg-[#E6F1FC] dark:bg-[#131C2E]"
+      className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-16 sm:py-24 bg-transparent"
     >
       <VideoSectionBackground
-        videoAsset={VIDEO_ASSETS.cinema}
-        variant="entertainment"
-        playbackRate={0.78}
-        videoOpacityClassName="opacity-80 dark:opacity-74"
-        tintClassName="bg-gradient-to-tr from-[#E6F1FC]/86 via-[#EFE6FA]/44 to-[#FBF4EB]/78 dark:from-[#131C2E]/88 dark:via-[#1D1630]/54 dark:to-[#151021]/82"
+        videoAsset={VIDEO_ASSETS.mallHero}
+        variant="hero"
+        playbackRate={0.25}
+        videoOpacityClassName="opacity-88 dark:opacity-78"
+        tintClassName="bg-gradient-to-tr from-[#FBF4EB]/82 via-[#EFE6FA]/42 to-[#FDE8DF]/35 dark:from-[#151021]/84 dark:via-[#1D1630]/46 dark:to-[#241724]/38"
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -41,7 +41,10 @@ export function HomeCinemaBannerSection({ onInspectBrand }) {
 
           <div className="flex items-center gap-4">
             <h2 className="font-display text-4xl sm:text-5xl font-semibold text-[#1B1325] dark:text-[#F6EFE7]">
-              INOX Cinemas
+              INOX{' '}
+              <span className="font-serif italic font-normal inline-block bg-gradient-to-r from-[#8B5CF6] via-[#D946EF] to-[#EC4899] bg-clip-text text-transparent">
+                Cinemas
+              </span>
             </h2>
             {inox && (
               <BrandInsignia

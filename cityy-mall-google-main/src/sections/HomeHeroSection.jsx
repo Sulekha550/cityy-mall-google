@@ -35,7 +35,7 @@ export function HomeHeroSection({ onInspectBrand }) {
     <section
       ref={sectionRef}
       id="home-hero"
-      className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#FBF4EB] dark:bg-[#151021]"
+      className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-transparent"
     >
       <VideoSectionBackground
         videoAsset={VIDEO_ASSETS.mallHero}

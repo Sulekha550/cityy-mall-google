@@ -15,6 +15,7 @@ import { DiningPage } from './pages/DiningPage';
 import { EntertainmentPage } from './pages/EntertainmentPage';
 import { WhatsOnPage } from './pages/WhatsOnPage';
 import { VisitUsPage } from './pages/VisitUsPage';
+import { MallPageBackground } from './components/MallPageBackground';
 
 function MallRoutesShell() {
   const { pathname } = useLocation();
@@ -25,11 +26,14 @@ function MallRoutesShell() {
   }, [pathname]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FBF4EB] dark:bg-[#151021] text-[#1B1325] dark:text-[#F6EFE7] transition-colors duration-300">
+    <div className="relative min-h-screen flex flex-col bg-transparent text-[#1B1325] dark:text-[#F6EFE7] transition-colors duration-300">
+      {/* Universal CITY MALL Homepage Background Video & Visual Atmosphere */}
+      <MallPageBackground />
+
       <Navbar />
       <AutoScrollBar />
 
-      <main className="flex-1">
+      <main className="flex-1 relative z-10">
         <PageTransition routeKey={pathname}>
           <Routes>
             <Route
@@ -118,7 +122,9 @@ function MallRoutesShell() {
         </PageTransition>
       </main>
 
-      <DestinationFooter />
+      <div className="relative z-10">
+        <DestinationFooter />
+      </div>
 
       <BrandDetailDrawer
         brand={selectedBrand}

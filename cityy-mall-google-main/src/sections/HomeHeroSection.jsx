@@ -28,8 +28,9 @@ export function HomeHeroSection({ onInspectBrand }) {
 
   useEffect(() => {
     const id = window.setInterval(() => {
+      if (typeof document !== 'undefined' && document.hidden) return;
       setActiveIndex((prev) => (prev + 1) % featuredBrands.length);
-    }, 4800);
+    }, 6000);
     return () => window.clearInterval(id);
   }, [featuredBrands.length]);
 
@@ -141,7 +142,7 @@ export function HomeHeroSection({ onInspectBrand }) {
                   </div>
 
                   {activeBrand && (
-                    <div className="shrink-0 bg-[#2D1D48]/5 dark:bg-white/5 p-2 rounded-xl border border-[#2D1D48]/10 dark:border-white/10 shadow-xs">
+                    <div className="shrink-0 w-[110px] h-[56px] flex items-center justify-center bg-[#2D1D48]/5 dark:bg-white/5 p-2 rounded-xl border border-[#2D1D48]/10 dark:border-white/10 shadow-xs">
                       <BrandLogo
                         brandId={activeBrand.id}
                         variant="showcase"
@@ -152,19 +153,23 @@ export function HomeHeroSection({ onInspectBrand }) {
 
                 {/* Interactive switcher dots & inspect link */}
                 <div className="pt-3 flex items-center justify-between border-t border-[#2D1D48]/10 dark:border-white/10">
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-0.5">
                     {featuredBrands.map((b, idx) => (
                       <button
                         key={b.id}
                         type="button"
                         onClick={() => setActiveIndex(idx)}
                         aria-label={`Preview ${b.name}`}
-                        className={`h-1.5 rounded-full transition-all cursor-pointer ${
-                          idx === activeIndex
-                            ? 'w-7 bg-[#C9523C] dark:bg-[#F48C74]'
-                            : 'w-2 bg-[#2D1D48]/20 dark:bg-white/25 hover:bg-[#683BA4]'
-                        }`}
-                      />
+                        className="relative p-2 flex items-center justify-center cursor-pointer min-h-[36px]"
+                      >
+                        <span
+                          className={`h-1.5 rounded-full transition-all duration-300 block ${
+                            idx === activeIndex
+                              ? 'w-7 bg-[#C9523C] dark:bg-[#F48C74]'
+                              : 'w-2 bg-[#2D1D48]/20 dark:bg-white/25 hover:bg-[#683BA4]'
+                          }`}
+                        />
+                      </button>
                     ))}
                   </div>
 

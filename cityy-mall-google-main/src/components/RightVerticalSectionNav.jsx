@@ -96,9 +96,9 @@ export function RightVerticalSectionNav({ sections = SECTIONS }) {
               aria-current={isActive ? 'true' : undefined}
               className="relative p-1.5 flex items-center justify-center cursor-pointer group focus:outline-none"
             >
-              {/* Outer pulsing ring for active section */}
+              {/* Active subtle halo ring */}
               {isActive && (
-                <span className="absolute w-5 h-5 rounded-full border border-[#C9523C]/50 dark:border-[#F48C74]/60 animate-ping opacity-75 pointer-events-none" />
+                <span className="absolute w-5 h-5 rounded-full border border-[#C9523C]/40 dark:border-[#F48C74]/50 pointer-events-none" />
               )}
 
               {/* Active glow halo */}

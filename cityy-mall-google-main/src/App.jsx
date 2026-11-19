@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { ThemeProvider } from './utilities/themeContext';
 import { Navbar } from './components/Navbar';
@@ -8,13 +8,13 @@ import { BrandDetailDrawer } from './components/BrandDetailDrawer';
 import { PageTransition } from './components/PageTransition';
 
 import { HomePage } from './pages/HomePage';
-import { DiscoverPage } from './pages/DiscoverPage';
-import { BrandsPage } from './pages/BrandsPage';
-import { ShoppingPage } from './pages/ShoppingPage';
-import { DiningPage } from './pages/DiningPage';
-import { EntertainmentPage } from './pages/EntertainmentPage';
-import { WhatsOnPage } from './pages/WhatsOnPage';
-import { VisitUsPage } from './pages/VisitUsPage';
+const DiscoverPage = lazy(() => import('./pages/DiscoverPage').then((m) => ({ default: m.DiscoverPage })));
+const BrandsPage = lazy(() => import('./pages/BrandsPage').then((m) => ({ default: m.BrandsPage })));
+const ShoppingPage = lazy(() => import('./pages/ShoppingPage').then((m) => ({ default: m.ShoppingPage })));
+const DiningPage = lazy(() => import('./pages/DiningPage').then((m) => ({ default: m.DiningPage })));
+const EntertainmentPage = lazy(() => import('./pages/EntertainmentPage').then((m) => ({ default: m.EntertainmentPage })));
+const WhatsOnPage = lazy(() => import('./pages/WhatsOnPage').then((m) => ({ default: m.WhatsOnPage })));
+const VisitUsPage = lazy(() => import('./pages/VisitUsPage').then((m) => ({ default: m.VisitUsPage })));
 import { MallPageBackground } from './components/MallPageBackground';
 import { initSmoothScroll } from './utilities/smoothScroll';
 
@@ -40,7 +40,8 @@ function MallRoutesShell() {
 
       <main className="flex-1 relative z-10">
         <PageTransition routeKey={pathname}>
-          <Routes>
+          <Suspense fallback={<div className="min-h-screen bg-transparent" />}>
+            <Routes>
             <Route
               path="/"
               element={<HomePage onInspectBrand={setSelectedBrand} />}
@@ -124,6 +125,7 @@ function MallRoutesShell() {
               element={<HomePage onInspectBrand={setSelectedBrand} />}
             />
           </Routes>
+          </Suspense>
         </PageTransition>
       </main>
 

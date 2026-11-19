@@ -137,11 +137,10 @@ export function VideoSectionBackground({
           ref={videoRef}
           src={videoSrc}
           poster={videoPoster}
-          autoPlay
           muted
           loop
           playsInline
-          preload={eager ? 'auto' : 'metadata'}
+          preload="none"
           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${videoOpacityClassName} ${videoFilterClassName}`}
         />
       )}

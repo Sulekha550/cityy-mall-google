@@ -834,7 +834,7 @@ export function HomeBrandSpotlightSection({ onInspectBrand }) {
           </div>
 
           {/* 5 Dot Pagination Indicators (Exact match to reference) */}
-          <div className="flex items-center justify-center gap-2 pt-6">
+          <div className="flex items-center justify-center gap-1.5 pt-6">
             {[0, 1, 2, 3, 4].map((dotIdx) => {
               const total = ALL_HOMEPAGE_BRANDS.length;
               const isCurrent = Math.floor(((activeIndex % total) / total) * 5) === dotIdx;
@@ -844,11 +844,15 @@ export function HomeBrandSpotlightSection({ onInspectBrand }) {
                   type="button"
                   onClick={() => setActiveIndex(Math.floor((dotIdx / 5) * total))}
                   aria-label={`Go to section ${dotIdx + 1}`}
-                  className={`rounded-full transition-all duration-300 cursor-pointer ${isCurrent
-                      ? 'w-2.5 h-2.5 bg-[#9333EA] ring-2 ring-purple-400/50'
-                      : 'w-2 h-2 bg-black/20 dark:bg-white/30 hover:bg-black/40'
-                    }`}
-                />
+                  className="relative p-2.5 flex items-center justify-center cursor-pointer min-w-[36px] min-h-[36px]"
+                >
+                  <span
+                    className={`rounded-full transition-transform duration-300 ${isCurrent
+                        ? 'w-2.5 h-2.5 bg-[#9333EA] scale-125 shadow-xs'
+                        : 'w-2 h-2 bg-black/25 dark:bg-white/35 hover:scale-110'
+                      }`}
+                  />
+                </button>
               );
             })}
           </div>

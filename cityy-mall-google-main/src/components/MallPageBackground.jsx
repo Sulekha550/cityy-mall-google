@@ -117,7 +117,7 @@ export function MallPageBackground() {
       aria-hidden="true"
       className="fixed inset-0 z-0 overflow-hidden pointer-events-none select-none"
     >
-      {/* 1. Exact Homepage MP4 Background Video (Interactive Mouse-Triggered Playback Only) */}
+      {/* 1. Exact Homepage MP4 Background Video (Interactive Mouse-Triggered Playback Only, zero auto-download) */}
       <video
         ref={videoRef}
         src={VIDEO_ASSETS.mallHero.src}
@@ -125,7 +125,7 @@ export function MallPageBackground() {
         muted
         loop
         playsInline
-        preload="auto"
+        preload="none"
         className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-88 dark:opacity-78"
       />
 

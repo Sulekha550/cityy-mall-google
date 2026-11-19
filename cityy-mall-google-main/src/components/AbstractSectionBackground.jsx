@@ -290,6 +290,7 @@ export function AbstractSectionBackground({
     // MAIN RENDER LOOP
     // =========================================================================
     let lastTime = performance.now();
+    let renderedInitial = 0;
 
     const render = (now) => {
       animId = requestAnimationFrame(render);
@@ -307,10 +308,21 @@ export function AbstractSectionBackground({
         mouseActivity = 0;
       }
 
-      // Background animation: steady on mobile, mouse-guided on desktop
-      const isMobile = window.innerWidth < 768;
-      const motionSpeed = isMobile ? 0.35 : mouseActivity;
-      time += dt * 0.55 * motionSpeed * speedFactor;
+      const motionSpeed = mouseActivity;
+
+      // Skip redrawing if completely idle after initial frame has rendered
+      if (
+        motionSpeed === 0 &&
+        targetMouseActivity === 0 &&
+        Math.abs(mouseX) < 0.01 &&
+        Math.abs(mouseY) < 0.01 &&
+        renderedInitial >= 2
+      ) {
+        return;
+      }
+      renderedInitial++;
+
+      time += dt * 0.55 * Math.max(0.2, motionSpeed) * speedFactor;
 
       // Mouse lerp
       mouseX += (targetMouseX - mouseX) * dt * 3;

@@ -54,8 +54,8 @@ export function ResilientImage({
 
   return (
     <div className={`relative overflow-hidden ${className}`}>
-      {/* Smooth Skeleton Shimmer Placeholder while loading */}
-      {!loaded && (
+      {/* Smooth Skeleton Shimmer Placeholder while loading (non-priority only) */}
+      {!loaded && !priority && (
         <div className="absolute inset-0 bg-gradient-to-r from-purple-100/50 via-pink-100/40 to-purple-100/50 dark:from-purple-950/50 dark:via-pink-950/40 dark:to-purple-950/50 animate-pulse pointer-events-none" />
       )}
       <img
@@ -70,8 +70,8 @@ export function ResilientImage({
         onLoad={handleLoad}
         onError={() => setFailed(true)}
         className={`w-full h-full object-cover ${
-          loaded ? 'opacity-100' : 'opacity-0'
-        } ${GLOBAL_IMAGE_CACHE.has(src) ? '' : 'transition-opacity duration-200'}`}
+          priority || loaded ? 'opacity-100' : 'opacity-0'
+        } ${priority || GLOBAL_IMAGE_CACHE.has(src) ? '' : 'transition-opacity duration-200'}`}
       />
     </div>
   );

@@ -8,8 +8,9 @@ import {
   Flame,
 } from 'lucide-react';
 import { VIDEO_ASSETS } from '../assets/mediaManifest';
-import { BRAND_IMAGES, SCENE_IMAGES } from '../assets/imageRegistry';
+import { BRAND_IMAGES } from '../assets/imageRegistry';
 import { registerSectionMotion } from '../animations/scrollAnimations';
+import { VideoSectionBackground } from '../components/VideoSectionBackground';
 import { ResilientImage } from '../components/ResilientImage';
 
 // Master catalog of all 23 approved brands inside CITY MALL
@@ -588,40 +589,16 @@ export function HomeBrandSpotlightSection({ onInspectBrand }) {
       className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden py-14 sm:py-20 border-b border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#FBF4EB] dark:bg-[#151021] select-none"
     >
       {/* =========================================================================
-          1. BACKGROUND & ENVIRONMENT (Exact match with reference image)
-          Full-screen luxurious shopping mall atrium background, curved balconies,
-          glass ceiling, soft pink, lavender, pearl white, warm champagne lighting,
-          glossy reflective marble floor.
+          BACKGROUND (Hero Section Signature Interactive Video & Abstract Canvas)
          ========================================================================= */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none">
-        <ResilientImage
-          src={SCENE_IMAGES.heroCityMallAtrium}
-          alt="Luxurious Shopping Mall Atrium"
-          className="w-full h-full object-cover object-center scale-105 filter brightness-105 contrast-105"
-        />
-        {/* Soft Pink, Lavender, Pearl White and Warm Champagne Ambient Lighting */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FDF2F8]/75 via-[#FCE7F3]/35 to-[#FDF4EA]/90 dark:from-[#130B1E]/88 dark:via-[#1B102A]/50 dark:to-[#120B1C]/92" />
-        <div className="absolute inset-0 bg-radial-at-t from-pink-300/35 via-purple-300/20 to-transparent mix-blend-screen" />
-        <div className="absolute inset-0 bg-radial-at-b from-purple-400/20 via-pink-400/15 to-transparent" />
-        {/* Glossy Reflective Marble Floor Light Gradient at the Bottom */}
-        <div className="absolute bottom-0 inset-x-0 h-2/5 bg-gradient-to-t from-white/95 via-white/60 to-transparent dark:from-[#130B1E]/98 dark:via-[#160E22]/70 dark:to-transparent" />
-      </div>
-
-      {/* Foreground Tropical Botanical Leaves (Framing the marble floor in bottom corners) */}
-      <div className="absolute -bottom-6 -left-8 w-44 sm:w-60 h-44 sm:h-60 z-30 pointer-events-none opacity-85 select-none">
-        <svg viewBox="0 0 200 200" className="w-full h-full fill-[#15803D]/65 dark:fill-[#047857]/45 filter blur-[0.5px]">
-          <path d="M-20 220 Q 30 110 90 70 Q 60 130 20 220 Z" />
-          <path d="M0 220 Q 70 80 150 40 Q 110 110 50 220 Z" />
-          <path d="M-10 220 Q 110 130 180 100 Q 130 160 80 220 Z" />
-        </svg>
-      </div>
-      <div className="absolute -bottom-6 -right-8 w-44 sm:w-60 h-44 sm:h-60 z-30 pointer-events-none opacity-85 select-none transform scale-x-[-1]">
-        <svg viewBox="0 0 200 200" className="w-full h-full fill-[#15803D]/65 dark:fill-[#047857]/45 filter blur-[0.5px]">
-          <path d="M-20 220 Q 30 110 90 70 Q 60 130 20 220 Z" />
-          <path d="M0 220 Q 70 80 150 40 Q 110 110 50 220 Z" />
-          <path d="M-10 220 Q 110 130 180 100 Q 130 160 80 220 Z" />
-        </svg>
-      </div>
+      <VideoSectionBackground
+        videoAsset={VIDEO_ASSETS.mallHero}
+        variant="hero"
+        eager
+        playbackRate={0.25}
+        videoOpacityClassName="opacity-88 dark:opacity-78"
+        tintClassName="bg-gradient-to-tr from-[#FBF4EB]/82 via-[#EFE6FA]/42 to-[#FDE8DF]/35 dark:from-[#151021]/84 dark:via-[#1D1630]/46 dark:to-[#241724]/38"
+      />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full space-y-8 sm:space-y-10">
         

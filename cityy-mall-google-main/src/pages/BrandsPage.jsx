@@ -1,740 +1,889 @@
-import { useMemo, useState, useRef, useEffect } from 'react';
+import { useState, useMemo, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Search,
   X,
   ArrowRight,
   Sparkles,
   MapPin,
-  Film,
-  Compass,
   Clock,
-  Camera,
+  Compass,
+  Building2,
+  Check,
+  ChevronDown,
+  Layers,
 } from 'lucide-react';
 import { VIDEO_ASSETS } from '../assets/mediaManifest';
-import { SCENE_IMAGES } from '../assets/imageRegistry';
-import {
-  APPROVED_BRANDS,
-  SAMPLE_CINEMA_FEATURES,
-  MALL_IDENTITY,
-} from '../utilities/brandsData';
+import { BRAND_IMAGES } from '../assets/imageRegistry';
+import { MALL_IDENTITY } from '../utilities/brandsData';
 import { VideoSectionBackground } from '../components/VideoSectionBackground';
 import { ResilientImage } from '../components/ResilientImage';
 
-// Curated architectural multi-image angles per brand
-const BRAND_GALLERY_IMAGES = {
-  'louis-philippe': [
-    APPROVED_BRANDS.find((b) => b.id === 'louis-philippe')?.image,
-    SCENE_IMAGES.brandsScene2,
-    SCENE_IMAGES.shoppingScene2,
-  ],
-  'levis-store': [
-    APPROVED_BRANDS.find((b) => b.id === 'levis-store')?.image,
-    SCENE_IMAGES.shoppingScene2,
-    SCENE_IMAGES.brandsScene3,
-  ],
-  'w-for-woman': [
-    APPROVED_BRANDS.find((b) => b.id === 'w-for-woman')?.image,
-    SCENE_IMAGES.shoppingScene3,
-    SCENE_IMAGES.brandsScene4,
-  ],
-  'allen-solly': [
-    APPROVED_BRANDS.find((b) => b.id === 'allen-solly')?.image,
-    SCENE_IMAGES.brandsScene4,
-    SCENE_IMAGES.shoppingScene2,
-  ],
-  'adidas': [
-    APPROVED_BRANDS.find((b) => b.id === 'adidas')?.image,
-    SCENE_IMAGES.brandsScene2,
-    SCENE_IMAGES.shoppingScene4,
-  ],
-  'puma': [
-    APPROVED_BRANDS.find((b) => b.id === 'puma')?.image,
-    SCENE_IMAGES.brandsScene3,
-    SCENE_IMAGES.shoppingScene3,
-  ],
-  'woodland-store': [
-    APPROVED_BRANDS.find((b) => b.id === 'woodland-store')?.image,
-    SCENE_IMAGES.shoppingScene2,
-    SCENE_IMAGES.brandsScene4,
-  ],
-  'skechers': [
-    APPROVED_BRANDS.find((b) => b.id === 'skechers')?.image,
-    SCENE_IMAGES.shoppingScene4,
-    SCENE_IMAGES.brandsScene2,
-  ],
-  'tanishq': [
-    APPROVED_BRANDS.find((b) => b.id === 'tanishq')?.image,
-    SCENE_IMAGES.brandsScene3,
-    SCENE_IMAGES.shoppingScene2,
-  ],
-  'titan-world': [
-    APPROVED_BRANDS.find((b) => b.id === 'titan-world')?.image,
-    SCENE_IMAGES.brandsScene2,
-    SCENE_IMAGES.shoppingScene4,
-  ],
-  'looks-salon': [
-    APPROVED_BRANDS.find((b) => b.id === 'looks-salon')?.image,
-    SCENE_IMAGES.brandsScene3,
-    SCENE_IMAGES.shoppingScene3,
-  ],
-  'spencers': [
-    APPROVED_BRANDS.find((b) => b.id === 'spencers')?.image,
-    SCENE_IMAGES.shoppingScene4,
-    SCENE_IMAGES.brandsScene4,
-  ],
-  'inox-cinemas': [
-    APPROVED_BRANDS.find((b) => b.id === 'inox-cinemas')?.image,
-    SCENE_IMAGES.cinemaPosterHeritage,
-    SCENE_IMAGES.cinemaPosterOdyssey,
-  ],
-};
-
-// Mall floor directory mapping for CITY MALL Gorakhpur premier outlets
-const BRAND_FLOOR_MAP = {
+// ============================================================================
+// ALL 17 OFFICIAL CITY MALL BRANDS
+// Complete authentic data with real boutique photography & suite mapping
+// ============================================================================
+export const BRANDS_DIRECTORY = {
+  // --- LEVEL 00: GROUND FLOOR ---
   'louis-philippe': {
+    id: 'louis-philippe',
+    name: 'Louis Philippe',
+    shortName: 'Louis Philippe',
+    monogram: 'LP',
     floor: 'Ground Floor',
     levelCode: 'LEVEL 00',
     suite: 'Suite G-04',
-    levelId: 'gf',
     hours: '10:00 AM – 10:00 PM',
-    tag: 'Haute Menswear',
-    color: '#818CF8',
-    access: 'Central Promenade',
+    tagline: 'Tailored Menswear, Bespoke Suiting & Luxury Ceremonial Attire',
+    category: 'Haute Menswear',
+    accentColor: '#4A154B',
+    badgeBg: '#2D114D',
+    badgeColor: '#FFFFFF',
+    image: BRAND_IMAGES.louisPhilippe,
+    features: ['Made-to-Measure Suiting', 'Silk & Linen Salon', 'Ceremonial Wardrobe'],
   },
   'levis-store': {
+    id: 'levis-store',
+    name: "Levi's Store",
+    shortName: "Levi's",
+    monogram: 'LV',
     floor: 'Ground Floor',
     levelCode: 'LEVEL 00',
     suite: 'Suite G-11',
-    levelId: 'gf',
     hours: '10:00 AM – 10:00 PM',
-    tag: 'Iconic Denim',
-    color: '#F87171',
-    access: 'Central Promenade',
-  },
-  'w-for-woman': {
-    floor: 'First Floor',
-    levelCode: 'LEVEL 01',
-    suite: 'Suite 1-08',
-    levelId: '1f',
-    hours: '10:00 AM – 09:30 PM',
-    tag: 'Contemporary Ethnic',
-    color: '#F472B6',
-    access: 'East Wing Gallery',
-  },
-  'allen-solly': {
-    floor: 'First Floor',
-    levelCode: 'LEVEL 01',
-    suite: 'Suite 1-14',
-    levelId: '1f',
-    hours: '10:00 AM – 10:00 PM',
-    tag: 'Smart Casuals',
-    color: '#34D399',
-    access: 'West Wing Concourse',
-  },
-  'adidas': {
-    floor: 'Second Floor',
-    levelCode: 'LEVEL 02',
-    suite: 'Suite 2-02',
-    levelId: '2f',
-    hours: '10:00 AM – 10:00 PM',
-    tag: 'Athletic Performance',
-    color: '#38BDF8',
-    access: 'Central Arena',
-  },
-  'puma': {
-    floor: 'Second Floor',
-    levelCode: 'LEVEL 02',
-    suite: 'Suite 2-05',
-    levelId: '2f',
-    hours: '10:00 AM – 10:00 PM',
-    tag: 'Speed & Sportswear',
-    color: '#FB923C',
-    access: 'North Wing Promenade',
-  },
-  'woodland-store': {
-    floor: 'Second Floor',
-    levelCode: 'LEVEL 02',
-    suite: 'Suite 2-12',
-    levelId: '2f',
-    hours: '10:00 AM – 10:00 PM',
-    tag: 'Outdoor Adventure',
-    color: '#A3E635',
-    access: 'South Concourse',
-  },
-  'skechers': {
-    floor: 'Second Floor',
-    levelCode: 'LEVEL 02',
-    suite: 'Suite 2-18',
-    levelId: '2f',
-    hours: '10:00 AM – 10:00 PM',
-    tag: 'Comfort & Running',
-    color: '#A78BFA',
-    access: 'East Wing',
+    tagline: 'Iconic 501 Original Denim & Contemporary Casual Collections',
+    category: 'Heritage Denim',
+    accentColor: '#C41230',
+    badgeBg: '#C41230',
+    badgeColor: '#FFFFFF',
+    image: BRAND_IMAGES.levisStore,
+    features: ['Tailor Shop Bar', '501 Archive Display', 'Sustainable Denim'],
   },
   'tanishq': {
+    id: 'tanishq',
+    name: 'Tanishq',
+    shortName: 'Tanishq',
+    monogram: 'TQ',
     floor: 'Ground Floor',
     levelCode: 'LEVEL 00',
     suite: 'Suite G-01',
-    levelId: 'gf',
     hours: '10:30 AM – 09:30 PM',
-    tag: 'Gold & Diamonds',
-    color: '#FBBF24',
-    access: 'Main Frontage Atrium',
+    tagline: 'Certified 22K Gold, Polki, Solitaires & Bridal Jewellery',
+    category: 'Fine Gold & Diamonds',
+    accentColor: '#B45309',
+    badgeBg: '#FEF3C7',
+    badgeColor: '#78350F',
+    image: BRAND_IMAGES.tanishq,
+    features: ['Rivaah Bridal Lounge', 'Solitaire Vault', 'Karatmeter Testing'],
   },
   'titan-world': {
+    id: 'titan-world',
+    name: 'Titan World',
+    shortName: 'Titan World',
+    monogram: 'TW',
     floor: 'Ground Floor',
     levelCode: 'LEVEL 00',
     suite: 'Suite G-02',
-    levelId: 'gf',
     hours: '10:00 AM – 10:00 PM',
-    tag: 'Haute Horlogerie',
-    color: '#CBD5E1',
-    access: 'West Gallery',
+    tagline: 'Swiss Automatics, Edge Ceramic & Precision Timepieces',
+    category: 'Precision Horology',
+    accentColor: '#1E293B',
+    badgeBg: '#0F172A',
+    badgeColor: '#FFFFFF',
+    image: BRAND_IMAGES.titanWorld,
+    features: ['Titan Edge Showcase', 'Watch Care Clinic', 'Smart Timepiece Bay'],
   },
-  'looks-salon': {
-    floor: 'Third Floor',
-    levelCode: 'LEVEL 03',
-    suite: 'Suite 3-06',
-    levelId: '3f',
+  'metro-shoes': {
+    id: 'metro-shoes',
+    name: 'Metro Shoes',
+    shortName: 'Metro Shoes',
+    monogram: 'MS',
+    floor: 'Ground Floor',
+    levelCode: 'LEVEL 00',
+    suite: 'Suite G-08',
+    hours: '10:00 AM – 10:00 PM',
+    tagline: 'Bridal Stilettos, Formal Loafers & Contemporary Leatherwear',
+    category: 'Fashion & Formal Footwear',
+    accentColor: '#6B21A8',
+    badgeBg: '#581C87',
+    badgeColor: '#FFFFFF',
+    image: BRAND_IMAGES.metroShoes,
+    features: ['Bridal Footwear Salon', 'Handcrafted Loafers', 'Leather Accessories'],
+  },
+
+  // --- LEVEL 01: FIRST FLOOR ---
+  'allen-solly': {
+    id: 'allen-solly',
+    name: 'Allen Solly',
+    shortName: 'Allen Solly',
+    monogram: 'AS',
+    floor: 'First Floor',
+    levelCode: 'LEVEL 01',
+    suite: 'Suite 1-14',
+    hours: '10:00 AM – 10:00 PM',
+    tagline: 'Friday Dressing, Playful Workwear, Chinos & Smart Casuals',
+    category: 'Smart Casuals',
+    accentColor: '#047857',
+    badgeBg: '#064E3B',
+    badgeColor: '#FFFFFF',
+    image: BRAND_IMAGES.allenSolly,
+    features: ['Friday Dressing Hub', 'Urban Chinos Rack', 'Polo & Knitwear'],
+  },
+  'w-for-woman': {
+    id: 'w-for-woman',
+    name: 'W for Woman',
+    shortName: 'W for Woman',
+    monogram: 'W',
+    floor: 'First Floor',
+    levelCode: 'LEVEL 01',
+    suite: 'Suite 1-08',
     hours: '10:00 AM – 09:30 PM',
-    tag: 'Salon & Wellness',
-    color: '#E879F9',
-    access: 'West Wing Pavilion',
+    tagline: 'Contemporary Ethnic & Fusion Festive Women’s Apparel',
+    category: 'Ethnic Couture',
+    accentColor: '#B45309',
+    badgeBg: '#FEF3C7',
+    badgeColor: '#78350F',
+    image: BRAND_IMAGES.wForWoman,
+    features: ['Festive Drapes Studio', 'Pastel Kurti Lounge', 'Occasion Ensembles'],
   },
-  'spencers': {
-    floor: 'Lower Ground',
-    levelCode: 'LEVEL LG',
-    suite: 'Suite LG-01',
-    levelId: 'lg',
-    hours: '08:30 AM – 10:30 PM',
-    tag: 'Hypermarket',
-    color: '#4ADE80',
-    access: 'Lower Ground Atrium',
+  'mufti': {
+    id: 'mufti',
+    name: 'Mufti',
+    shortName: 'Mufti',
+    monogram: 'MF',
+    floor: 'First Floor',
+    levelCode: 'LEVEL 01',
+    suite: 'Suite 1-18',
+    hours: '10:00 AM – 10:00 PM',
+    tagline: 'Alternative Streetwear, Expressive Casuals & Raw Denim',
+    category: 'Contemporary Streetwear',
+    accentColor: '#1E1B4B',
+    badgeBg: '#0F172A',
+    badgeColor: '#FFFFFF',
+    image: BRAND_IMAGES.mufti,
+    features: ['Expressive Shirts Line', 'Distressed Denim Line', 'Street Casuals'],
   },
+  'flying-machine': {
+    id: 'flying-machine',
+    name: 'Flying Machine',
+    shortName: 'Flying Machine',
+    monogram: 'FM',
+    floor: 'First Floor',
+    levelCode: 'LEVEL 01',
+    suite: 'Suite 1-22',
+    hours: '10:00 AM – 10:00 PM',
+    tagline: 'Bold Youth Denim, Graphic Tees & Urban Outerwear',
+    category: 'Youth Denim & Outerwear',
+    accentColor: '#DC2626',
+    badgeBg: '#991B1B',
+    badgeColor: '#FFFFFF',
+    image: BRAND_IMAGES.flyingMachine,
+    features: ['Tripmachine Capsule', 'Graphic Apparel', 'Stretch Denim Lab'],
+  },
+
+  // --- LEVEL 02: SECOND FLOOR ---
+  'adidas': {
+    id: 'adidas',
+    name: 'Adidas',
+    shortName: 'Adidas',
+    monogram: 'AD',
+    floor: 'Second Floor',
+    levelCode: 'LEVEL 02',
+    suite: 'Suite 2-02',
+    hours: '10:00 AM – 10:00 PM',
+    tagline: 'Performance Footwear, Ultraboost & Originals Sportswear',
+    category: 'Athletic Footwear',
+    accentColor: '#0F172A',
+    badgeBg: '#000000',
+    badgeColor: '#FFFFFF',
+    image: BRAND_IMAGES.adidas,
+    features: ['Ultraboost Trial Lab', 'Originals Heritage Wall', 'Performance Sportswear'],
+  },
+  'puma': {
+    id: 'puma',
+    name: 'Puma',
+    shortName: 'Puma',
+    monogram: 'PM',
+    floor: 'Second Floor',
+    levelCode: 'LEVEL 02',
+    suite: 'Suite 2-05',
+    hours: '10:00 AM – 10:00 PM',
+    tagline: 'Speed Running Shoes, Nitro Foam Tech & Motorsport Collections',
+    category: 'Sportswear & Footwear',
+    accentColor: '#C9523C',
+    badgeBg: '#111827',
+    badgeColor: '#FFFFFF',
+    image: BRAND_IMAGES.puma,
+    features: ['Nitro Running Station', 'Motorsport Showcase', 'Training Apparel'],
+  },
+  'woodland-store': {
+    id: 'woodland-store',
+    name: 'Woodland Store',
+    shortName: 'Woodland',
+    monogram: 'WL',
+    floor: 'Second Floor',
+    levelCode: 'LEVEL 02',
+    suite: 'Suite 2-12',
+    hours: '10:00 AM – 10:00 PM',
+    tagline: 'All-Terrain Leather Boots & Outdoor Adventure Equipment',
+    category: 'Outdoor Boots & Gear',
+    accentColor: '#15803D',
+    badgeBg: '#14532D',
+    badgeColor: '#FFFFFF',
+    image: BRAND_IMAGES.woodlandStore,
+    features: ['Rugged Boot Trail Test', 'Climbing Gear Rack', 'Weatherproof Apparel'],
+  },
+  'skechers': {
+    id: 'skechers',
+    name: 'Skechers',
+    shortName: 'Skechers',
+    monogram: 'SK',
+    floor: 'Second Floor',
+    levelCode: 'LEVEL 02',
+    suite: 'Suite 2-18',
+    hours: '10:00 AM – 10:00 PM',
+    tagline: 'Hands-Free Slip-ins, Arch Fit & Walking Comfort Footwear',
+    category: 'Comfort Walking Footwear',
+    accentColor: '#002D62',
+    badgeBg: '#0A2540',
+    badgeColor: '#FFFFFF',
+    image: BRAND_IMAGES.skechers,
+    features: ['Hands-Free Step Bar', 'Arch Fit Cushion Testing', 'Gowalk Gallery'],
+  },
+  'red-chief': {
+    id: 'red-chief',
+    name: 'Red Chief',
+    shortName: 'Red Chief',
+    monogram: 'RC',
+    floor: 'Second Floor',
+    levelCode: 'LEVEL 02',
+    suite: 'Suite 2-24',
+    hours: '10:00 AM – 10:00 PM',
+    tagline: 'Genuine Leather Casual Shoes, Rugged Boots & Accessories',
+    category: 'Pure Leather Footwear',
+    accentColor: '#B91C1C',
+    badgeBg: '#7F1D1D',
+    badgeColor: '#FFFFFF',
+    image: BRAND_IMAGES.redChief,
+    features: ['Pure Leather Craft Wall', 'Rugged Boot Display', 'Belt & Wallet Bar'],
+  },
+
+  // --- ANCHORS & LIFESTYLE: UPPER & LOWER FLOORS ---
   'inox-cinemas': {
+    id: 'inox-cinemas',
+    name: 'INOX Cinemas',
+    shortName: 'INOX Cinemas',
+    monogram: 'IX',
     floor: 'Fourth Floor',
     levelCode: 'LEVEL 04',
     suite: 'Multiplex Level',
-    levelId: '4f',
     hours: '09:00 AM – 01:00 AM',
-    tag: 'Multiplex INSIGNIA',
-    color: '#F43F5E',
-    access: 'Express Elevator & Escalator',
+    tagline: 'Multiplex INSIGNIA, Laser 4K Projection & Dolby Atmos Sound',
+    category: 'Multiplex Cinema & Entertainment',
+    accentColor: '#004B93',
+    badgeBg: '#002B5B',
+    badgeColor: '#FFFFFF',
+    image: BRAND_IMAGES.inoxCinemas,
+    features: ['INSIGNIA Luxury Recliners', 'Laser 4K Projection', 'Gourmet Cine-Dining'],
+  },
+  'looks-salon': {
+    id: 'looks-salon',
+    name: 'Looks Salon',
+    shortName: 'Looks Salon',
+    monogram: 'LK',
+    floor: 'Third Floor',
+    levelCode: 'LEVEL 03',
+    suite: 'Suite 3-06',
+    hours: '10:00 AM – 09:30 PM',
+    tagline: 'Luxury Hair Styling, Bespoke Facial Therapy & Grooming',
+    category: 'Luxury Salon & Wellness',
+    accentColor: '#DB2777',
+    badgeBg: '#831843',
+    badgeColor: '#FFFFFF',
+    image: BRAND_IMAGES.looksSalon,
+    features: ['Private Styling Pods', 'Kerastase Hair Therapy', 'VIP Grooming Lounge'],
+  },
+  'spencers': {
+    id: 'spencers',
+    name: "Spencer's",
+    shortName: "Spencer's",
+    monogram: 'SP',
+    floor: 'Lower Ground',
+    levelCode: 'LEVEL LG',
+    suite: 'Suite LG-01',
+    hours: '08:30 AM – 10:30 PM',
+    tagline: 'Fresh Gourmet Pantry, Global Delicacies & Family Essentials',
+    category: 'Gourmet Hypermarket',
+    accentColor: '#059669',
+    badgeBg: '#064E3B',
+    badgeColor: '#FFFFFF',
+    image: BRAND_IMAGES.spencers,
+    features: ['Artisan Bakery', 'Farm-Fresh Produce', 'Imported Gourmet Cellar'],
   },
 };
 
-// Floor Levels for Architectural Discovery
-const FLOOR_LEVELS = [
-  { id: 'all', shortLabel: 'All Levels', badge: '13 Outlets' },
-  { id: 'gf', shortLabel: 'Level 00', badge: 'Ground' },
-  { id: '1f', shortLabel: 'Level 01', badge: 'Fashion' },
-  { id: '2f', shortLabel: 'Level 02', badge: 'Sportswear' },
-  { id: '3f', shortLabel: 'Level 03', badge: 'Salon' },
-  { id: 'lg', shortLabel: 'Level LG', badge: "Spencer's" },
-  { id: '4f', shortLabel: 'Level 04', badge: 'INOX' },
+// ============================================================================
+// 4 DISTINCT LEVEL ZONES FOR CITY MALL
+// Alternating layout and unique ambient theme per zone matching the reference screenshots
+// ============================================================================
+export const SHOPPING_FLOOR_ZONES = [
+  // SECTION 1: GROUND FLOOR (Card Left, Image Right - Soft Terracotta / Peach Ambient)
+  {
+    id: 'zone-ground-floor',
+    anchorId: 'level-00',
+    levelCode: 'LEVEL 00 · GROUND FLOOR',
+    shortCode: 'Level 00',
+    title: 'Flagship Icons & Haute Horlogerie',
+    subtitle: '5 flagship menswear, heritage denim, certified gold and precision watchmaking salons along the main atrium.',
+    brandIds: ['louis-philippe', 'levis-store', 'tanishq', 'titan-world', 'metro-shoes'],
+    isReversed: false, // Card Left, Image Right
+    theme: 'peach', // Peach / warm ivory background with subtle contours
+  },
+
+  // SECTION 2: FIRST FLOOR (Image Left, Card Right - Wavy Aqua / Teal Contours)
+  {
+    id: 'zone-first-floor',
+    anchorId: 'level-01',
+    levelCode: 'LEVEL 01 · FIRST FLOOR',
+    shortCode: 'Level 01',
+    title: 'Denim, Ethnic Couture & Streetwear',
+    subtitle: '4 contemporary Indian ethnic, European smart casuals & expressive streetwear destinations along the upper promenade.',
+    brandIds: ['allen-solly', 'w-for-woman', 'mufti', 'flying-machine'],
+    isReversed: true, // Image Left, Card Right (Exact match to screenshot 1)
+    theme: 'teal', // Teal wavy curves & glowing nodes
+  },
+
+  // SECTION 3: SECOND FLOOR (Card Left, Image Right - Concentric Lavender / Pink Rings)
+  {
+    id: 'zone-second-floor',
+    anchorId: 'level-02',
+    levelCode: 'LEVEL 02 · SECOND FLOOR',
+    shortCode: 'Level 02',
+    title: 'Athletic Performance & Outdoor Adventure',
+    subtitle: '5 global athletic footwear, speed trainers, rugged leather boots & comfortable walking boutiques.',
+    brandIds: ['adidas', 'puma', 'woodland-store', 'skechers', 'red-chief'],
+    isReversed: false, // Card Left, Image Right
+    theme: 'lavender', // Concentric lilac / pink fluid rings
+  },
+
+  // SECTION 4: ANCHOR DESTINATIONS (Image Left, Card Right - Royal Amethyst / Cinema Gold)
+  {
+    id: 'zone-anchors',
+    anchorId: 'level-anchors',
+    levelCode: 'LEVEL LG – 04 · ANCHOR DESTINATIONS',
+    shortCode: 'Anchors',
+    title: 'Multiplex Cinema, Wellness & Hypermarket',
+    subtitle: '3 anchor lifestyle destinations: INSIGNIA Laser 4K multiplex cinema, bespoke luxury salon & family gourmet hypermarket.',
+    brandIds: ['inox-cinemas', 'looks-salon', 'spencers'],
+    isReversed: true, // Image Left, Card Right
+    theme: 'gold', // Gold / violet ambient glow
+  },
 ];
 
-export function BrandsPage({ onInspectBrand }) {
-  const [query, setQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedFloor, setSelectedFloor] = useState('all');
-  const [activeBrandId, setActiveBrandId] = useState('louis-philippe');
-  const [activeImageAngleIndex, setActiveImageAngleIndex] = useState(0);
+// Authentic Brand Logo / Monogram Badge Component
+function BrandBadgeEmblem({ brandId, className = 'w-9 h-7' }) {
+  const brand = BRANDS_DIRECTORY[brandId];
+  if (!brand) return null;
 
-  // Filter out any dining/filler brands, keeping strictly the 13 premier retail houses
-  const premier13Brands = useMemo(() => {
-    return APPROVED_BRANDS.filter((b) => b.categoryId !== 'dining');
-  }, []);
-
-  const normalizedQuery = query.trim().toLowerCase();
-
-  const filteredBrands = useMemo(() => {
-    return premier13Brands.filter((b) => {
-      const matchesCat =
-        selectedCategory === 'all' || b.categoryId === selectedCategory;
-      if (!matchesCat) return false;
-
-      const floorInfo = BRAND_FLOOR_MAP[b.id];
-      const matchesFloor =
-        selectedFloor === 'all' || floorInfo?.levelId === selectedFloor;
-      if (!matchesFloor) return false;
-
-      if (!normalizedQuery) return true;
+  switch (brandId) {
+    case 'inox-cinemas':
       return (
-        b.name.toLowerCase().includes(normalizedQuery) ||
-        b.categoryName.toLowerCase().includes(normalizedQuery) ||
-        b.tagline.toLowerCase().includes(normalizedQuery) ||
-        (floorInfo?.floor || '').toLowerCase().includes(normalizedQuery) ||
-        (floorInfo?.suite || '').toLowerCase().includes(normalizedQuery)
+        <div className={`${className} rounded-xl bg-[#002B5B] text-white flex items-center justify-center font-black text-[10px] tracking-tight shrink-0 shadow-xs border border-white/20`}>
+          <span>IN<span className="text-amber-400">O</span>X</span>
+        </div>
       );
-    });
-  }, [premier13Brands, normalizedQuery, selectedCategory, selectedFloor]);
 
-  // Keep activeBrand synchronized
-  const activeBrand = useMemo(() => {
-    const found = filteredBrands.find((b) => b.id === activeBrandId);
-    return found || filteredBrands[0] || premier13Brands[0];
-  }, [filteredBrands, activeBrandId, premier13Brands]);
+    case 'levis-store':
+      return (
+        <div className={`${className} rounded-xl bg-[#C41230] text-white flex items-center justify-center font-serif italic font-black text-[10px] tracking-tight shrink-0 shadow-xs`}>
+          <span>Levi&apos;s</span>
+        </div>
+      );
 
-  // Reset angle index when brand changes
-  useEffect(() => {
-    setActiveImageAngleIndex(0);
-  }, [activeBrand?.id]);
+    case 'louis-philippe':
+      return (
+        <div className={`${className} rounded-xl bg-[#2D114D] text-white flex items-center justify-center font-serif font-black text-[10px] tracking-tight shrink-0 shadow-xs`}>
+          <span>LP</span>
+        </div>
+      );
 
-  const activeFloorData = BRAND_FLOOR_MAP[activeBrand?.id] || {
-    floor: 'Ground Floor',
-    levelCode: 'LEVEL 00',
-    suite: 'Suite G-01',
-    hours: '10:00 AM – 10:00 PM',
-    tag: 'Luxury Boutique',
-    color: '#D63F28',
-    access: 'Central Promenade',
-  };
+    case 'adidas':
+      return (
+        <div className={`${className} rounded-xl bg-black text-white flex items-center justify-center font-black text-[10px] shrink-0 shadow-xs`}>
+          <span>///</span>
+        </div>
+      );
 
-  const galleryImages = BRAND_GALLERY_IMAGES[activeBrand?.id] || [
-    activeBrand?.image,
-    SCENE_IMAGES.brandsScene2,
-    SCENE_IMAGES.shoppingScene2,
-  ];
+    case 'puma':
+      return (
+        <div className={`${className} rounded-xl bg-[#111827] text-white flex items-center justify-center font-black text-[9px] tracking-wider shrink-0 shadow-xs`}>
+          <span>PUMA</span>
+        </div>
+      );
 
-  const currentDisplayImage =
-    galleryImages[activeImageAngleIndex] || activeBrand?.image;
+    case 'woodland-store':
+      return (
+        <div className={`${className} rounded-xl bg-[#14532D] text-white flex items-center justify-center font-black text-[8px] tracking-wider shrink-0 shadow-xs`}>
+          <span>WOOD</span>
+        </div>
+      );
+
+    case 'allen-solly':
+      return (
+        <div className={`${className} rounded-xl bg-[#064E3B] text-white flex items-center justify-center font-serif font-black text-[10px] tracking-tight shrink-0 shadow-xs`}>
+          <span>AS</span>
+        </div>
+      );
+
+    case 'tanishq':
+      return (
+        <div className={`${className} rounded-xl bg-[#FEF3C7] text-[#78350F] border border-amber-300 flex items-center justify-center font-serif font-black text-[9px] tracking-wider shrink-0 shadow-xs`}>
+          <span>TQ</span>
+        </div>
+      );
+
+    case 'w-for-woman':
+      return (
+        <div className={`${className} rounded-xl bg-[#FEF3C7] text-[#78350F] border border-amber-300 flex items-center justify-center font-serif font-black text-xs shrink-0 shadow-xs`}>
+          <span>W</span>
+        </div>
+      );
+
+    default:
+      return (
+        <div
+          className={`${className} rounded-xl text-white flex items-center justify-center font-black text-[10px] tracking-tight shrink-0 shadow-xs`}
+          style={{ backgroundColor: brand.badgeBg || brand.accentColor }}
+        >
+          <span>{brand.monogram}</span>
+        </div>
+      );
+  }
+}
+
+// ============================================================================
+// INDIVIDUAL FLOOR ZONE SECTION
+// Supports Alternating Left/Right Layout & Custom Ambient Theme per Floor Zone
+// ============================================================================
+function FloorZoneSection({ zone, onInspectBrand }) {
+  const [selectedBrandId, setSelectedBrandId] = useState(zone.brandIds[0]);
+
+  const activeBrand = BRANDS_DIRECTORY[selectedBrandId] || BRANDS_DIRECTORY[zone.brandIds[0]];
 
   return (
-    <div className="relative min-h-screen bg-[#FAF4ED] dark:bg-[#140D1F] text-[#1E112A] dark:text-[#FAF0F8] transition-colors duration-300">
-      {/* Animated Ambient Background */}
-      <VideoSectionBackground
-        videoAsset={VIDEO_ASSETS.brandsStorefronts}
-        variant="brands"
-        eager
-        playbackRate={0.65}
-        videoOpacityClassName="opacity-60 dark:opacity-45"
-        tintClassName="bg-gradient-to-b from-[#FAF4ED]/90 via-[#F3E5F5]/60 to-[#FCE7F3]/85 dark:from-[#140D1F]/94 dark:via-[#1E122E]/70 dark:to-[#140D1F]/96"
-      />
+    <section
+      id={zone.anchorId}
+      className="relative min-h-[85vh] flex flex-col justify-center overflow-hidden py-16 sm:py-24 border-b border-[#2D1D48]/10 dark:border-white/10"
+    >
+      {/* Subtle ambient lighting accent */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none">
+        <div className="absolute top-1/2 -left-32 -translate-y-1/2 w-96 h-96 rounded-full bg-gradient-to-tr from-purple-300/15 via-pink-300/10 to-transparent blur-3xl" />
+        <div className="absolute -top-10 right-10 w-96 h-96 bg-gradient-to-bl from-amber-200/15 via-purple-200/10 to-transparent blur-3xl" />
+      </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-20 sm:py-10 space-y-8 sm:space-y-10">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
 
-        {/* =========================================================================
-            TOP MINIMAL HEADER & SEARCH (Ultra-Crisp Text)
-           ========================================================================= */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-[#2D1D48]/12 dark:border-white/12">
-          <div className="space-y-1 max-w-xl">
-            <div className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-[#D63F28] dark:text-[#FFA07A]">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>13 Premier Flagships · {MALL_IDENTITY.name}</span>
+          {/* ===================================================================
+              FLOATING WHITE PILL CARD CONTAINER
+              Order switches depending on zone.isReversed!
+             =================================================================== */}
+          <div
+            className={`lg:col-span-5 relative rounded-[2.5rem] bg-white/95 dark:bg-[#1C122C]/95 backdrop-blur-2xl border-2 border-white/90 dark:border-white/15 shadow-[0_20px_60px_rgba(147,51,234,0.08)] p-7 sm:p-9 space-y-6 ${zone.isReversed ? 'lg:order-2' : 'lg:order-1'
+              }`}
+          >
+            {/* Header Kicker & Titles */}
+            <div className="space-y-2">
+              <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.22em] text-[#9333EA] dark:text-[#F472B6] block">
+                {zone.levelCode}
+              </span>
+              <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#1E112A] dark:text-[#FAF0F8] leading-[1.12]">
+                {zone.title}
+              </h3>
+              <p className="text-xs sm:text-sm text-[#5C426E] dark:text-[#D8CEE9] font-medium leading-relaxed">
+                {zone.subtitle}
+              </p>
             </div>
-            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#1D1129] dark:text-[#FAF0F8]">
-              Flagship Boutiques
-            </h1>
-          </div>
 
-          {/* Search Bar */}
-          <div className="relative w-full md:w-72 lg:w-80 shrink-0">
-            <Search className="w-4 h-4 text-[#D63F28] dark:text-[#FFA07A] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search boutique or floor..."
-              aria-label="Search brands directory"
-              className="w-full pl-10 pr-9 py-2.5 text-xs sm:text-sm rounded-2xl border border-black/10 dark:border-white/15 bg-white/90 dark:bg-[#1E122E]/90 text-[#1D1129] dark:text-[#FAF0F8] placeholder:text-[#6E557F] dark:placeholder:text-[#BFA1FF] focus:outline-none focus:ring-2 focus:ring-[#D63F28] transition-all shadow-xs"
-            />
-            {query && (
+            {/* Interactive Brand Selector Pills Grid (Exact Orion Mall Style) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+              {zone.brandIds.map((brandId) => {
+                const brand = BRANDS_DIRECTORY[brandId];
+                if (!brand) return null;
+                const isSelected = activeBrand.id === brand.id;
+
+                return (
+                  <button
+                    key={brand.id}
+                    type="button"
+                    onClick={() => setSelectedBrandId(brand.id)}
+                    onMouseEnter={() => setSelectedBrandId(brand.id)}
+                    className={`flex items-center gap-2.5 px-3 py-2.5 rounded-2xl transition-all cursor-pointer text-left border ${isSelected
+                      ? 'bg-purple-500/10 dark:bg-purple-500/20 border-2 border-[#9333EA] dark:border-[#C084FC] shadow-md ring-2 ring-purple-400/30 scale-[1.02]'
+                      : 'bg-white/80 dark:bg-white/5 border-black/10 dark:border-white/10 hover:border-black/25 hover:bg-white dark:hover:bg-white/10'
+                      }`}
+                  >
+                    {/* Brand Insignia Emblem Badge */}
+                    <BrandBadgeEmblem brandId={brand.id} className="w-8 h-6 sm:w-9 sm:h-7" />
+
+                    {/* Brand Name */}
+                    <div className="min-w-0 flex-1">
+                      <span className={`block font-bold text-xs sm:text-sm tracking-tight truncate ${isSelected ? 'text-[#9333EA] dark:text-[#F472B6]' : 'text-[#1E112A] dark:text-[#FAF0F8]'
+                        }`}>
+                        {brand.shortName}
+                      </span>
+                      <span className="text-[10px] text-[#8C769F] dark:text-[#C5B3D9] block truncate font-medium">
+                        {brand.suite}
+                      </span>
+                    </div>
+
+                    {isSelected && (
+                      <Check className="w-3.5 h-3.5 text-[#9333EA] dark:text-[#F472B6] shrink-0" />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Inspect Details Action Footer */}
+            <div className="pt-2 border-t border-black/5 dark:border-white/10 flex items-center justify-between">
+              <div className="flex flex-col">
+                <span className="text-[10px] font-mono font-bold text-[#9333EA] dark:text-[#F472B6]">
+                  {activeBrand.hours}
+                </span>
+                <span className="text-xs text-[#5C426E] dark:text-[#D8CEE9] font-medium">
+                  {activeBrand.floor} · {activeBrand.suite}
+                </span>
+              </div>
+
               <button
                 type="button"
-                onClick={() => setQuery('')}
-                aria-label="Clear search"
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[#6E557F] hover:text-[#1D1129] dark:hover:text-white cursor-pointer"
+                onClick={() => onInspectBrand?.(activeBrand)}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-[#9333EA] via-[#D946EF] to-[#EC4899] text-white shadow-lg shadow-pink-500/25 hover:scale-105 transition-all cursor-pointer"
               >
-                <X className="w-3.5 h-3.5" />
+                <span>Inspect Store</span>
+                <ArrowRight className="w-3.5 h-3.5" />
               </button>
+            </div>
+          </div>
+
+          {/* ===================================================================
+              MONUMENTAL ARCHITECTURAL SHOWCASE VITRINE
+              High-resolution store interior photograph with floating bottom pill
+             =================================================================== */}
+          <div
+            className={`lg:col-span-7 relative aspect-[16/11] sm:aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white/95 dark:border-white/20 bg-black/10 group cursor-pointer ${zone.isReversed ? 'lg:order-1' : 'lg:order-2'
+              }`}
+            onClick={() => onInspectBrand?.(activeBrand)}
+          >
+            {/* Real Boutique Photograph */}
+            <ResilientImage
+              key={activeBrand.id}
+              src={activeBrand.image}
+              alt={`${activeBrand.name} Showcase`}
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+
+            {/* Top Floor Tag Badge */}
+            <div className="absolute top-4 left-4 z-10 flex items-center gap-2 bg-black/75 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/20 shadow-lg pointer-events-none">
+              <span className="w-2 h-2 rounded-full bg-[#F472B6] animate-pulse" />
+              <span className="text-xs font-bold text-white tracking-wide">
+                {activeBrand.floor} · {activeBrand.suite}
+              </span>
+            </div>
+
+            {/* Bottom Floating Pill (Exact Orion Mall Style) */}
+            <div className="absolute bottom-4 left-4 right-4 z-10 p-3.5 sm:p-4 rounded-2xl bg-white/95 dark:bg-[#1A0E2A]/95 backdrop-blur-xl border border-white/80 dark:border-white/15 shadow-xl flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3 min-w-0">
+                <BrandBadgeEmblem brandId={activeBrand.id} className="w-10 h-8 sm:w-11 sm:h-9" />
+                <div className="min-w-0">
+                  <h4 className="font-display text-sm sm:text-base font-black text-[#1E112A] dark:text-white truncate">
+                    {activeBrand.name}
+                  </h4>
+                  <p className="text-[11px] text-[#6B5A7D] dark:text-[#D8CEE9] truncate font-medium">
+                    {activeBrand.tagline}
+                  </p>
+                </div>
+              </div>
+
+              <span
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider text-white shadow-md hover:scale-105 transition-all shrink-0"
+                style={{ backgroundColor: activeBrand.accentColor }}
+              >
+                <span>View</span>
+                <ArrowRight className="w-3 h-3" />
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ============================================================================
+// MAIN BRANDS PAGE COMPONENT
+// Elegant Hero Section + 4 Alternating Floor Zone Sections
+// ============================================================================
+export function BrandsPage({ onInspectBrand }) {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Quick search matching across all 17 brands
+  const filteredBrands = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return [];
+    return Object.values(BRANDS_DIRECTORY).filter((b) => {
+      return (
+        b.name.toLowerCase().includes(q) ||
+        b.category.toLowerCase().includes(q) ||
+        b.tagline.toLowerCase().includes(q) ||
+        b.floor.toLowerCase().includes(q) ||
+        b.suite.toLowerCase().includes(q)
+      );
+    });
+  }, [searchQuery]);
+
+  const scrollToZone = (anchorId) => {
+    const el = document.getElementById(anchorId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <div className="relative min-h-screen bg-[#FBF4EB] dark:bg-[#151021] text-[#1E112A] dark:text-[#FAF0F8] transition-colors duration-300 overflow-x-hidden selection:bg-pink-500/20">
+
+      {/* Background matches Homepage Signature Theme */}
+      <div className="fixed inset-0 z-0 pointer-events-none select-none overflow-hidden">
+        <VideoSectionBackground
+          videoAsset={VIDEO_ASSETS.mallHero}
+          variant="hero"
+          eager
+          playbackRate={0.25}
+          videoOpacityClassName="opacity-88 dark:opacity-78"
+          tintClassName="bg-gradient-to-tr from-[#FBF4EB]/82 via-[#EFE6FA]/42 to-[#FDE8DF]/35 dark:from-[#151021]/84 dark:via-[#1D1630]/46 dark:to-[#241724]/38"
+        />
+      </div>
+
+      {/* =========================================================================
+          1. ELEGANT HERO SECTION
+          Refined editorial aesthetic with fluid light curves, stats & quick jump
+         ========================================================================= */}
+      <section className="relative min-h-[70vh] flex flex-col justify-center items-center text-center overflow-hidden pt-28 pb-16 px-4 sm:px-6 lg:px-8 border-b border-[#2D1D48]/10 dark:border-white/10">
+
+        {/* Soft Ambient Hero Highlights */}
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none">
+          <div className="absolute top-12 left-1/4 w-3 h-3 rounded-full bg-amber-400/70 blur-[1px] animate-pulse" />
+          <div className="absolute bottom-16 right-1/4 w-3.5 h-3.5 rounded-full bg-pink-400/60 blur-[1px] animate-pulse" />
+        </div>
+
+        <div className="relative z-10 max-w-4xl mx-auto space-y-6">
+
+          {/* Spaced Kicker */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 dark:bg-white/10 backdrop-blur-md border border-pink-400/30 text-[#9333EA] dark:text-[#F472B6] text-[11px] font-bold tracking-[0.24em] uppercase shadow-xs">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>{MALL_IDENTITY.name} · THE RETAIL COMPENDIUM</span>
+          </div>
+
+          {/* Grand Title */}
+          <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.06] text-[#1E112A] dark:text-[#FAF0F8]">
+            The Pinnacle of Global{' '}
+            <span className="font-serif italic font-normal bg-gradient-to-r from-[#9333EA] via-[#D946EF] to-[#EC4899] bg-clip-text text-transparent">
+              Fashion &amp; Luxury
+            </span>
+          </h1>
+
+          {/* Subtext */}
+          <p className="text-sm sm:text-base text-[#5C426E] dark:text-[#D8CEE9] font-medium max-w-2xl mx-auto leading-relaxed">
+            Curated across four architectural promenades in Gorakhpur — discover 17 official flagship boutiques, athletic pavilions, fine jewelry salons, and multiplex entertainment.
+          </p>
+
+          {/* Quick Level Jump Strip */}
+          <div className="flex flex-wrap items-center justify-center gap-2.5 pt-2">
+            {SHOPPING_FLOOR_ZONES.map((zone) => (
+              <button
+                key={zone.id}
+                type="button"
+                onClick={() => scrollToZone(zone.anchorId)}
+                className="px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap cursor-pointer bg-white/90 dark:bg-white/10 border border-black/10 dark:border-white/15 text-[#3D264E] dark:text-[#FAF0F8] hover:bg-[#1E112A] hover:text-white dark:hover:bg-white dark:hover:text-[#1E112A] shadow-xs hover:scale-105"
+              >
+                <span>{zone.shortCode}</span> · <span className="opacity-80 font-normal">{zone.title.split('&')[0]}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Concierge Search Bar */}
+          <div className="pt-2 max-w-md mx-auto">
+            <div className="relative">
+              <Search className="w-4 h-4 text-[#D946EF] absolute left-4 top-1/2 -translate-y-1/2 pointer-none" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search any of the 17 official brands or suites..."
+                aria-label="Search brands"
+                className="w-full pl-11 pr-10 py-3 text-xs sm:text-sm rounded-full border border-black/10 dark:border-white/15 bg-white/95 dark:bg-[#1C122C]/95 text-[#1E112A] dark:text-white placeholder:text-[#8C769F] focus:outline-none focus:ring-2 focus:ring-[#D946EF] shadow-lg shadow-purple-500/5 transition-all"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-[#6E557F] hover:text-black dark:hover:text-white"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+
+            {/* Instant Search Dropdown Results */}
+            {searchQuery && (
+              <div className="mt-2 p-3 rounded-2xl bg-white dark:bg-[#1C122C] border border-black/10 dark:border-white/15 shadow-2xl text-left space-y-1 max-h-60 overflow-y-auto">
+                {filteredBrands.length > 0 ? (
+                  filteredBrands.map((b) => (
+                    <div
+                      key={b.id}
+                      onClick={() => onInspectBrand?.(b)}
+                      className="flex items-center justify-between p-2 rounded-xl hover:bg-purple-50 dark:hover:bg-white/10 cursor-pointer transition-colors"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <BrandBadgeEmblem brandId={b.id} className="w-7 h-5" />
+                        <div>
+                          <span className="text-xs font-bold block">{b.name}</span>
+                          <span className="text-[10px] text-[#6B5A7D] dark:text-[#D8CEE9]">{b.floor} · {b.suite}</span>
+                        </div>
+                      </div>
+                      <ArrowRight className="w-3.5 h-3.5 text-[#9333EA]" />
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-xs text-center py-2 text-[#6B5A7D]">No matching official brand found.</p>
+                )}
+              </div>
             )}
           </div>
         </div>
+      </section>
 
-        {/* =========================================================================
-            FLOOR LEVEL FILTER PILLS (Orion Mall Style)
-           ========================================================================= */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-[#D63F28] dark:text-[#FFA07A] shrink-0 flex items-center gap-1.5 mr-1">
-            <Compass className="w-3.5 h-3.5" /> Level:
-          </span>
-          {FLOOR_LEVELS.map((lvl) => {
-            const active = selectedFloor === lvl.id;
-            return (
-              <button
-                key={lvl.id}
-                type="button"
-                onClick={() => {
-                  setSelectedFloor(lvl.id);
-                  const firstMatch =
-                    lvl.id === 'all'
-                      ? premier13Brands[0]
-                      : premier13Brands.find(
-                          (b) => BRAND_FLOOR_MAP[b.id]?.levelId === lvl.id
-                        );
-                  if (firstMatch) setActiveBrandId(firstMatch.id);
-                }}
-                className={`px-3.5 py-1.5 text-xs rounded-full font-bold transition-all whitespace-nowrap cursor-pointer border ${
-                  active
-                    ? 'bg-[#D63F28] text-white border-[#D63F28] shadow-md shadow-[#D63F28]/25 scale-[1.02]'
-                    : 'bg-white/80 dark:bg-white/5 border-black/10 dark:border-white/10 text-[#4A3258] dark:text-[#D8C7E5] hover:border-[#D63F28]/50 hover:bg-white'
-                }`}
-              >
-                {lvl.shortLabel} · <span className="opacity-80 text-[10px] font-medium">{lvl.badge}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* =========================================================================
-            MASTER BRAND STAGE (Exact Reference Style: Multi-Image Showcase + Zero Cards)
-            Left: Floor Kicker + Headline + 1-Line Text + 2-Column Brand Logo Pills
-            Right: Monumental Stadium Vitrine + Multi-Angle Switcher + Bottom Capsule
-           ========================================================================= */}
-        {activeBrand && (
-          <div className="space-y-12">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-              
-              {/* Left Column: Kicker, Title & Interactive Brand Logo Pills (5 cols) */}
-              <div className="lg:col-span-5 space-y-5" data-motion="reveal">
-                <div className="space-y-1.5">
-                  <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#D63F28] dark:text-[#FFA07A] block">
-                    {activeFloorData.levelCode} • {activeFloorData.floor.toUpperCase()}
-                  </span>
-                  <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-[#1D1129] dark:text-[#FAF0F8] tracking-tight leading-[1.08]">
-                    Flagship Icons &amp; Tech
-                  </h2>
-                  <p className="text-xs sm:text-sm text-[#3D2E50] dark:text-[#D8CEE9] font-medium leading-relaxed">
-                    {filteredBrands.length} premier boutiques on {activeFloorData.floor}.
-                  </p>
-                </div>
-
-                {/* 2-Column Brand Logo Pills (Exact Orion Mall Reference Style) */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1 max-h-[460px] overflow-y-auto pr-1 scrollbar-none">
-                  {filteredBrands.map((brand) => {
-                    const isSelected = brand.id === activeBrand.id;
-                    const bFloor = BRAND_FLOOR_MAP[brand.id];
-
-                    return (
-                      <button
-                        key={brand.id}
-                        type="button"
-                        onClick={() => setActiveBrandId(brand.id)}
-                        onMouseEnter={() => setActiveBrandId(brand.id)}
-                        className={`group/btn flex items-center gap-3 p-2.5 sm:p-3 rounded-2xl transition-all cursor-pointer text-left border ${
-                          isSelected
-                            ? 'bg-[#D63F28]/10 dark:bg-white/15 border-2 border-[#D63F28] dark:border-[#FFA07A] shadow-md ring-2 ring-[#FFA07A]/30 scale-[1.01]'
-                            : 'bg-white/80 dark:bg-white/5 border border-black/10 dark:border-white/10 hover:border-black/25 dark:hover:border-white/25 hover:bg-white dark:hover:bg-white/10'
-                        }`}
-                      >
-                        {/* Monogram / Insignia Pill */}
-                        <div
-                          className={`w-9 h-7 sm:w-10 sm:h-8 rounded-xl flex items-center justify-center font-black text-xs shrink-0 shadow-xs border transition-colors ${
-                            isSelected
-                              ? 'bg-[#D63F28] text-white border-transparent'
-                              : 'bg-black/5 dark:bg-white/10 text-[#1B1325] dark:text-[#FAF0F8] border-black/5 dark:border-white/10'
-                          }`}
-                        >
-                          {brand.monogram}
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <span
-                            className={`block font-extrabold text-xs sm:text-sm tracking-tight truncate ${
-                              isSelected
-                                ? 'text-[#D63F28] dark:text-[#FFA07A]'
-                                : 'text-[#1B1325] dark:text-[#FAF0F8]'
-                            }`}
-                          >
-                            {brand.name}
-                          </span>
-                          <span className="text-[10px] text-[#5D5070] dark:text-[#D8CEE9] block truncate font-medium">
-                            {bFloor?.suite || bFloor?.floor}
-                          </span>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Right Column: Multi-Image Architectural Vitrine (7 cols) */}
-              <div className="lg:col-span-7 relative aspect-[16/11] sm:aspect-[16/10] rounded-[2.5rem] overflow-hidden shadow-2xl border-3 border-white/95 dark:border-white/20 bg-[#250B08] group">
-                
-                {/* Active Storefront / Scene Image */}
-                <ResilientImage
-                  src={currentDisplayImage}
-                  alt={`${activeBrand.name} Store Showcase`}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
-
-                {/* Top Left Badge: Floor & Suite */}
-                <div className="absolute top-4 left-4 z-20 flex items-center gap-2 bg-black/75 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/25 shadow-lg">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#FFA07A] animate-pulse" />
-                  <span className="text-xs font-black text-white tracking-wide">
-                    {activeFloorData.floor} · {activeFloorData.suite}
-                  </span>
-                </div>
-
-                {/* Top Right: Architectural Multi-Angle Switcher */}
-                <div className="absolute top-4 right-4 z-20 flex items-center gap-1.5 bg-black/75 backdrop-blur-md p-1 rounded-full border border-white/25 shadow-lg">
-                  {galleryImages.map((img, idx) => {
-                    const isActive = idx === activeImageAngleIndex;
-                    const labels = ['Showroom', 'Facade', 'Atrium'];
-                    return (
-                      <button
-                        key={idx}
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setActiveImageAngleIndex(idx);
-                        }}
-                        className={`px-2.5 py-1 text-[10px] font-bold rounded-full transition-all cursor-pointer ${
-                          isActive
-                            ? 'bg-[#D63F28] text-white shadow-xs'
-                            : 'text-white/80 hover:text-white hover:bg-white/15'
-                        }`}
-                      >
-                        {labels[idx] || `Angle 0${idx + 1}`}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Overlapping Secondary Vitrine (Corner Window) */}
-                {galleryImages[1] && activeImageAngleIndex === 0 && (
-                  <div
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setActiveImageAngleIndex(1);
-                    }}
-                    className="hidden sm:block absolute bottom-24 right-4 z-20 w-36 sm:w-44 aspect-[4/3] rounded-2xl overflow-hidden border-2 border-white/80 dark:border-white/30 shadow-2xl bg-black/80 cursor-pointer group/sec hover:scale-105 transition-transform"
-                    title="Click to view Atrium Facade"
-                  >
-                    <ResilientImage
-                      src={galleryImages[1]}
-                      alt={`${activeBrand.name} Concourse View`}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover/sec:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-black/30 flex items-end p-2 pointer-events-none">
-                      <span className="text-[9px] font-mono font-bold text-white bg-black/75 px-1.5 py-0.5 rounded backdrop-blur-xs flex items-center gap-1">
-                        <Camera className="w-2.5 h-2.5 text-[#FFA07A]" />
-                        Atrium Facade
-                      </span>
-                    </div>
-                  </div>
-                )}
-
-                {/* Floating Bottom Card / Pill (Exact Orion Mall Reference Style) */}
-                <div className="absolute bottom-4 left-4 right-4 z-20 p-4 sm:p-5 rounded-3xl bg-white/95 dark:bg-[#1C0A08]/95 backdrop-blur-xl border border-white/80 dark:border-white/15 shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                  <div className="space-y-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#D63F28]/10 dark:bg-[#FFA07A]/15 text-[#D63F28] dark:text-[#FFA07A] border border-[#D63F28]/20">
-                        0{filteredBrands.findIndex((b) => b.id === activeBrand.id) + 1} / 13
-                      </span>
-                      <h3 className="font-display text-xl sm:text-2xl font-black text-[#1B1325] dark:text-[#FFF6EA] tracking-tight truncate">
-                        {activeBrand.name}
-                      </h3>
-                    </div>
-                    <p className="text-xs sm:text-sm text-[#433754] dark:text-[#D8CEE9] line-clamp-1">
-                      {activeFloorData.hours} · {activeBrand.tagline}
-                    </p>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => onInspectBrand?.(activeBrand)}
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl text-xs font-bold uppercase tracking-[0.14em] bg-gradient-to-r from-[#D63F28] to-[#B36624] text-white shadow-lg hover:opacity-95 hover:scale-[1.02] transition-all cursor-pointer shrink-0"
-                  >
-                    <span>Inspect Details</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* =========================================================================
-                ALL-BRAND ARCHITECTURAL LOOKBOOK RUNWAY (Pure Visual Vitrines, Zero Bulky Cards)
-               ========================================================================= */}
-            <div className="space-y-3 pt-6 border-t border-[#2D1D48]/12 dark:border-white/12">
-              <div className="flex items-center justify-between px-1">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#D63F28] animate-pulse" />
-                  <span className="font-bold uppercase tracking-[0.16em] text-[#D63F28] dark:text-[#FFA07A] text-xs">
-                    Haute Boutique Vitrines · All {filteredBrands.length} Flagships
-                  </span>
-                </div>
-                <span className="text-xs font-mono text-[#5C426E] dark:text-[#BFA1FF]">
-                  Select boutique to spotlight
-                </span>
-              </div>
-
-              {/* Horizontally Overlapping Stadium-Rounded Vitrines */}
-              <div className="relative flex items-center justify-start overflow-x-auto pb-4 pt-1 scrollbar-none">
-                <div className="flex items-center -space-x-6 sm:-space-x-10 w-max select-none py-2">
-                  {filteredBrands.map((brand, idx) => {
-                    const isSelected = activeBrand.id === brand.id;
-                    const floorInfo = BRAND_FLOOR_MAP[brand.id] || { floor: 'Ground Floor', suite: 'Suite G-01' };
-
-                    return (
-                      <div
-                        key={brand.id}
-                        onMouseEnter={() => setActiveBrandId(brand.id)}
-                        onClick={() => {
-                          setActiveBrandId(brand.id);
-                          onInspectBrand?.(brand);
-                        }}
-                        className={`relative shrink-0 ${
-                          isSelected
-                            ? 'w-64 sm:w-80 aspect-[16/11] rounded-[2.5rem] z-30 ring-3 ring-[#D63F28] dark:ring-[#FFA07A] shadow-2xl scale-[1.04]'
-                            : 'w-48 sm:w-60 aspect-[3/3.8] rounded-[2.2rem] ' + (idx % 2 === 0 ? 'z-20' : 'z-10')
-                        } overflow-hidden shadow-xl border-3 border-white/95 dark:border-white/20 transition-all duration-500 hover:scale-[1.05] hover:z-40 cursor-pointer group`}
-                      >
-                        <ResilientImage
-                          src={brand.image}
-                          alt={brand.name}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent pointer-events-none" />
-
-                        {/* Top Badges */}
-                        <div className="absolute top-3 left-3 right-3 z-20 flex items-center justify-between gap-1">
-                          <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-black/75 text-white/95 backdrop-blur-md border border-white/20 shadow-md">
-                            {floorInfo.floor}
-                          </span>
-                          <div className="w-7 h-7 rounded-xl bg-white/95 dark:bg-[#1A0E2A]/95 backdrop-blur-md shadow-md flex items-center justify-center font-black text-xs text-[#1D1129] dark:text-[#FAF0F8] border border-white/40">
-                            <span>{brand.monogram}</span>
-                          </div>
-                        </div>
-
-                        {/* Bottom Floating Metadata */}
-                        <div className="absolute bottom-3 left-3 right-3 z-20 flex items-center justify-between gap-1.5">
-                          <div className="min-w-0">
-                            <span className="text-[9px] font-mono font-bold text-[#FFA07A] block truncate">
-                              {floorInfo.suite}
-                            </span>
-                            <h4 className="text-xs sm:text-sm font-black text-white drop-shadow-md truncate tracking-tight">
-                              {brand.name}
-                            </h4>
-                          </div>
-                          <span className="text-[10px] font-bold text-white bg-gradient-to-r from-[#D63F28] to-[#B36624] px-2.5 py-0.5 rounded-full shadow-md shrink-0">
-                            Inspect ↗
-                          </span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-
-            {/* =========================================================================
-                PURE ARCHITECTURAL LOOKBOOK GRID (High-Res Images, Zero Card Boxes)
-               ========================================================================= */}
-            <div className="space-y-4 pt-6 border-t border-[#2D1D48]/12 dark:border-white/12">
-              <div className="flex items-center justify-between px-1">
-                <span className="font-bold uppercase tracking-[0.16em] text-[#D63F28] dark:text-[#FFA07A] text-xs">
-                  Architectural Storefront Directory
-                </span>
-                <span className="text-xs font-mono text-[#5C426E] dark:text-[#BFA1FF]">
-                  {filteredBrands.length} Showrooms
-                </span>
-              </div>
-
-              {/* Pure High-Res Photo Vitrines in a 3-Column Architectural Mosaic */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredBrands.map((brand) => {
-                  const isSelected = activeBrand.id === brand.id;
-                  const floorInfo = BRAND_FLOOR_MAP[brand.id] || { floor: 'Ground Floor', suite: 'Suite G-01' };
-
-                  return (
-                    <div
-                      key={brand.id}
-                      onClick={() => {
-                        setActiveBrandId(brand.id);
-                        onInspectBrand?.(brand);
-                      }}
-                      className={`group relative aspect-[16/11] rounded-3xl overflow-hidden shadow-xl border-2 transition-all duration-300 cursor-pointer ${
-                        isSelected
-                          ? 'border-[#D63F28] ring-2 ring-[#FFA07A]/40 scale-[1.02]'
-                          : 'border-white/80 dark:border-white/15 hover:border-[#D63F28]/60 hover:scale-[1.01]'
-                      }`}
-                    >
-                      <ResilientImage
-                        src={brand.image}
-                        alt={brand.name}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
-
-                      {/* Top Badges */}
-                      <div className="absolute top-3.5 left-3.5 right-3.5 z-10 flex items-center justify-between">
-                        <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-black/75 text-white backdrop-blur-md border border-white/20">
-                          {floorInfo.floor} · {floorInfo.suite}
-                        </span>
-                        <div className="w-8 h-8 rounded-xl bg-white/95 dark:bg-[#1A0E2A]/95 backdrop-blur-md shadow-md flex items-center justify-center font-black text-xs text-[#1D1129] dark:text-[#FAF0F8]">
-                          {brand.monogram}
-                        </div>
-                      </div>
-
-                      {/* Bottom Floating Pill with Name and Tagline */}
-                      <div className="absolute bottom-3.5 left-3.5 right-3.5 z-10 flex items-center justify-between gap-2 p-3 rounded-2xl bg-black/75 backdrop-blur-md border border-white/15">
-                        <div className="min-w-0">
-                          <h4 className="text-sm font-black text-white tracking-tight truncate">
-                            {brand.name}
-                          </h4>
-                          <p className="text-[11px] text-white/80 truncate font-medium">
-                            {brand.tagline}
-                          </p>
-                        </div>
-                        <span className="text-[10px] font-bold text-white bg-gradient-to-r from-[#D63F28] to-[#B36624] px-3 py-1 rounded-xl shrink-0">
-                          View ↗
-                        </span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Section: Multiplex Cinema Highlights (When Cinema is Selected) */}
-        {selectedCategory === 'cinema' && (
-          <div className="rounded-3xl border border-[#2D1D48]/15 dark:border-white/15 bg-[#1A0E2A] text-white p-6 sm:p-8 space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Film className="w-5 h-5 text-[#F472B6]" />
-                <h3 className="font-display text-xl font-bold text-white">
-                  INOX Cinemas Multiplex Features
-                </h3>
-              </div>
-              <span className="text-[11px] font-mono text-[#E9D5FF]">
-                Fourth Floor Multiplex
-              </span>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {SAMPLE_CINEMA_FEATURES.map((item) => (
-                <div
-                  key={item.id}
-                  className="p-4 rounded-2xl border border-white/10 bg-white/5 space-y-2"
-                >
-                  <p className="text-xs font-bold text-[#F472B6]">
-                    {item.genre}
-                  </p>
-                  <h4 className="font-display text-base font-semibold">
-                    {item.title}
-                  </h4>
-                  <p className="text-[11px] text-white/70 line-clamp-1">
-                    {item.format}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+      {/* =========================================================================
+          2. THE 4 ALTERNATING FLOOR ZONE SECTIONS
+          Section 1: Level 00 (Card Left, Image Right - Peach Theme)
+          Section 2: Level 01 (Image Left, Card Right - Teal Contours Theme)
+          Section 3: Level 02 (Card Left, Image Right - Lavender Rings Theme)
+          Section 4: Anchors (Image Left, Card Right - Gold Radiance Theme)
+         ========================================================================= */}
+      <div className="space-y-0">
+        {SHOPPING_FLOOR_ZONES.map((zone) => (
+          <FloorZoneSection
+            key={zone.id}
+            zone={zone}
+            onInspectBrand={onInspectBrand}
+          />
+        ))}
       </div>
+
+      {/* =========================================================================
+          3. BRAND DIRECTORY FOOTER CONCIERGE BANNER
+          Closing luxury experience section with timings, map & quick explore CTAs
+         ========================================================================= */}
+      <section className="relative z-10 py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-t border-[#2D1D48]/10 dark:border-white/10">
+        <div className="max-w-7xl mx-auto">
+          <div className="relative rounded-[3rem] p-8 sm:p-12 lg:p-16 overflow-hidden bg-white/90 dark:bg-[#1C122C]/90 backdrop-blur-2xl border-2 border-white/95 dark:border-white/15 shadow-2xl">
+            {/* Ambient Lighting Glows */}
+            <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-pink-300/25 via-purple-300/15 to-transparent rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-amber-300/20 via-pink-300/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+
+            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+              {/* Left Column: Heading, Value Props & CTAs */}
+              <div className="lg:col-span-7 space-y-6">
+                <div className="space-y-3">
+                  <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-purple-500/10 dark:bg-purple-500/20 text-[#9333EA] dark:text-[#F472B6] text-xs font-bold uppercase tracking-widest border border-purple-500/20">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>Experience CITY MALL Gorakhpur</span>
+                  </div>
+                  <h3 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#1E112A] dark:text-[#FAF0F8] leading-[1.08]">
+                    17 Premier Brands.{' '}
+                    <span className="font-serif italic font-normal bg-gradient-to-r from-[#9333EA] via-[#D946EF] to-[#EC4899] bg-clip-text text-transparent">
+                      One Grand Mall.
+                    </span>
+                  </h3>
+                  <p className="text-sm sm:text-base text-[#5C426E] dark:text-[#D8CEE9] font-medium leading-relaxed max-w-xl">
+                    From bespoke haute couture tailoring to certified diamond jewelry, athletic footwear, multi-screen laser cinema and family dining — spend a luxurious day at Gorakhpur&apos;s living promenade.
+                  </p>
+                </div>
+
+                {/* Concierge Feature Badges */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
+                  <div className="p-3.5 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 space-y-1">
+                    <Clock className="w-4 h-4 text-[#D946EF]" />
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#8C769F] block">Visiting Hours</span>
+                    <span className="text-xs font-bold text-[#1E112A] dark:text-white block">10:00 AM – 10:00 PM</span>
+                  </div>
+                  <div className="p-3.5 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 space-y-1">
+                    <MapPin className="w-4 h-4 text-[#D946EF]" />
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#8C769F] block">Location</span>
+                    <span className="text-xs font-bold text-[#1E112A] dark:text-white block">Civil Lines, Gorakhpur</span>
+                  </div>
+                  <div className="p-3.5 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 space-y-1">
+                    <Building2 className="w-4 h-4 text-[#D946EF]" />
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#8C769F] block">Levels</span>
+                    <span className="text-xs font-bold text-[#1E112A] dark:text-white block">Level LG to Level 04</span>
+                  </div>
+                </div>
+
+                {/* Direct Page Navigation CTAs */}
+                <div className="flex flex-wrap items-center gap-3 pt-2">
+                  <Link
+                    to="/dining"
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-[#9333EA] via-[#D946EF] to-[#EC4899] text-white shadow-lg shadow-pink-500/25 hover:scale-105 transition-all cursor-pointer"
+                  >
+                    <span>Explore 9 Dining Venues</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                  <Link
+                    to="/entertainment"
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider bg-white dark:bg-white/10 border border-black/10 dark:border-white/20 text-[#1E112A] dark:text-white hover:bg-black/5 transition-all cursor-pointer"
+                  >
+                    <span>INOX Laser 4K</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                  <Link
+                    to="/visit-us"
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider bg-white dark:bg-white/10 border border-black/10 dark:border-white/20 text-[#1E112A] dark:text-white hover:bg-black/5 transition-all cursor-pointer"
+                  >
+                    <span>Directions & Parking</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+
+              {/* Right Column: Architectural Directory Grid Quick Filter */}
+              <div className="lg:col-span-5 relative p-6 rounded-3xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 space-y-4">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#9333EA] dark:text-[#F472B6] block">
+                  Complete 17 Flagship Directory
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  {Object.values(BRANDS_DIRECTORY).map((b) => (
+                    <button
+                      key={b.id}
+                      type="button"
+                      onClick={() => onInspectBrand?.(b)}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white dark:bg-white/10 border border-black/10 dark:border-white/15 text-[#1E112A] dark:text-white hover:border-[#D946EF] hover:scale-105 transition-all cursor-pointer shadow-2xs"
+                    >
+                      <BrandBadgeEmblem brandId={b.id} className="w-5 h-4 text-[8px]" />
+                      <span>{b.shortName}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 }
+
+export default BrandsPage;

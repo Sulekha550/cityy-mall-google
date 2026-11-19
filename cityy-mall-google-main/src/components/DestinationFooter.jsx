@@ -4,7 +4,7 @@ import { BRAND_CATEGORIES, MALL_IDENTITY } from '../utilities/brandsData';
 
 export function DestinationFooter() {
   return (
-    <footer className="border-t border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#EFE6FA] dark:bg-[#191326] text-[#1B1325] dark:text-[#F6EFE7] transition-colors duration-300">
+    <footer className="relative z-20 border-t border-[#2D1D48]/14 dark:border-[#E2D4FF]/14 bg-[#EFE6FA] dark:bg-[#191326] text-[#1B1325] dark:text-[#F6EFE7] transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-14">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-[#2D1D48]/12 dark:border-[#E2D4FF]/12">
           <div className="md:col-span-5 space-y-3">

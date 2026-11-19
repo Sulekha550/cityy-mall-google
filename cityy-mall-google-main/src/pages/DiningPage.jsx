@@ -23,6 +23,7 @@ import { ResilientImage } from '../components/ResilientImage';
 import { RightVerticalSectionNav } from '../components/RightVerticalSectionNav';
 
 const DINING_SECTIONS = [
+  
   { id: 'dining-hero', number: '01', title: 'Flavours Pavilion' },
   { id: 'dining-flame', number: '02', title: 'Flame Grills' },
   { id: 'dining-pizza', number: '03', title: 'Stone-Baked 450°' },
